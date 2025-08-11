@@ -1,0 +1,192 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+//Some Functions to be used down
+//Max in Array : O(n)
+int maxInArr(vector<int> arr){
+    int n=arr.size();
+    int maxi=INT_MIN;
+    for(int i=0;i<n;i++) maxi=max(maxi,arr[i]);
+    return maxi;
+}
+
+
+
+
+//Q.1) Assign Cookies
+int assignCookies(vector<int> cookies,vector<int> children){
+    int n=cookies.size();
+    int m=children.size();
+    sort(cookies.begin(),cookies.end());
+    sort(children.begin(),children.end());
+    int i=0;
+    int j=0;
+    int count=0;
+    while(i<n && j<m){
+        if(cookies[i]>=children[j]){
+            count++;
+            j++;
+        }
+        i++;
+    }
+    return count;
+}
+//TC is NLogN + MLogM + min(n,m);
+
+
+
+
+//Q.2) Lemonade Change 
+bool lemonadeChange(vector<int> customers){
+    int n=customers.size();
+    int count5=0;
+    int count10=0;
+    for(int i=0;i<n;i++){
+        if(customers[i]==5){
+            count5++;
+        }
+        else if(customers[i]==10){
+            count5--;
+            count10++;
+        }
+        else {
+            if(count10>0){
+                count10--;
+                count5--;
+            }
+            else{
+                count5=count5-3;
+            }
+        }
+        if(count5<0 || count10<0) return false;
+    }
+    return true;
+}
+
+
+
+//Q.3) Shortest Job First
+int ShortestJobFirst(vector<int> arr){
+    int n=arr.size();
+    int waitTime=0;
+    int startTime=0;
+    sort(arr.begin(),arr.end());
+    for(int i=0;i<n;i++){
+        waitTime+=startTime;
+        startTime+=arr[i];
+    }
+    return waitTime/n;
+}
+//Time Complexity will be O(n*logn + n)
+
+
+
+
+//Q.4) Jump Game
+bool jumpGame(vector<int> arr){
+    int n=arr.size();
+    int maxReach=0;
+    for(int i=0;i<n;i++){
+        if(i>maxReach) return false;
+        maxReach=max(maxReach,arr[i]+i);
+        if(maxReach>=n-1) return true; //This optimises the code a bit
+    }
+    return true;
+}
+//Time Complexity will be O(n)
+
+
+
+
+// Q.6) Job Sequencing Problem
+class Job{
+    public:
+        int deadline;
+        int profit;
+};
+bool comparator(Job a,Job b){
+    return a.profit>b.profit;
+}
+vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
+    int n=deadline.size();
+    vector<Job> jobs(n);
+    //Pairing each deadline with its corresponding profit
+    for(int i=0;i<n;i++){
+        jobs[i]={deadline[i],profit[i]};
+    }
+
+    //Sorting jobs in decreasing order
+    sort(jobs.begin(),jobs.end(),comparator);
+
+    //Find max deadline to create time slots
+    int maxDeadline=maxInArr(deadline);
+
+    //Creating time slots array
+    vector<bool> slot(maxDeadline+1,false);
+
+    //Filling up the time slots
+    int jobCount=0;
+    int totalProfit=0;
+    for(int i=0;i<n;i++){
+        for(int j=jobs[i].deadline;j>0;j--){
+            if(!slot[j]){
+                slot[j]=true;
+                jobCount++;
+                totalProfit+=jobs[i].profit;
+                break;
+            }
+        }
+    }
+    
+    //Creating an ans array to store the values
+    vector<int> ans;
+    ans.push_back(jobCount);
+    ans.push_back(totalProfit);    
+}
+
+
+
+
+
+//Q.7 N Meetings in one room
+class Meeting{
+    public:
+        int startTime;
+        int endTime;
+};
+
+bool compare(Meeting a, Meeting b){
+    if(a.endTime<b.endTime) return true;
+    else if(a.endTime>b.endTime) return false;
+    else {
+        return a.startTime<b.startTime;
+    }
+}
+int nMeetings(vector<int> start,vector<int> end){
+    int n=start.size();
+    vector<Meeting> meetings(n);
+    for(int i=0;i<n;i++){
+        meetings[i]={start[i],end[i]};
+    }
+
+    sort(meetings.begin(),meetings.end(),compare);
+    int meetCount=0;
+    int timePassed=0;
+    for(int i=0;i<n;i++){
+        if(meetings[i].startTime>timePassed){
+            timePassed+=meetings[i].endTime;
+            meetCount++;
+        }
+    }
+    return meetCount;
+}
+
+//Q.5) Jump Game Part 2
+//To be done after learning dynamic programming
+
+int main(){
+    vector<int> arr={1,2,4,1,1,0,2,5};
+    cout<<jumpGame(arr);
+    return 0;
+}
+
