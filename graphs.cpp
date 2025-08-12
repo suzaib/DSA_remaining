@@ -904,6 +904,51 @@ vector<int> kahnAlgorithm(int n,vector<vector<int>> &adj){
 //Time Complexity will be O(V+E)
 //Space Complexity will be O(2V)
 
+
+
+//Detect Cycle in a Directed Graph : BFS
+bool detectCycleInDG_bfs(int n,vector<vector<int>> &adj){
+    //We use kahn algorithm to get the topo sort
+    //If topo sort size was less than n that means topo sort wasn't completed fully, reason ? a cycle existed(since the graph is directed)
+    vector<int> topoSort=kahnAlgorithm(n,adj);
+    if(topoSort.size()<n) return true;
+    return false;
+}
+//Time and Space Complexities will be same as kahn Algorithm
+//Time Complexity will be O(V+E)
+//Space Complexity will be O(2V)
+
+
+
+//Course Schedule I
+//Check if courses can be performed or not
+//Just check if a cycle exists or not
+bool courseSchedule(int n,vector<pair<int,int>> schedule){
+    vector<vector<int>> adj(n);
+    for(auto it:schedule){
+        adj[it.first].push_back(it.second);
+    }
+    return (!(detectCycleInDG_bfs(n,adj)));
+}
+//Time Complexity will be O(V+E+V)
+//Space Complexity will be O(2V)
+
+
+
+//Course Schedule II
+//Here you have to return the order of doing tasks as well
+//Incase the tasks can't be performed, return an empty array
+vector<int> courseScheduleII(int n,vector<pair<int,int>> schedule){
+    vector<vector<int>> adj(n);
+    for(auto it:schedule){
+        adj[it.first].push_back(it.second);
+    }
+    vector<int> topo=kahnAlgorithm(n,adj);
+    if(topo.size()==n) return topo;
+    vector<int> ans;
+    return ans;
+    
+}
 //Optimal Method for cycle in directed graph
 //Revise Safe States code
 
