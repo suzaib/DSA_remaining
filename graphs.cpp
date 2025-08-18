@@ -947,8 +947,66 @@ vector<int> courseScheduleII(int n,vector<pair<int,int>> schedule){
     if(topo.size()==n) return topo;
     vector<int> ans;
     return ans;
-    
 }
+//Time Complexity will be O(V+E+V)
+//Space Complexity will be O(2V)
+
+
+//Shortest Path
+//Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
+//In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
+//In case we come across a question that has disconnected components, just mark them with INT_MAX
+vector<int> shortestPath_brute(int n,int src,vector<vector<int>> &adj){
+    vector<int> vis(n,0);
+
+    queue<pair<int,int>> q;
+    q.push({src,0});
+    vis[src]=true;
+    vector<int> ans(n,0);
+    while(!q.empty()){
+        int node=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        for(auto it:adj[node]){
+            if(vis[it]) continue;
+            vis[it]=true;
+            q.push({it,dist+1});
+        }
+        ans[node]=dist;
+    }
+    return ans;
+}
+
+//Optimal : Using the vis array to mark the distances as well
+//Also let us solve it when instead of giving us the adjacency list, they have given us the edges
+vector<int> shortestPath(int n,int m,int src,vector<vector<int>> &edges){
+    vector<vector<int>> adj(n);
+    for(auto it:edges){
+        adj[it[0]].push_back(it[1]);
+        adj[it[1]].push_back(it[0]);
+    }
+    vector<int> dist(n,1e9);
+    dist[src]=0;
+    queue<int> q;
+    q.push(src);
+    while(!q.empty()){
+        int node=q.front();
+        q.pop();
+        for(auto it:adj[node]){
+            if(dist[node]+1<dist[it]){
+                dist[it]=1+dist[node];
+                q.push(it);
+            }
+        }
+    }
+
+    vector<int> ans(n,-1);
+    for(int i=0;i<ans.size();i++){
+        if(dist[i]!=1e9) ans[i]=dist[i];
+    }
+    return ans;
+}
+
 //Optimal Method for cycle in directed graph
 //Revise Safe States code
 
