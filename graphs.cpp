@@ -1009,6 +1009,7 @@ vector<int> shortestPath(int n,int m,int src,vector<vector<int>> &edges){
 
 //Optimal Method for cycle in directed graph
 //Revise Safe States code
+//Also write down kahn algorithm once more
 
 
 int main(){
