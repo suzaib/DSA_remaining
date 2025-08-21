@@ -659,9 +659,6 @@ void sudokuSolver(vector<vector<char>> &board){
     solve(board);
 }
 
-
-
-
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);

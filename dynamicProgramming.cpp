@@ -1106,7 +1106,7 @@ int buySellStocksIV_memoization(vector<int> &arr,int k){
 }
 
 //Tabulation 
-int buySellStocks_tabulation(vector<int> &arr,int k){
+int buySellStocksIV_tabulation(vector<int> &arr,int k){
     k=k*2;
     int n=arr.size();
     vector<vector<int>> dp(n+1,vector<int> (k+1,0));
@@ -1148,6 +1148,57 @@ int buySellStocksIV(vector<int> &arr,int k){
 //Space Complexity will be O(2k)
 
 
+//DP On Stocks IV
+//Buying and Selling with cooldown
+//We can't buy immediately after selling, unlimited transactions
+int stocksIVHelper_brute(int idx,int canBuy,vector<int> &arr){
+    if(idx>=arr.size()) return 0;
+    int profit;
+    if(canBuy){
+        int buy=-arr[idx]+stocksIVHelper_brute(idx+1,0,arr);
+        int notBuy=stocksIVHelper_brute(idx+1,1,arr);
+        profit=max(buy,notBuy);
+    }
+    else{
+        int sell=arr[idx]+stocksIVHelper_brute(idx+2,1,arr);
+        int notSell=stocksIVHelper_brute(idx+1,0,arr);
+        profit=max(sell,notSell);
+    }
+    return profit;
+}
+int buySellStocksIV_brute(vector<int> &arr){
+    return stocksIVHelper_brute(0,1,arr);
+}
+//At each index two calls are made ; buy/skip, sell/skip, therefore total of 2^n calls
+//Time Complexity will be O(pow(2,n)) (exponential)
+//Space Complexity will be O(n) (just recursion stack space)
+
+//Memoization
+int stocksIVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,vector<int> &arr){
+    if(idx>=arr.size()) return 0;
+    if(dp[idx][canBuy]!=-1) return dp[idx][canBuy];
+    int profit;
+    if(canBuy){
+        int buy=-arr[idx]+stocksIVHelper_memoization(idx+1,0,dp,arr);
+        int notBuy=stocksIVHelper_memoization(idx+1,1,dp,arr);
+        profit=max(buy,notBuy);
+    }
+    else{
+        int sell=arr[idx]+stocksIVHelper_memoization(idx+2,1,dp,arr);
+        int notSell=stocksIVHelper_memoization(idx+1,0,dp,arr);
+        profit=max(sell,notSell);
+    }
+    return dp[idx][canBuy]=profit;
+}
+//There are only n*2 different indices that needs to be computed due to memoization
+//A DP array of 2n is used and recursion stack space of n is also used
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n+n) 
+int buySellStocksIV_memoization(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (1,-1));
+    return stocksIVHelper_memoization(0,1,dp,arr);
+}
 //See if you can further optimize stocks II problem
 int main(){
     vector<int> arr={7,1,5,3,6,4};
