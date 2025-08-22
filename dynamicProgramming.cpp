@@ -1190,15 +1190,59 @@ int stocksIVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,vector
     }
     return dp[idx][canBuy]=profit;
 }
-//There are only n*2 different indices that needs to be computed due to memoization
-//A DP array of 2n is used and recursion stack space of n is also used
-//Time Complexity will be O(2n)
-//Space Complexity will be O(2n+n) 
 int buySellStocksIV_memoization(vector<int> &arr){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (1,-1));
     return stocksIVHelper_memoization(0,1,dp,arr);
 }
+//There are only n*2 different indices that needs to be computed due to memoization
+//A DP array of 2n is used and recursion stack space of n is also used
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n+n) 
+
+//Tabulation
+int buySellStocksIV_tabulation(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> dp(n+2,vector<int> (2,0));
+    for(int i=n-1;i>=0;i--){
+        int profit;
+        for(int buy=0;buy<=1;buy++){
+            if(buy){
+                int b=-arr[i]+dp[i+1][0];
+                int nb=dp[i+1][1];
+                profit=max(b,nb);
+            }
+            else{
+                int s=arr[i]+dp[i+2][1];
+                int ns=dp[i+1][0];
+                profit=max(s,ns);
+            }
+            dp[i][buy]=profit;
+        }
+    }
+    return dp[0][1];
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n+4)
+
+//Space Optimization
+int buySellStocksIV(vector<int> &arr){
+    int n=arr.size();
+    vector<int> front2(2,0);
+    vector<int> front1(2,0);
+    vector<int> curr(2,0);
+    for(int i=n-1;i>=0;i--){
+        //Instead of running a second loop, we can just write those conditions
+        curr[1]=max(-arr[i]+front1[0],front1[1]);
+        curr[0]=max(arr[i]+front2[1],front1[0]);
+        front2=front1;
+        front1=curr;
+    }
+    return curr[1];
+}
+//Time Complexity will be O(N)
+//Space Complexity will be O(6)
+
 //See if you can further optimize stocks II problem
 int main(){
     vector<int> arr={7,1,5,3,6,4};
