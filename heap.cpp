@@ -6,6 +6,14 @@ Heap order property is of two types, max heap, min heap
 Max heap means that every child is smaller than the parent
 Min heap means that every child is bigger than the parent
 */
+
+//That was for the conceptual part, we will now discuss how to solve heap questions
+
+/*
+Heap are only represented as trees for understanding purpose, but they must be implemented as array
+Reason? 
+Consider an array with first index as 0
+*/
 #include<bits/stdc++.h>
 using namespace std;
 int main(){
