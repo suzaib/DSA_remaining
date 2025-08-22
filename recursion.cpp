@@ -79,6 +79,7 @@ void sumToN_striverMethod(int n,int sum){
     sumToN_striverMethod(n-1,sum+n);
 }
 
+
 //Calculate factorial of n
 //My method
 int factorial(int n){
@@ -127,6 +128,22 @@ bool palindromeTest(string str,int n,int i){
     return palindromeTest(str,n,i+1);
 }
 
+
+
+//Recursive Implementation of atoi
+// atoi is a built in function that converts strings to integer
+int atoiHelper(string &str,int idx){
+    if(idx==0) return str[0]-'0';
+    int lastChar=str[idx]-'0';
+    return atoiHelper(str,idx-1)*10+lastChar;
+}
+int recursiveAtoI(string &str){
+    int n=str.size();
+    if(n==0) return -1;
+    return atoiHelper(str,n-1);
+}
+//Time Complexity will be O(n)
+//Space Complexity will be O(n)
 
 //Functions with multiple recursions calls
 //A thing to be noted in multiple recursion calls is that for eg: return = recursion1 + recursion2 , then only after
@@ -196,7 +213,6 @@ void subSeqsWithSumK(vector<int> arr,int k){
 //What if the question asks us to print only or anyone subsequence with the given sum
 //A smart trick would be to declare a global variable bool flag=false (global means declared outside int main()) and as modifying the code inside the if condition as 
 // if(k==sum && flag==false) then inside the if statement doing flag=true. This way , as soon as the if statement in executed for the first time, the flag is set to false, never repeating the if again
-
 bool flag=false;
 void printF2(int ind,vector<int> temp,int sum,int k,vector<int> arr){
     int n=arr.size();

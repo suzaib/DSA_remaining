@@ -12,5 +12,6 @@ class Node{
 };
 
 int main(){
+    cout<<typeid(atoi("23"));
     return 0;
 }

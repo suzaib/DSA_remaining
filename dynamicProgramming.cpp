@@ -674,7 +674,105 @@ int uniquePathsMinSum(vector<vector<int>> &mat){
 
 
 
+//Unique Paths : Variable Ending Point
+//Triangle
+//Start from the head of a right angled triangle, and end at the last row(any cell of the last row)
+//Therefore ending point is variable(can be any cell on the last row)
+//In this case instead of writing n different recursions for each cell in the last row, we should write recursion from the top
+//And Then compute the min sum
+//F(i,j) represents the min sum from starting point i,j to last row
+//Traversing is allowed only in two direction, down, and down right diagonal
+//We are writing the function when starting point is (0,0), but the function can be modified for any other starting coordinate very easily
+int upTriangleHelper_brute(int row,int col,vector<vector<int>> &triangle){
+    if(row==triangle.size()-1) return triangle[row][col];
 
+    //Going Down
+    int down=triangle[row][col]+upTriangleHelper_brute(row+1,col,triangle);
+
+    //Going Diagonally
+    int diagonal=triangle[row][col]+upTriangleHelper_brute(row+1,col+1,triangle);
+    return min(down,diagonal);
+}
+int uniquePathsTriangle_brute(vector<vector<int>> &triangle){
+    return upTriangleHelper_brute(0,0,triangle);
+}
+//At each step, there are two ways the recursion could go, and since there are (1+2+3+...+n) such steps, it would take 2^(n(n+1)/2) time
+//Recursion stack space is used as n steps
+//Time Complexity will be O(pow(2,n))
+//Space Complexity will be O(n)
+
+//Memoization
+int upTriangleHelper_memoization(int row,int col,vector<vector<int>> &dp,vector<vector<int>> &triangle){
+    if(row==triangle.size()-1) return triangle[row][col];
+    if(dp[row][col]!=-1) return dp[row][col];
+
+    //Going Down
+    int down=triangle[row][col]+upTriangleHelper_memoization(row+1,col,dp,triangle);
+
+    //Going Diagonally
+    int diagonal=triangle[row][col]+upTriangleHelper_memoization(row+1,col+1,dp,triangle);
+
+    return dp[row][col]=min(down,diagonal);
+}
+
+int uniquePathsTriangle_memoization(vector<vector<int>> &triangle){
+    int n=triangle.size();
+    vector<vector<int>> dp(n,vector<int> (n,-1));
+    return upTriangleHelper_memoization(0,0,dp,triangle);
+}
+//The recursion will learn for somewhat lesser than n2 steps(n*n) , but we can say it would be n2 steps
+//DP array occupies n2 space and n space is used as recursion stack space
+//Time Complexity will be O(n*n) 
+//Space Complexity will be O(n2+n)
+
+//Tabulation
+int uniquePathsTriangle_tabulation(vector<vector<int>> &triangle){
+    int n=triangle.size();
+    vector<vector<int>> dp(n,vector<int> (n,0));
+    for(int i=0;i<n;i++) dp[n-1][i]=triangle[n-1][i];
+    for(int i=n-2;i>=0;i--){
+        for(int j=0;j<=i;j++){
+            int down=dp[i+1][j];
+            int diagonal=dp[i+1][j+1];
+            dp[i][j]=triangle[i][j]+min(down,diagonal);
+        }
+    }
+    return dp[0][0];
+}
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n2)
+
+//Space Optimization
+int uniquePathsTriangle_spaceOptimized(vector<vector<int>> &triangle){
+    int n=triangle.size();
+    vector<int> below(n,0);
+    vector<int> curr(n,0);
+    for(int i=0;i<n;i++) below[i]=triangle[n-1][i];
+    for(int i=n-2;i>=0;i--){
+        for(int j=0;j<=i;j++){
+            int down=below[j];
+            int diagonal=below[j+1];
+            curr[j]=triangle[i][j]+min(down,diagonal);
+        }
+        below=curr;
+    }
+    return curr[0];
+}
+//Time Complexity will be O(n2)
+//Space Complexity will be O(2n)
+
+//Further Optimization
+int uniquePathsTriangle(vector<vector<int>> &triangle){
+    int n=triangle.size();
+    vector<int> curr(n,0);
+    for(int i=0;i<n;i++) curr[i]=triangle[n-1][i];
+    for(int i=n-2;i>=0;i--){
+        for(int j=0;j<=i;j++) curr[j]=triangle[i][j]+min(curr[j],curr[j+1]);
+    }
+    return curr[0];
+}
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n)
 //Subset Sum equal to target
 //Return true or false if there exists a single subset with sum K
 bool fxEOSS_brute(int idx,int target,vector<int> arr){
@@ -1242,6 +1340,8 @@ int buySellStocksIV(vector<int> &arr){
 }
 //Time Complexity will be O(N)
 //Space Complexity will be O(6)
+
+
 
 //See if you can further optimize stocks II problem
 int main(){
