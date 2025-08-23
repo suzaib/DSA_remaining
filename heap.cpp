@@ -25,14 +25,45 @@ using namespace std;
 //Insertion in a Heap
 //Insert the element in order(if a space is left at the last level, fill it first in order(left to right), otherwise fill in the next level(left to right))
 //Then keep swapping the element with its parent until correct heap structure is formed
-vector<int> insertInHeap(vector<int> &arr,int k){
+void insertInMaxHeap(vector<int> &arr,int k){
     int n=arr.size();
     arr.push_back(k);
-    int parentIdx=n/2;
-    while(k>arr[parentIdx]){
-        swap(arr[k],arr[parentIdx]);
-        parentIdx=k
+    int idx=n;
+    while(idx>1){
+        int parentIdx=idx/2;
+        if(arr[idx]>arr[parentIdx]){
+            swap(arr[idx],arr[parentIdx]);
+            idx=parentIdx;
+        }
+        else return;
     }
+}
+//Time Complexity will be O(logn)
+//No extra space is needed, the original array is although changed
+
+
+
+//Insertion in a Min Heap
+//Follow the reverse logic used in the max heap
+void insertInMinHeap(vector<int> &arr,int k){
+    int n=arr.size();
+    arr.push_back(k);
+    int idx=n;
+    while(idx>1){
+        int pIdx=idx/2;
+        if(arr[idx]<arr[pIdx]){
+            swap(arr[idx],arr[pIdx]);
+            idx=pIdx;
+        }
+        else return;
+    }
+}
+
+
+//Deletion in a Max Heap
+void delInMaxHeap(vector<int> &arr,int k){
+    int n=arr.size();
+    
 }
 int main(){
 
