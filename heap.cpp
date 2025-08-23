@@ -61,9 +61,23 @@ void insertInMinHeap(vector<int> &arr,int k){
 
 
 //Deletion in a Max Heap
-void delInMaxHeap(vector<int> &arr,int k){
+//Deletion in a heap only happens at the root
+//First replace the root element with the last element
+//Then delete the last element(the root element)
+//Now restructure the heap according to the heap property
+void delInMaxHeap(vector<int> &arr){
     int n=arr.size();
-    
+    swap(arr[n-1],arr[1]);
+    arr.pop_back();
+    int idx=1;
+    while(idx<n){
+        int childIdx=2*idx;
+        if(arr[idx]<arr[childIdx]){
+            swap(arr[idx],arr[childIdx]);
+            idx=childIdx;
+        }
+        else return;
+    }
 }
 int main(){
 
