@@ -79,6 +79,11 @@ void delInMaxHeap(vector<int> &arr){
         else return;
     }
 }
+
+//Deletion in Min Heap
+void delInMinHeap(vector<int> &arr){
+    int n=arr.size();
+}
 int main(){
 
 }
