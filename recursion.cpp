@@ -674,7 +674,19 @@ bool solve(vector<vector<char>> &board){
 void sudokuSolver(vector<vector<char>> &board){
     solve(board);
 }
+//Three loops in solve fxn => 9*9*9 and the isValid fxn also has a loop running 9 times so total of 9^4
+//The above logic is wrong, since this is backtracking, and hence the loop runs much more than visible
+//We can think of it like that, for every empty cell, it has 9 ways the recursion would run, so if there are m empty cell the recursion would run 9^m times
+//Since in the worst case all the cells can be empty, therefore m=81, hence the recursion would run for 9^81 times
+//Only recursion stack space is being used, which is equal to m(no of empty cells)
+//Time Complexity will be O(9^m)
+//Space Complexity will be O(m)
 
+
+
+//M-Coloring Graph
+//Similar to bipartite graph problem, but here we have to colour with m colours, such that no two adjacent cells have the same colour
+//We can denote colours via numbers
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);
