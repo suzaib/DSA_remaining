@@ -1007,6 +1007,47 @@ vector<int> shortestPath(int n,int m,int src,vector<vector<int>> &edges){
     return ans;
 }
 
+
+
+//Word Ladder I
+
+void findNextWord(string word,int dist,unordered_set<string> &st,queue<pair<string,int>> &q){
+    int n=word.size();
+    for(int i=0;i<n;i++){
+        for(char c='a';c<='z';c++){
+            char orgChar=word[i];
+            word[i]=c;
+            if(st.find(word)!=st.end()){
+                q.push({word,dist+1});
+                st.erase(word);
+            }
+            word[i]=orgChar;
+        }
+    }
+}
+int wordLadderI(string startWord, string endWord, vector<string> &wordList){
+    int n=wordList.size();
+    unordered_set<string> st(wordList.begin(),wordList.end());
+    st.erase(startWord);
+    queue<pair<string,int>> q;
+    q.push({startWord,1});
+    while(!q.empty()){
+        string word=q.front().first;
+        int dist=q.front().second;
+        q.pop();
+        if(word==endWord) return dist;
+        findNextWord(word,dist,st,q);
+    }
+    return 0;
+}
+//Each word will go into the queue once and it will done operations in the findNextWord in 26*l(length of word) times
+//Set use space of n*l, and queue uses space of 2*n(in worst case where it holds all words) and temporary words are of size l(say)
+//Time Complexity will be O(26*n*l)
+//Space Complexity will be O(n*l+2*n+l)
+
+
+
+
 //Optimal Method for cycle in directed graph
 //Revise Safe States code
 //Also write down kahn algorithm once more
