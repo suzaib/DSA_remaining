@@ -1343,6 +1343,97 @@ int buySellStocksIV(vector<int> &arr){
 
 
 
+//DP on Stocks V
+//A transaction fee is applied for each transaction
+int stocksVHelper_brute(int idx,int canBuy,vector<int> &arr,int fee){
+    if(idx==arr.size()) return 0;
+    int profit;
+    if(canBuy){
+        int buy=-arr[idx]+stocksVHelper_brute(idx+1,0,arr,fee);
+        int notBuy=stocksVHelper_brute(idx+1,1,arr,fee);
+        profit=max(buy,notBuy);
+    }
+    else{
+        int sell=arr[idx]-fee+stocksVHelper_brute(idx+1,1,arr,fee);
+        int notSell=stocksVHelper_brute(idx+1,0,arr,fee);
+        profit=max(sell,notSell);
+    }
+    return profit;
+}
+int buySellStocksV_brute(vector<int> &arr,int fee){
+    return stocksVHelper_brute(0,1,arr,fee);
+}
+//At each step we have two options, can buy or can't buy, and there are a total of n such steps
+//Recursion stack space is used which is equal to n
+//Time Complexity will be O(2^n)
+//Space Complexity will be O(n) 
+
+//Memoization
+int stocksVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,int fee, vector<int> &arr){
+    if(idx==arr.size()) return 0;
+    if(dp[idx][canBuy]!=-1) return dp[idx][canBuy];
+    int profit;
+    if(canBuy){
+        int buy=-arr[idx]+stocksVHelper_memoization(idx+1,0,dp,fee,arr);
+        int notBuy=stocksVHelper_memoization(idx+1,1,dp,fee,arr);
+        profit=max(buy,notBuy);
+    }
+    else{
+        int sell=arr[idx]-fee+stocksVHelper_memoization(idx+1,1,dp,fee,arr);
+        int notSell=stocksVHelper_memoization(idx+1,0,dp,fee,arr);
+        profit=max(sell,notSell);
+    }
+    return dp[idx][canBuy]=profit;
+}
+int buySellStocksV_memoization(vector<int> &arr,int fee){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (2,-1));
+    return stocksVHelper_memoization(0,1,dp,fee,arr);
+}
+//Time Complexity will be O(2N)
+//Space Complexity will be O(N+2N)
+
+//Tabulation
+int buySellStocksV_tabulation(vector<int> &arr,int fee){
+    int n=arr.size();
+    vector<vector<int>> dp(n+1,vector<int> (2,0));
+    for(int idx=n-1;idx>=0;idx--){
+        for(int buy=0;buy<=1;buy++){
+            int profit;
+            if(buy){
+                int b=-arr[idx]+dp[idx+1][0];
+                int nb=dp[idx+1][1];
+                profit=max(b,nb);
+            }
+            else{
+                int s=arr[idx]-fee+dp[idx+1][1];
+                int ns=dp[idx+1][0];
+                profit=max(s,ns);
+            }
+            dp[idx][buy]=profit;
+        }
+    }
+    return dp[0][1];
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+//Space Optimization
+int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
+    int n=arr.size();
+    vector<int> curr(2,0);
+    vector<int> above(2,0);
+    for(int idx=n-1;idx>=0;idx--){
+
+        //We can also use the earlier approaches, by running a loop from buy=0 to buy=1, but this code is more cleaner(both codes work in same time)
+        curr[0]=max(arr[idx]-fee+above[1],above[0]);
+        curr[1]=max(-arr[idx]+above[0],above[1]);
+        above=curr;
+    }
+    return curr[1];
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(4)
 //See if you can further optimize stocks II problem
 int main(){
     vector<int> arr={7,1,5,3,6,4};
