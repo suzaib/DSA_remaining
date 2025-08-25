@@ -773,6 +773,24 @@ int uniquePathsTriangle(vector<vector<int>> &triangle){
 }
 //Time Complexity will be O(n2)
 //Space Complexity will be O(n)
+
+
+
+//Unique Paths : Minimum falling sum
+int upmfsHelper_brute(int x,int y,int n,vector<vector<int>> &mat){
+    if(x==n) return mat[x][y];
+    if(x)
+
+
+}
+int uniquePathsMinFallingSum_brute(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    int maxSum=0;
+    for(int i=0;i<n;i++){
+        maxSum=max(maxSum,upmfsHelper_brute(0,i,n,mat));
+    }
+}
 //Subset Sum equal to target
 //Return true or false if there exists a single subset with sum K
 bool fxEOSS_brute(int idx,int target,vector<int> arr){
@@ -1435,6 +1453,7 @@ int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
 //Time Complexity will be O(2n)
 //Space Complexity will be O(4)
 //See if you can further optimize stocks II problem
+
 int main(){
     vector<int> arr={7,1,5,3,6,4};
     cout<<buySellStocksII_brute(arr);
