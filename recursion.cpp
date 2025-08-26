@@ -688,38 +688,40 @@ void sudokuSolver(vector<vector<char>> &board){
 //Similar to bipartite graph problem, but here we have to colour with m colours, such that no two adjacent cells have the same colour
 //We can denote colours via numbers
 //We just have to tell whether or not we can colour the graph or not
-bool isSafeColor(int node,vector<int> &color,vector<vector<int>> &adj,int n, int col){
+//We will use the adjacency matrix this time instead of adjacency list/array
+bool isSafeCol(int node,int col,int n,int m,vector<int> &color,vector<vector<int>> &adj){
     for(int k=0;k<n;k++){
-        if(k!=node && adj[k][node]==1 && color[k]==col) return false;
+        if(k==node) continue;
+        if(adj[k][node]==1 && color[k]==col) return false;
     }
     return true;
 }
-bool mColorHelper(int node,vector<int> &color,int m,int n,vector<vector<int>> &adj){
+
+bool mColHelper(int node,vector<int> &color,int m,int n,vector<vector<int>> &adj){
     if(node==n) return true;
     for(int i=1;i<=m;i++){
-        if(isSafeColor(node,color,adj,n,i)){
+        if(isSafeCol(node,i,n,m,color,adj)){
             color[node]=i;
-            if(mColorHelper(node+1,color,m,n,adj)) return true;
+            if(mColHelper(node+1,color,m,n,adj)) return true;
             color[node]=0;
         }
     }
     return false;
 }
 bool mColorGraph(int n,vector<vector<int>> &edges,int m){
-    vector<vector<int>> adj(n);
+    if(n<=m) return true;
+    vector<vector<int>> adj(n,vector<int> (n));
     for(auto it:edges){
-        adj[it[0]].push_back(it[1]);
-        adj[it[1]].push_back(it[0]);
+        adj[it[0]][it[1]]=1;
+        adj[it[1]][it[0]]=1;
     }
     vector<int> color(n,0);
-    if(mColorHelper(0,color,m,n,adj)) return true;
+    if(mColHelper(0,color,m,n,adj)) return true;
     return false;
 }
 //We are trying m colours at every node(n in total)=> n^m
 //Time Complexity will be O(n^m)
-//Space Complexity will be O(n+n)
-
-//Revise the code of m color graph
+//Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);

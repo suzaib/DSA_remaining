@@ -754,7 +754,6 @@ bool bipartiteGraph_bfs(int n,vector<vector<int>> &adj){
 }
 
 
-
 //Bipartite Graph : DFS
 bool bipartite_dfs_helper(int i,vector<int> &vis,stack<int> &st,vector<vector<int>> &adj){
     vis[i]=0;
@@ -784,6 +783,51 @@ bool bipartiteGraph_dfs(int n,vector<vector<int>> &adj){
 }
 //Time Complexity will be O(V+2E)
 //Space Complexity will be O(2V)(visited array and stack space)
+
+
+
+//M-Coloring Graph
+//Similar to bipartite graph problem, but here we have to colour with m colours, such that no two adjacent cells have the same colour
+//This question belongs to recursion, but we have also included it here, since graphs are involved
+//We can denote colours via numbers
+//We just have to tell whether or not we can colour the graph or not
+//We will use the adjacency matrix this time instead of adjacency list/array
+bool isSafeCol(int node,int col,int n,int m,vector<int> &color,vector<vector<int>> &adj){
+    for(int k=0;k<n;k++){
+        if(k==node) continue;
+        if(adj[k][node]==1 && color[k]==col) return false;
+    }
+    return true;
+}
+
+bool mColHelper(int node,vector<int> &color,int m,int n,vector<vector<int>> &adj){
+    if(node==n) return true;
+    for(int i=1;i<=m;i++){
+        if(isSafeCol(node,i,n,m,color,adj)){
+            color[node]=i;
+            if(mColHelper(node+1,color,m,n,adj)) return true;
+            color[node]=0;
+        }
+    }
+    return false;
+}
+bool mColorGraph(int n,vector<vector<int>> &edges,int m){
+    if(n<=m) return true;
+    vector<vector<int>> adj(n,vector<int> (n));
+    for(auto it:edges){
+        adj[it[0]][it[1]]=1;
+        adj[it[1]][it[0]]=1;
+    }
+    vector<int> color(n,0);
+    if(mColHelper(0,color,m,n,adj)) return true;
+    return false;
+}
+//We are trying m colours at every node(n in total)=> n^m
+//Time Complexity will be O(n^m)
+//Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
+
+
+
 //Detect Cycle in a directed graph : DFS
 bool dcidg(int node,vector<bool> &vis,vector<bool> &pathVis,vector<vector<int>> &adj){
     vis[node]=true;
@@ -1049,7 +1093,6 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 
 
 //Optimal Method for cycle in directed graph
-//Revise Safe States code
 //Also write down kahn algorithm once more
 
 
