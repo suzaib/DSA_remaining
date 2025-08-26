@@ -871,7 +871,7 @@ bool safeStatesHelper(int node,vector<vector<int>> &adj,vector<int> &vis,vector<
         }
         else if(pathVis[it]){
             check[node]=0;
-            return false;
+            return true;
         }
     }
     check[node]=1;
