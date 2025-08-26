@@ -607,7 +607,6 @@ class minStack{
 //Space Complexity will be O(n)
 
 
-
 //Monotonic Stack : Stack that stores element in some particular order, say increasing or decreasing etc
 //Next greater element
 void nextGreater_brute(vector<int> &arr){
