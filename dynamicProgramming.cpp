@@ -848,7 +848,8 @@ int uniquePathsMaxFallingSum_tabulation(vector<vector<int>> &mat){
 //Space Complexity will be O(n*m)
 
 //Space Optimization
-int uniquePathsMaxFallingSum_spaceOptimization(vector<vector<int>> &mat){
+//This is the most optimal approach, we can't trim it down to a single array since movement is in three ways.
+int uniquePathsMaxFallingSum(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
     vector<int> below=mat[n-1];
@@ -868,6 +869,8 @@ int uniquePathsMaxFallingSum_spaceOptimization(vector<vector<int>> &mat){
 }
 //Time Complexity will be O(n*m)
 //Space Complexity will be O(2m)
+
+
 //Subset Sum equal to target
 //Return true or false if there exists a single subset with sum K
 bool fxEOSS_brute(int idx,int target,vector<int> arr){
@@ -1530,7 +1533,7 @@ int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
 //Time Complexity will be O(2n)
 //Space Complexity will be O(4)
 //See if you can further optimize stocks II problem
-
+//Do unique Path Minimum Falling sum(we have done only maximum falling sum)
 int main(){
     vector<int> arr={7,1,5,3,6,4};
     cout<<buySellStocksII_brute(arr);

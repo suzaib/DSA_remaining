@@ -718,6 +718,8 @@ bool mColorGraph(int n,vector<vector<int>> &edges,int m){
 //We are trying m colours at every node(n in total)=> n^m
 //Time Complexity will be O(n^m)
 //Space Complexity will be O(n+n)
+
+//Revise the code of m color graph
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);
