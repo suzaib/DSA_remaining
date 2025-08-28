@@ -1539,14 +1539,38 @@ int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
 //Longest Increasing Subsequence
 //Length of Longest Increasing Subsequence
 //Brute Force
-//Trying all ways
-int lengthOfLISHelper_brute(int idx,int last,vector<int> &arr){
-    if(idx==0)
+//Form all the subsequences and then see if they are increasing(strictly increasing), if they are, count their length
+bool checkIfIncreasing(vector<int> &arr){
+    int n=arr.size();
+    for(int i=0;i<n-1;i++){
+        if(arr[i+1]<=arr[i]) return false;
+    }
+    return true;
+}
+void lengthOfLISHelper_brute(int idx,vector<int> &arr,vector<int> &temp,vector<vector<int>> &allSub){
+    if(idx==0){
+        if(checkIfIncreasing(temp)) allSub.push_back(temp);
+        return;
+    }
+
+    //Pick
+    temp.push_back(arr[idx]);
+    lengthOfLISHelper_brute(idx-1,arr,temp,allSub);
+
+    //Not Pick
+    temp.pop_back();
+    lengthOfLISHelper_brute(idx-1,arr,temp,allSub);
 }
 int lengthOfLIS_brute(vector<int> &arr){
     int n=arr.size();
-    if(n<=1) return n;
-    return lengthOfLISHelper_brute(n-2,arr[n-1],arr);
+    vector<int> temp;
+    vector<vector<int>> allSub;
+    lengthOfLISHelper_brute(n-1,arr,temp,allSub);
+    int maxCnt=1;
+    for(auto it:allSub){
+        maxCnt=max(maxCnt,(int)it.size());
+    }
+    return maxCnt;
 }
 //See if you can further optimize stocks II problem
 //Do unique Path Minimum Falling sum(we have done only maximum falling sum)
