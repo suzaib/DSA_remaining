@@ -1532,8 +1532,25 @@ int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
 }
 //Time Complexity will be O(2n)
 //Space Complexity will be O(4)
+
+
+
+
+//Longest Increasing Subsequence
+//Length of Longest Increasing Subsequence
+//Brute Force
+//Trying all ways
+int lengthOfLISHelper_brute(int idx,int last,vector<int> &arr){
+    if(idx==0)
+}
+int lengthOfLIS_brute(vector<int> &arr){
+    int n=arr.size();
+    if(n<=1) return n;
+    return lengthOfLISHelper_brute(n-2,arr[n-1],arr);
+}
 //See if you can further optimize stocks II problem
 //Do unique Path Minimum Falling sum(we have done only maximum falling sum)
+
 int main(){
     vector<int> arr={7,1,5,3,6,4};
     cout<<buySellStocksII_brute(arr);
