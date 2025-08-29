@@ -1538,7 +1538,7 @@ int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
 
 //Longest Increasing Subsequence
 //Length of Longest Increasing Subsequence
-//Brute Force
+//Naive Solution
 //Form all the subsequences and then see if they are increasing(strictly increasing), if they are, count their length
 bool checkIfIncreasing(vector<int> &arr){
     int n=arr.size();
@@ -1547,7 +1547,7 @@ bool checkIfIncreasing(vector<int> &arr){
     }
     return true;
 }
-void lengthOfLISHelper_brute(int idx,vector<int> &arr,vector<int> &temp,vector<vector<int>> &allSub){
+void lengthOfLISHelper_naive(int idx,vector<int> &arr,vector<int> &temp,vector<vector<int>> &allSub){
     if(idx==0){
         if(checkIfIncreasing(temp)) allSub.push_back(temp);
         return;
@@ -1555,24 +1555,39 @@ void lengthOfLISHelper_brute(int idx,vector<int> &arr,vector<int> &temp,vector<v
 
     //Pick
     temp.push_back(arr[idx]);
-    lengthOfLISHelper_brute(idx-1,arr,temp,allSub);
+    lengthOfLISHelper_naive(idx-1,arr,temp,allSub);
 
     //Not Pick
     temp.pop_back();
-    lengthOfLISHelper_brute(idx-1,arr,temp,allSub);
+    lengthOfLISHelper_naive(idx-1,arr,temp,allSub);
 }
-int lengthOfLIS_brute(vector<int> &arr){
+int lengthOfLIS_naive(vector<int> &arr){
     int n=arr.size();
     vector<int> temp;
     vector<vector<int>> allSub;
-    lengthOfLISHelper_brute(n-1,arr,temp,allSub);
+    lengthOfLISHelper_naive(n-1,arr,temp,allSub);
     int maxCnt=1;
     for(auto it:allSub){
         maxCnt=max(maxCnt,(int)it.size());
     }
     return maxCnt;
 }
+//Time Complexity will be ~ O(2^n)
+//Space Complexity will be O(n) recursion stack space
 //See if you can further optimize stocks II problem
+
+//Brute Force
+//Using the same pick / not pick technique
+int lengthOfLISHelper_brute(int idx,int prevIdx,int n,vector<int> &arr){
+    if(idx==n) return 0;
+    int len=0+lengthOfLISHelper_brute(idx,prevIdx,n,arr);
+    if(prevIdx==-1 || arr[idx]>arr[prevIdx]) len=max(len,1+lengthOfLISHelper_brute(idx+1,idx,n,arr));
+    return len;
+}
+int lengthOfLIS_brute(vector<int> &arr){
+    int n=arr.size();
+    return lengthOfLISHelper_brute(0,-1,n,arr);
+}
 //Do unique Path Minimum Falling sum(we have done only maximum falling sum)
 
 int main(){
