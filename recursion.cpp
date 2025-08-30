@@ -721,6 +721,23 @@ bool mColorGraph(int n,vector<vector<int>> &edges,int m){
 }
 //We are trying m colours at every node(n in total)=> n^m
 //Time Complexity will be O(n^m)
+
+
+
+//Palindrome Partitioning
+//Watch Video for better explanation
+
+bool isPartitionAllowed(int idx,vector<int> &arr){
+
+}
+void palindromePartitionHeler(int idx,string str,vector<string> &path,vector<vector<string>> &res){
+    
+}
+vector<vector<string>> palindromePartition(string str){
+    vector<vector<string>> res;
+    vector<string> path;
+    palindromePartitionHelper(0,str,path,res);
+}
 //Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
 int main(){
     vector<int> arr={1,2,3};
