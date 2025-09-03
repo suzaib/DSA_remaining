@@ -777,12 +777,12 @@ int uniquePathsTriangle(vector<vector<int>> &triangle){
 
 
 //Unique Paths : Maximum falling sum
-int upmfsHelper_brute(int x,int y,int n,int m,vector<vector<int>> &mat){
+int upmxfsHelper_brute(int x,int y,int n,int m,vector<vector<int>> &mat){
     if(x==n-1) return mat[x][y];
     if(x<0 || x>=n || y<0 || y>=m) return 0;
-    int down=mat[x][y]+upmfsHelper_brute(x+1,y,n,m,mat);
-    int leftDiag=mat[x][y]+upmfsHelper_brute(x+1,y-1,n,m,mat);
-    int rightDiag=mat[x][y]+upmfsHelper_brute(x+1,y+1,n,m,mat);
+    int down=mat[x][y]+upmxfsHelper_brute(x+1,y,n,m,mat);
+    int leftDiag=mat[x][y]+upmxfsHelper_brute(x+1,y-1,n,m,mat);
+    int rightDiag=mat[x][y]+upmxfsHelper_brute(x+1,y+1,n,m,mat);
     return max(down,max(leftDiag,rightDiag));
 }
 int uniquePathsMaxFallingSum_brute(vector<vector<int>> &mat){
@@ -790,7 +790,7 @@ int uniquePathsMaxFallingSum_brute(vector<vector<int>> &mat){
     int m=mat[0].size();
     int maxSum=0;
     for(int i=0;i<m;i++){
-        maxSum=max(maxSum,upmfsHelper_brute(0,i,n,m,mat));
+        maxSum=max(maxSum,upmxfsHelper_brute(0,i,n,m,mat));
     }
     return maxSum;
 }
@@ -800,13 +800,13 @@ int uniquePathsMaxFallingSum_brute(vector<vector<int>> &mat){
 //Space Complexity will be O(n)
 
 //Memoization
-int upmfsHelper_memoization(int x,int y,int n,int m,vector<vector<int>> &dp,vector<vector<int>> &mat){
+int upmxfsHelper_memoization(int x,int y,int n,int m,vector<vector<int>> &dp,vector<vector<int>> &mat){
     if(x==n-1) return dp[x][y]=mat[x][y];
     if(x<0 || x>=n || y<0 || y>=m) return 0;
     if(dp[x][y]!=-1) return dp[x][y];
-    int down=mat[x][y]+upmfsHelper_memoization(x+1,y,n,m,dp,mat);
-    int leftDiag=mat[x][y]+upmfsHelper_memoization(x+1,y-1,n,m,dp,mat);
-    int rightDiag=mat[x][y]+upmfsHelper_memoization(x+1,y+1,n,m,dp,mat);
+    int down=mat[x][y]+upmxfsHelper_memoization(x+1,y,n,m,dp,mat);
+    int leftDiag=mat[x][y]+upmxfsHelper_memoization(x+1,y-1,n,m,dp,mat);
+    int rightDiag=mat[x][y]+upmxfsHelper_memoization(x+1,y+1,n,m,dp,mat);
     return dp[x][y]=max(down,max(leftDiag,rightDiag));
 }
 int uniquePathsMaxFallingSum_memoization(vector<vector<int>> &mat){
@@ -815,7 +815,7 @@ int uniquePathsMaxFallingSum_memoization(vector<vector<int>> &mat){
     vector<vector<int>> dp(n,vector<int> (m,-1));
     int maxSum=0;
     for(int i=0;i<m;i++){
-        maxSum=max(maxSum,upmfsHelper_memoization(0,i,n,m,dp,mat));
+        maxSum=max(maxSum,upmxfsHelper_memoization(0,i,n,m,dp,mat));
     }
     return maxSum;
 }
@@ -870,6 +870,22 @@ int uniquePathsMaxFallingSum(vector<vector<int>> &mat){
 //Time Complexity will be O(n*m)
 //Space Complexity will be O(2m)
 
+
+
+
+//Minimum Falling Sum
+int upmnfsHelper_brute(int x,int y,int n,int m,vector<vector<int>>& mat){
+    if(x==0) return mat[x][y];
+    if(x<0 ||)
+}
+int uniquePathsMinFallingSum_brute(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    int minSum=0;
+    for(int i=m-1;i>=0;i--){
+        minSum=min(minSum,upmnfsHelper_brute(n-1,i,n,m,mat))
+    }
+}
 
 //Subset Sum equal to target
 //Return true or false if there exists a single subset with sum K
