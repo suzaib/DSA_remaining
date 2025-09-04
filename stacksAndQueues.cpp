@@ -816,10 +816,9 @@ int sumOfSubarrMin_naive(vector<int> arr){
             a.push_back(temp);
         }
     }
-    int minEl=INT_MAX;
     int minSum=0;
     for(auto it:a){
-        minEl=INT_MAX;
+        int minEl=INT_MAX;
         for(auto el:it) minEl=min(minEl,el);
         minSum+=minEl;
     }
@@ -842,6 +841,29 @@ int sumOfSubarrMin_brute(vector<int> arr){
     }
     return sum;
 }
+//The code runs for two loops therefore n2
+//No space is occupied
+//Time Complexity will be O(n2)
+
+
+//Before moving ahead, we need some prerequisites, 
+//Ques: What is the number of subarrays(non empty) possbile from an array of length n
+//Consider an array of size n, since we can't skip elements while forming a subarray, therefore the start can be anywhere from 0 to n-1 but the end point will depend on the start
+//When start was 0, end can be from n-1 to 0(n ways)
+//When start was 1, end can be from n-1 to 1(n-1 ways)
+//When start was 2, end can be from n-1 to 2(n-2 ways)
+//.
+//.
+//.
+//When start was n-1, end can be from n-1 to n-1(1 way)
+//Summing up : 1+2+...+n => (n*(n+1))/2
+//This is the total number of subarrays possible
+
+
+//Ques: Consider that there is a particular element at index k, which always needs to be included, what will be the number of subarrays now?
+//In this case the start of subarray can be anywhere from 0 to k
+//And the ending point can be anywhere from k to n-1
+//Therefore, total choices will be (k+1)*(n-1)
 
 
 //Optimal Approach
