@@ -739,6 +739,45 @@ vector<int> nearestSmaller(vector<int> arr){
     }
     return ans;
 }
+//Time Complexity will be O(2N)
+//Space Complexity will be O(N)
+
+
+
+//Find Previous Smaller element
+vector<int> findPSE(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans;
+    stack<pair<int,int>> st;
+    for(int i=0;i<n;i++){
+        while(!st.empty() && st.top().first>=arr[i]) st.pop();
+        if(st.empty()) ans.push_back(-1);
+        else ans.push_back(st.top().second);
+        st.push({arr[i],i});
+    }
+    return ans;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+
+
+//Find Next Smaller
+vector<int> findNSE(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans(n);
+    stack<pair<int,int>> st;
+    for(int i=n-1;i>=0;i--){
+        while(!st.empty() && st.top().first>=arr[i]) st.pop();
+        if(st.empty()) ans[i]=n;
+        else ans[i]=(st.top().second);
+        st.push({arr[i],i});
+    }
+    return ans;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
 
 
 //Trapping Rainwater : Formula --> min(leftMaxElement,rightMaxElement)-height of building, this give the water logged on that building
@@ -801,7 +840,6 @@ int trappingRainwater(vector<int> arr){
     return total;
 }
 //Time Complexity will be O(n)
-
 
 //Sum of Subarray minimum
 //Form all possible subarrays, then find out the minimum element in each one of them, then sum all these minimum element
@@ -875,9 +913,63 @@ int sumOfSubarrMin_better(vector<int> arr){
 //In all these subarrays, 3 will be smallest
 //Index of 4 can be found out by using pse(Previous smaller element)
 //Index of 8 can be found out by using nge(Next greater element)
+//Therefore the total subarrays will be pse*nge
+//This will the total number of subarrays formed in which 3 will be the smallest element. 
+//Therefore this will be the contribution of 3
+int sumOfSubarrMin(vector<int> &arr){
+    int n=arr.size();
+    int ans=0;
+    vector<int> nse=findNSE(arr);
+    vector<int> pse=findPSE(arr);
+    for(int i=0;i<n;i++){
+        int left=i-pse[i];
+        int right=nse[i]-i;
+        ans+=left*right*arr[i];
+    }
+    return ans;
+}
+//We can decrease the time complexity by doing the NSE and PSE array generation in a single loop, but this code is far more readable
+//Time Complexity will be O(2n+2n+n)
+//Space Complexity will be O(2n+2n)
 
-//Consider 1
-//Optimal Approach
+
+
+//Sum of Subarray Ranges
+//Form all the subarrays and find the range of them and then sum up all the ranges
+//Brute Force : Doing as told above
+vector<vector<int>> formAllSubarr(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> ans;
+    for(int i=0;i<n;i++){
+        vector<int> temp;
+        for(int j=i;j<n;j++){
+            temp.push_back(arr[j]);
+            ans.push_back(temp);//This operation takes time equal to temp.size(), that is at max O(N) time
+        }
+    }
+    return ans;
+}
+//Total subarrays are n2 and some of them have n elements in total
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n3)
+
+int sumOfSubarrRanges_brute(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> mat=formAllSubarr(arr);
+    int ans=0;
+    for(auto it:mat){
+        int maxi=*max_element(it.begin(),it.end());
+        int mini=*min_element(it.begin(),it.end());
+        ans+=(maxi-mini);
+    }
+    return ans;
+}
+//Time Complexity will be O(n3+n2)
+//Space Complexity will be O(n3)
+
+//Better Method
+//No need to generate all subarrays, we can keep track of max and min while traversing
+
 
 int main(){
     vector<int> arr={3,1,2,4};
