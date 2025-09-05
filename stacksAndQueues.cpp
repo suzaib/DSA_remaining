@@ -762,7 +762,7 @@ vector<int> findPSE(vector<int> &arr){
 
 
 
-//Find Next Smaller
+//Find Next Smaller Element
 vector<int> findNSE(vector<int> &arr){
     int n=arr.size();
     vector<int> ans(n);
@@ -780,6 +780,19 @@ vector<int> findNSE(vector<int> &arr){
 
 
 
+//Find Next Greater Element
+vector<int> findNGE(vector<int> &arr){
+    int n=arr.size();
+    stack<pair<int,int>> st;
+
+
+}
+
+//Find Previous Greater Element
+vector<int> findPGE(vector<int> &arr){
+    int n=arr.size();
+    stack<pair<int,int>> st;
+}
 //Trapping Rainwater : Formula --> min(leftMaxElement,rightMaxElement)-height of building, this give the water logged on that building
 //Add water logged on all the buildings to get the total trapped water
 int trappingRainwater_brute(vector<int> arr){
@@ -907,6 +920,9 @@ int sumOfSubarrMin_better(vector<int> arr){
 //Try to count how many times will a particular element contribute to the total sum
 //It will just be equal to the total numbers of subarrays formed, in which that particular element will be the smallest
 //For eg consider the array : [1,4,6,7,3,7,8,1]
+
+
+
 //Now let's try to find out how much contribution will 3 give
 //We need to count only the subarrays where 3 will be the minimum
 //Such subarray can start from 4, and end at 8.
@@ -934,9 +950,7 @@ int sumOfSubarrMin(vector<int> &arr){
 
 
 
-//Sum of Subarray Ranges
-//Form all the subarrays and find the range of them and then sum up all the ranges
-//Brute Force : Doing as told above
+//A function to form all subarrays
 vector<vector<int>> formAllSubarr(vector<int> &arr){
     int n=arr.size();
     vector<vector<int>> ans;
@@ -952,6 +966,60 @@ vector<vector<int>> formAllSubarr(vector<int> &arr){
 //Total subarrays are n2 and some of them have n elements in total
 //Time Complexity will be O(n3)
 //Space Complexity will be O(n3)
+
+
+
+//Sum of Subarray Maximum
+//Form all subarrays and find the max element in each of them then sum all these elements
+//Brute Force : Do as told above
+int sumOfSubarrMax_brute(vector<int> &arr){
+    int n=arr.size();
+    int ans=0;
+    vector<vector<int>> mat=formAllSubarr(arr);
+    for(auto it:mat){
+        int maxi=*max_element(it.begin(),it.end());
+        ans+=maxi;
+    }
+    return ans;
+}
+
+//Better Method
+//Doing the same thing in a better way
+int sumOfSubarrMax_better(vector<int> &arr){
+    int n=arr.size();
+    int ans=0;
+    for(int i=0;i<n;i++){
+        int maxi=arr[i];
+        for(int j=i;j<n;j++){
+            maxi=max(maxi,arr[j]);
+            ans+=maxi;
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(n2)
+
+//Optimal Method
+int sumOfSubarrMax(vector<int> &arr){
+    int n=arr.size();
+    vector<int> nge=findNGE(arr);
+    vector<int> pge=findPGE(arr);
+    int ans=0;
+    for(int i=0;i<n;i++){
+        int left=i-pge[i];
+        int right=nge[i]-i;
+        ans+=(left*right*arr[i]);
+    }
+    return ans;
+}
+//Time Complexity will be O(2n+2n+n)
+//Space Complexity will be O(2n+2n)
+
+
+
+//Sum of Subarray Ranges
+//Form all the subarrays and find the range of them and then sum up all the ranges
+//Brute Force : Doing as told above
 
 int sumOfSubarrRanges_brute(vector<int> &arr){
     int n=arr.size();
@@ -969,9 +1037,33 @@ int sumOfSubarrRanges_brute(vector<int> &arr){
 
 //Better Method
 //No need to generate all subarrays, we can keep track of max and min while traversing
+int sumOfSubarrRanges_better(vector<int> &arr){
+    int n=arr.size();
+    int ans=0;
+    for(int i=0;i<n;i++){
+        int maxi=arr[i];
+        int mini=arr[i];
+        for(int j=i;j<n;j++){
+            maxi=max(maxi,arr[j]);
+            mini=min(mini,arr[j]);
+            ans+=(maxi-mini);
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(n2)
 
-
+//Optimal Approach
+//We can apply our brain and just subtract the sumOfSubarrMin and sumOfSubarrMax values
+int sumOfSubarrRanges(vector<int> &arr){
+    int maxi=sumOfSubarrMax(arr);
+    int mini=sumOfSubarrMin(arr);
+    return maxi-mini;
+}
 int main(){
     vector<int> arr={3,1,2,4};
     cout<<sumOfSubarrMin_brute(arr);
 }
+//Complete findNGE and findPGE functions(they should give index)
+
+
