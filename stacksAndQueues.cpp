@@ -805,8 +805,8 @@ int trappingRainwater(vector<int> arr){
 
 //Sum of Subarray minimum
 //Form all possible subarrays, then find out the minimum element in each one of them, then sum all these minimum element
-//Naive Approach : Do as instructed above
-int sumOfSubarrMin_naive(vector<int> arr){
+//Brute Force : Do as instructed above
+int sumOfSubarrMin_brute(vector<int> arr){
     int n=arr.size();
     vector<vector<int>> a;
     for(int i=0;i<n;i++){
@@ -828,8 +828,8 @@ int sumOfSubarrMin_naive(vector<int> arr){
 //Space Complexity O(n2)
 
 //Same Approach can be written in better way
-//Brute Force
-int sumOfSubarrMin_brute(vector<int> arr){
+//Better Force
+int sumOfSubarrMin_better(vector<int> arr){
     int n=arr.size();
     int sum=0;
     for(int i=0;i<n;i++){
@@ -846,7 +846,7 @@ int sumOfSubarrMin_brute(vector<int> arr){
 //Time Complexity will be O(n2)
 
 
-//Before moving ahead, we need some prerequisites, 
+//Before moving ahead, we need some prerequisites 
 //Ques: What is the number of subarrays(non empty) possbile from an array of length n
 //Consider an array of size n, since we can't skip elements while forming a subarray, therefore the start can be anywhere from 0 to n-1 but the end point will depend on the start
 //When start was 0, end can be from n-1 to 0(n ways)
@@ -865,20 +865,20 @@ int sumOfSubarrMin_brute(vector<int> arr){
 //And the ending point can be anywhere from k to n-1
 //Therefore, total choices will be (k+1)*(n-1)
 
+//We will now solve using the Optimal Approach
+//Try to count how many times will a particular element contribute to the total sum
+//It will just be equal to the total numbers of subarrays formed, in which that particular element will be the smallest
+//For eg consider the array : [1,4,6,7,3,7,8,1]
+//Now let's try to find out how much contribution will 3 give
+//We need to count only the subarrays where 3 will be the minimum
+//Such subarray can start from 4, and end at 8.
+//In all these subarrays, 3 will be smallest
+//Index of 4 can be found out by using pse(Previous smaller element)
+//Index of 8 can be found out by using nge(Next greater element)
 
+//Consider 1
 //Optimal Approach
-// int sumOfSubarrMin(vector<int> arr){
-//     int n=arr.size();
-//     int sum=0;
-//     vector<int> nse=findNSE(arr);
-//     vector<int> pse=findPSE(arr);
-//     for(int i=0;i<n;i++){
-//         int left=i-pse[i];
-//         int right=nse[i]-i;
-//         sum=(sum+(right*left*(1LL)*arr[i])%mod)%mod;
-//     }
-//     return sum;
-// }
+
 int main(){
     vector<int> arr={3,1,2,4};
     cout<<sumOfSubarrMin_brute(arr);
