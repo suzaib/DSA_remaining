@@ -1105,25 +1105,47 @@ vector<int> asteroidCollision_brute(vector<int> &arr){
 //Space Complexity will be O(2n)
 
 //Better Method : Can be done by using only a stack
-//If we iterate from the back it may help as we won't have to use the reverse function then
+
 vector<int> asteroidCollision_better(vector<int> &arr){
     int n=arr.size();
     stack<int> st;
     vector<int> ans;
-    int k=n-1;
-    while(k>=0 && arr[k]>0){
-        st.push(arr[k]);
-        k--;
-    }
-    for(int i=k;i>=0;i--){
-        if(arr[i]<0) st.push(arr[i]);
+    for(int i=0;i<n;i++){
+        if(arr[i]>0) st.push(arr[i]);
         else{
-            while(!st.empty() && arr[i]>abs(st.top())) st.pop();
-            if(!st.empty()) st.push(arr[i]);
-            
+            while(!st.empty() && st.top()>0 && abs(arr[i])>st.top()) st.pop();
+            if(!st.empty() && st.top()==abs(arr[i])) st.pop();
+            else if(st.empty() || st.top()<0) st.push(arr[i]);
         }
     }
+    while(!st.empty()){
+        ans.push_back(st.top());
+        st.pop();
+    }
+    reverse(ans.begin(),ans.end());
+    return ans;
 }
+//Time Complexity will be O(3n)
+//Space Complexity will be O(n)
+
+//Optimal Approach
+//Further Optimisation can be done if we use an array instead of a stack
+vector<int> asteroidCollision(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans;
+    for(int i=0;i<n;i++){
+        if(arr[i]>0) ans.push_back(arr[i]);
+        else{
+            while(ans.size()>0 && ans.back()>0 && abs(arr[i])>ans.back()) ans.pop_back();
+            if(ans.size()>0 && ans.back()==abs(arr[i])) ans.pop_back();
+            else if(ans.size()==0 || ans.back()<0) ans.push_back(arr[i]);
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(2n)
+//No space is required to solve the question, to give the answer only we need the ans array so Space Complexity will be O(1)
+
 int main(){
     vector<int> arr={3,1,2,4};
     cout<<sumOfSubarrMin_brute(arr);
