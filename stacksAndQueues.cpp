@@ -784,14 +784,16 @@ vector<int> findNSE(vector<int> &arr){
 vector<int> findNGE(vector<int> &arr){
     int n=arr.size();
     stack<pair<int,int>> st;
-
-
+    vector<int> ans;
+    return ans;
 }
 
 //Find Previous Greater Element
 vector<int> findPGE(vector<int> &arr){
     int n=arr.size();
     stack<pair<int,int>> st;
+    vector<int> ans;
+    return ans;
 }
 //Trapping Rainwater : Formula --> min(leftMaxElement,rightMaxElement)-height of building, this give the water logged on that building
 //Add water logged on all the buildings to get the total trapped water
@@ -1059,6 +1061,68 @@ int sumOfSubarrRanges(vector<int> &arr){
     int maxi=sumOfSubarrMax(arr);
     int mini=sumOfSubarrMin(arr);
     return maxi-mini;
+}
+
+
+//Asteroid Collision
+//Brute Force
+vector<int> asteroidCollision_brute(vector<int> &arr){
+    int n=arr.size();
+    stack<int> st;
+    vector<int> ans;
+    int k=0;
+    while(arr[k]<0){
+        ans.push_back(arr[k]);
+        k++;
+    }
+    //Runs for atmost O(n)
+
+    for(int i=k;i<n;i++){
+        if(arr[i]>0) st.push(arr[i]);
+        else{
+            if(!st.empty()){
+                while(!st.empty() && abs(arr[i])>st.top()) st.pop();
+                if(st.empty()){
+                    ans.push_back(arr[i]);
+                    continue;
+                }
+                if(abs(arr[i])==st.top()){
+                    st.pop();
+                    continue;
+                }
+            }
+        }
+    }
+    //Runs for atmost O(2n) 
+
+    vector<int> temp;
+    while(!st.empty()) temp.push_back(st.top()); //O(n) time 
+    reverse(temp.begin(),temp.end()); //O(n) time
+    for(int i=0;i<temp.size();i++) ans.push_back(temp[i]); //O(n) time
+    return ans;
+}
+//Time Complexity is almost O(6n)
+//Space Complexity will be O(2n)
+
+//Better Method : Can be done by using only a stack
+//If we iterate from the back it may help as we won't have to use the reverse function then
+vector<int> asteroidCollision_better(vector<int> &arr){
+    int n=arr.size();
+    stack<int> st;
+    vector<int> ans;
+    int k=n-1;
+    while(k>=0 && arr[k]>0){
+        st.push(arr[k]);
+        k--;
+    }
+    for(int i=k;i>=0;i--){
+        if(arr[i]<0) st.push(arr[i]);
+        else{
+            while(!st.empty() && arr[i]>abs(st.top())) st.pop();
+            if(!st.empty()) st.push(arr[i]);
+            
+        }
+    }
 }
 int main(){
     vector<int> arr={3,1,2,4};
