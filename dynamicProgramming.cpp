@@ -876,15 +876,33 @@ int uniquePathsMaxFallingSum(vector<vector<int>> &mat){
 //Minimum Falling Sum
 int upmnfsHelper_brute(int x,int y,int n,int m,vector<vector<int>>& mat){
     if(x==0) return mat[x][y];
-    if(x<0 ||)
+    if(x<0 || x>=n || y<0 || y>=m) return 1e9;
+    int up=mat[x][y]+upmnfsHelper_brute(x-1,y,n,m,mat);
+    int leftUp=mat[x][y]+upmnfsHelper_brute(x-1,y-1,n,m,mat);
+    int rightUp=mat[x][y]+upmnfsHelper_brute(x-1,y+1,n,m,mat);
+    return min(up,min(leftUp,rightUp));
 }
 int uniquePathsMinFallingSum_brute(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
-    int minSum=0;
-    for(int i=m-1;i>=0;i--){
-        minSum=min(minSum,upmnfsHelper_brute(n-1,i,n,m,mat))
-    }
+    int minSum=INT_MAX;
+    for(int i=m-1;i>=0;i--) minSum=min(minSum,upmnfsHelper_brute(n-1,i,n,m,mat));
+    return minSum;
+}
+//Time Complexity will be O(m*(3^n))
+//Space Complexity will be O(n)
+
+//Memoization
+int upmnfsHelper_memoization(int x,int y,int n,int m,vector<vector<int>> &dp,vector<vector<int>> &mat){
+    
+}
+int uniquePathsMinFallingSum_memoization(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    int minSum=INT_MAX;
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    for(int i=m-1;i>=0;i--) minSum=min(minSum,upmnfsHelper_memoization(n-1,i,n,m,dp,mat));
+    return minSum;
 }
 
 //Subset Sum equal to target
