@@ -1681,6 +1681,39 @@ int lengthOfLIS_brute(vector<int> &arr){
     int n=arr.size();
     return lengthOfLISHelper_brute(0,-1,n,arr);
 }
+//Each element has a choice to be picked or not, therefore the code will run for 2^n times
+//n levels in total, therefore stack space of n will be used
+//Time Complexity will be O(2^n)
+//Space Complexity will be O(n)
+
+//Memoization
+int lengthOfLISHelper_memoization(int idx,int prevIdx,int n,vector<vector<int>> &dp,vector<int> &arr){
+    if(idx==n) return 0;
+    if(dp[idx][prevIdx+1]!=-1) return dp[idx][prevIdx+1];
+
+    //Not Picking the element
+    int len=0+lengthOfLISHelper_memoization(idx+1,prevIdx,n,dp,arr);
+
+    //Picking the element
+    if(prevIdx==-1 || arr[idx]>arr[prevIdx]) len=max(len,1+lengthOfLISHelper_memoization(idx+1,idx,n,dp,arr));
+    return dp[idx][prevIdx+1]=len;
+}
+
+int lengthOfLIS_memoization(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (n+1,-1));
+    return lengthOfLISHelper_memoization(0,-1,n,dp,arr);
+}
+//The loop runs only for at max n2 times (since that is the total size of dp array)
+//Recursion stack space of n and dp matrix of n2
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n+n2)
+
+//Tabulation
+int lengthOfLIS_tabulation(vector<int> &arr){
+    int n=arr.size();
+    
+}
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
