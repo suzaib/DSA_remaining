@@ -1756,12 +1756,13 @@ int lengthOfLIS(vector<int> &arr){
             dp[i]=max(1+dp[j],dp[i]);
         }
     }
-    int maxi=1;
 
+    int maxi=1;
     for(int i=0;i<n;i++) maxi=max(maxi,dp[i]);
     return maxi;
 }
-
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n)
 
 
 int main(){
