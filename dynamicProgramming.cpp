@@ -1701,7 +1701,7 @@ int lengthOfLISHelper_memoization(int idx,int prevIdx,int n,vector<vector<int>> 
 
 int lengthOfLIS_memoization(vector<int> &arr){
     int n=arr.size();
-    vector<vector<int>> dp(n,vector<int> (n+1,-1));
+    vector<vector<int>> dp(n,vector<int> (n+1,0));
     return lengthOfLISHelper_memoization(0,-1,n,dp,arr);
 }
 //The loop runs only for at max n2 times (since that is the total size of dp array)
@@ -1712,8 +1712,38 @@ int lengthOfLIS_memoization(vector<int> &arr){
 //Tabulation
 int lengthOfLIS_tabulation(vector<int> &arr){
     int n=arr.size();
-    
+    vector<vector<int>> dp(n+1,vector<int> (n+1,0));
+    for(int idx=n-1;idx>=0;idx--){
+        for(int prevIdx=idx-1;prevIdx>=-1;prevIdx--){
+            int len=0+dp[idx+1][prevIdx+1];
+            if(prevIdx==-1 || arr[idx]>arr[prevIdx]){
+                len=max(len,1+dp[idx+1][idx+1]);
+            }
+            dp[idx][prevIdx+1]=len;
+        }
+    }
+    return dp[0][-1+1];
 }
+//Time Complexity will be O((n+1)^2)
+//Space Complexity will be O((n+1)^2)
+
+//Space Optimization
+int lengthOfLIS_spaceOptimization(vector<int> &arr){
+    int n=arr.size();
+    vector<int> prev(n+1,0);
+    for(int idx=n-1;idx>=0;idx--){
+        vector<int> curr(n+1,0);
+        for(int prevIdx=idx-1;prevIdx>=-1;prevIdx--){
+            int len=0+prev[prevIdx+1];
+            if(prevIdx==-1 || arr[idx]>arr[prevIdx]) len=max(len,1+prev[idx+1]);
+            curr[prevIdx+1]=len;
+        }
+        prev=curr;
+    }
+    return prev[0];
+}
+//Time Complexity will be O(n^2)
+//Space Complexity will be O(2n)
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
