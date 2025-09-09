@@ -894,7 +894,13 @@ int uniquePathsMinFallingSum_brute(vector<vector<int>> &mat){
 
 //Memoization
 int upmnfsHelper_memoization(int x,int y,int n,int m,vector<vector<int>> &dp,vector<vector<int>> &mat){
-    
+    if(x==0) return mat[x][y];
+    if(x<0 || x>=n || y<0 || y>=m) return 1e9;
+    if(dp[x][y]!=-1) return dp[x][y];
+    int up=mat[x][y]+upmnfsHelper_memoization(x-1,y,n,m,dp,mat);
+    int leftUp=mat[x][y]+upmnfsHelper_memoization(x-1,y-1,n,m,dp,mat);
+    int rightUp=mat[x][y]+upmnfsHelper_memoization(x-1,y+1,n,m,dp,mat);
+    return dp[x][y]=min(up,min(leftUp,rightUp));
 }
 int uniquePathsMinFallingSum_memoization(vector<vector<int>> &mat){
     int n=mat.size();
@@ -904,6 +910,59 @@ int uniquePathsMinFallingSum_memoization(vector<vector<int>> &mat){
     for(int i=m-1;i>=0;i--) minSum=min(minSum,upmnfsHelper_memoization(n-1,i,n,m,dp,mat));
     return minSum;
 }
+//There will be a total of n*m times the code will run
+//Recursion stack space of n is being used along with the dp array of size n*m
+//Time Complexity will be O(n*m)
+//Space Complexity will be O(n+m*n)
+
+//Tabulation
+int uniquePathsMinFallingSum_tabulation(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    for(int i=0;i<m;i++) dp[0][i]=mat[0][i];
+    for(int i=1;i<n;i++){
+        for(int j=0;j<m;j++){
+            int up=mat[i][j]+dp[i-1][j];
+            int leftUp=(j>0 ? mat[i][j]+dp[i-1][j-1]:1e9);
+            int rightUp=(j<m-1 ? mat[i][j]+dp[i-1][j+1]:1e9);
+            dp[i][j]=min(up,min(leftUp,rightUp));
+        }
+    }
+    int ans=INT_MAX;
+    for(int i=0;i<m;i++) ans=min(ans,dp[n-1][i]);
+    return ans;
+}
+//Time Complexity will be O(n*m)
+//Space Complexity will be O(n*m)
+
+//Space Optimization
+int uniquePathsMinFallingSum(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<int> prev=mat[0];
+    for(int i=1;i<n;i++){
+        vector<int> curr(m,0);
+        for(int j=0;j<m;j++){
+            int up=mat[i][j]+prev[j];
+            int leftUp=(j>0 ? mat[i][j]+prev[j-1]:1e9);
+            int rightUp=(j<m-1 ? mat[i][j]+prev[j+1]:1e9);
+            curr[j]=min(up,min(leftUp,rightUp));
+        }
+        prev=curr;
+    }
+    int ans=INT_MAX;
+    for(int i=0;i<m;i++) ans=min(ans,prev[i]);
+    return ans;
+}
+//Time Complexity will be O(n*m)
+//Space Complexity will be O(2m)
+
+
+
+
+//DP On Subsequences
+
 
 //Subset Sum equal to target
 //Return true or false if there exists a single subset with sum K
@@ -1622,7 +1681,6 @@ int lengthOfLIS_brute(vector<int> &arr){
     int n=arr.size();
     return lengthOfLISHelper_brute(0,-1,n,arr);
 }
-//Do unique Path Minimum Falling sum(we have done only maximum falling sum)
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
