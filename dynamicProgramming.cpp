@@ -1673,7 +1673,7 @@ int lengthOfLIS_naive(vector<int> &arr){
 //Using the same pick / not pick technique
 int lengthOfLISHelper_brute(int idx,int prevIdx,int n,vector<int> &arr){
     if(idx==n) return 0;
-    int len=0+lengthOfLISHelper_brute(idx,prevIdx,n,arr);
+    int len=0+lengthOfLISHelper_brute(idx+1,prevIdx,n,arr);
     if(prevIdx==-1 || arr[idx]>arr[prevIdx]) len=max(len,1+lengthOfLISHelper_brute(idx+1,idx,n,arr));
     return len;
 }
