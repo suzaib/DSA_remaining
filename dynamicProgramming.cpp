@@ -1745,6 +1745,25 @@ int lengthOfLIS_spaceOptimization(vector<int> &arr){
 //Time Complexity will be O(n^2)
 //Space Complexity will be O(2n)
 
+//The most optimized approach is quite different this time
+//It uses tabulation in a more neat way, try to see video for explanation
+int lengthOfLIS(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp(n,1);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(arr[j]>arr[i]) continue;
+            dp[i]=max(1+dp[j],dp[i]);
+        }
+    }
+    int maxi=1;
+
+    for(int i=0;i<n;i++) maxi=max(maxi,dp[i]);
+    return maxi;
+}
+
+
+
 int main(){
     vector<int> arr={7,1,5,3,6,4};
     cout<<buySellStocksII_brute(arr);
