@@ -1024,7 +1024,7 @@ bool existenceOfSubsetSum(vector<int> arr,int k){
     vector<bool> prev(k+1,0);
     vector<bool> curr(k+1,0);
     prev[0]=curr[0]=true;
-    prev[arr[0]]=true;
+    if(arr[0]<=k) prev[arr[0]]=true;
     for(int ind=1;ind<n;ind++){
         for(int target=1;target<=k;target++){
             bool notTake=prev[target];
@@ -1040,6 +1040,19 @@ bool existenceOfSubsetSum(vector<int> arr,int k){
 //Space Complexity will be O(2M)
 
 
+
+//Partition Equal Subset Sum
+//Check whether or not you can form two subsequences(exhaustive) which will have the same sum
+bool partitionEqualSubsetSum_brute(vector<int> &arr){
+    int n=arr.size();
+    
+    //If the sum of all the elements is odd, then the answer will be false
+    int totalSum=accumulate(arr.begin(),arr.end(),0);
+    if(totalSum%2!=0) return false;
+
+    //We just now need to find whether a subset exists with half of the total sum
+    return existenceOfSubsetSum(arr,totalSum/2);
+}
 
 
 //DP On Strings
