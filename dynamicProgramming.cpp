@@ -1013,9 +1013,9 @@ int cherryPickup_memoization(vector<vector<int>> &mat){
     vector<vector<vector<int>>> dp(n,vector<vector<int>> (m,vector<int> (m,-1)));
     return cherryPickupHelper_memoization(0,0,m-1,n,m,dp,mat);
 }
-//Total times the loop can run will be n*m*m times
+//Total times the loop can run will be n*m*m times and inside also it runs 9 times
 //Total space is n for recursion stack space and n*m*m for 3d dp array
-//Time Complexity will be O(n*m*m)
+//Time Complexity will be O(9*n*m*m)
 //Space Complexity will be O(n+n*m*m)
 
 //Tabulation
@@ -1031,7 +1031,11 @@ int cherryPickup_tabulation(vector<vector<int>> &mat){
         for(int j=0;j<m;j++){
             for(int k=0;k<m;k++){
                 int point=(j==k ? mat[i][j] : mat[i][j]+mat[i][k]);
-                dp[i][j][k]=max()
+                int maxi=INT_MIN;
+                for(int x=-1;x<=1;x++){
+                    for(int y=-1;y<=1;y++) maxi=max(maxi,point+dp[i+1][j+x][k+y]);
+                }
+                dp[i][j][k]=maxi;
             }
         }
     }
