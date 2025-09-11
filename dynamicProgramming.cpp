@@ -1033,14 +1033,20 @@ int cherryPickup_tabulation(vector<vector<int>> &mat){
                 int point=(j==k ? mat[i][j] : mat[i][j]+mat[i][k]);
                 int maxi=INT_MIN;
                 for(int x=-1;x<=1;x++){
-                    for(int y=-1;y<=1;y++) maxi=max(maxi,point+dp[i+1][j+x][k+y]);
+                    for(int y=-1;y<=1;y++){
+                        int nj=j+x;
+                        int nk=k+y;
+                        if(nj>=0 && nj<m && nk>=0 && nk<m) maxi=max(maxi,point+dp[i+1][nj][nk]);
+                    }
                 }
                 dp[i][j][k]=maxi;
             }
         }
     }
+    return dp[0][0][m-1];
 }
-
+//Time Complexity will be O(9*n*m*m)
+//Space Complexity will be O(n*m*m)
 //DP On Subsequences
 
 
