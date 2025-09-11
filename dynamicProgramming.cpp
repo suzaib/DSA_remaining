@@ -1031,7 +1031,7 @@ int cherryPickup_tabulation(vector<vector<int>> &mat){
         for(int j=0;j<m;j++){
             for(int k=0;k<m;k++){
                 int point=(j==k ? mat[i][j] : mat[i][j]+mat[i][k]);
-                int maxi=INT_MIN;
+                int maxi=-1e9;
                 for(int x=-1;x<=1;x++){
                     for(int y=-1;y<=1;y++){
                         int nj=j+x;
@@ -1047,6 +1047,40 @@ int cherryPickup_tabulation(vector<vector<int>> &mat){
 }
 //Time Complexity will be O(9*n*m*m)
 //Space Complexity will be O(n*m*m)
+
+//Space Optimization
+int cherryPickup(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<int>> after(m,vector<int> (m,0));
+    vector<vector<int>> curr(m,vector<int> (m,0));
+    for(int j=0;j<m;j++){
+        for(int k=0;k<m;k++){
+            after[j][k]=(j==k ? mat[n-1][j] : mat[n-1][j]+mat[n-1][k]);
+        }
+    }
+
+    for(int i=n-2;i>=0;i--){
+        for(int j=0;j<m;j++){
+            for(int k=0;k<m;k++){
+                int point=(j==k ? mat[i][j] : mat[i][j]+mat[i][k]);
+                int maxi=-1e9;
+                for(int x=-1;x<=1;x++){
+                    for(int y=-1;y<=1;y++){
+                        int nj=j+x;
+                        int nk=k+y;
+                        if(nj>=0 && nj<m && nk>=0 && nk<m) maxi=max(maxi,point+after[nj][nk]);
+                    }
+                }
+                curr[j][k]=maxi;
+            }
+        }
+        after=curr;
+    }
+    return after[0][m-1];
+}
+//Time Complexity will be O(9*n*m)
+//Space Complexity will be O(2*m*m)
 //DP On Subsequences
 
 
