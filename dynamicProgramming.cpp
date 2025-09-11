@@ -962,27 +962,79 @@ int uniquePathsMinFallingSum(vector<vector<int>> &mat){
 
 //Cherry Pickup OR Chocolate Pickup
 int cherryPickupHelper_brute(int x,int y1,int y2,int n,int m,vector<vector<int>> &mat){
+    if(y1<0 || y1>=m || y2<0 || y2>=m) return -1e9;
     if(x==n-1){//We need to check if they have reached the same cell or not
         if(y1==y2) return mat[x][y1];//If they reach same cell, we return the value of that cell only once
         return (mat[x][y1]+mat[x][y2]);//If they reach different cells, then we return the sum of those two cells
     }
-    if(y1<0 || y1>=m || y2<0 || y2>=m) return -1e9;
+
 
     int maxi=INT_MIN;
     int point=(y1==y2 ? mat[x][y1] : mat[x][y1]+mat[x][y2]);
     for(int i=-1;i<=1;i++){
-        for(int j=-1;j<=1;j++){
-            point=point+cherryPickupHelper_brute(x+1,y1+i,y2+j,n,m,mat);
-            maxi=max(maxi,point);
-        }
+        for(int j=-1;j<=1;j++) maxi=max(maxi,point+cherryPickupHelper_brute(x+1,y1+i,y2+j,n,m,mat));
     }
     return maxi;
-
 }
 int cherryPickup_brute(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
     return cherryPickupHelper_brute(0,0,m-1,n,m,mat);
+}
+//The code will obviously run for n rows along with which at each row, it can move into 9 different ways, therefore the code will run for about 9^n times
+//A recursion stack space of about n will be used
+//Time Complexity will be O(9^n)
+//Space Complexity will be O(n)
+
+//Memoization
+int cherryPickupHelper_memoization(int x,int y1,int y2,int n,int m,vector<vector<vector<int>>> &dp,vector<vector<int>> &mat){
+    if(y1<0 || y1>=m || y2<0 || y2>=m) return -1e9;
+    if(dp[x][y1][y2]!=-1) return dp[x][y1][y2];
+    if(x==n-1){
+        int temp;
+        if(y1==y2) temp=mat[x][y1];
+        else temp=mat[x][y1]+mat[x][y2];
+        return dp[x][y1][y2]=temp; 
+    }
+
+    int point=(y1==y2 ? mat[x][y1] : mat[x][y1]+mat[x][y2]);
+    int maxi=INT_MIN;
+    for(int i=-1;i<=1;i++){
+        for(int j=-1;j<=1;j++){
+            maxi=max(maxi,point+cherryPickupHelper_memoization(x+1,y1+i,y2+j,n,m,dp,mat));
+        }
+    }
+    return dp[x][y1][y2]=maxi;
+}
+
+int cherryPickup_memoization(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (m,vector<int> (m,-1)));
+    return cherryPickupHelper_memoization(0,0,m-1,n,m,dp,mat);
+}
+//Total times the loop can run will be n*m*m times
+//Total space is n for recursion stack space and n*m*m for 3d dp array
+//Time Complexity will be O(n*m*m)
+//Space Complexity will be O(n+n*m*m)
+
+//Tabulation
+int cherryPickup_tabulation(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (m,vector<int> (m,0)));
+    for(int j=0;j<m;j++){
+        for(int k=0;k<m;k++) dp[n-1][j][k]=(j==k ? mat[n-1][j] : mat[n-1][j]+mat[n-1][k]);
+    }
+
+    for(int i=n-2;i>=0;i--){
+        for(int j=0;j<m;j++){
+            for(int k=0;k<m;k++){
+                int point=(j==k ? mat[i][j] : mat[i][j]+mat[i][k]);
+                dp[i][j][k]=max()
+            }
+        }
+    }
 }
 
 //DP On Subsequences
