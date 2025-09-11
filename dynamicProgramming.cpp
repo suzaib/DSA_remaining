@@ -960,6 +960,30 @@ int uniquePathsMinFallingSum(vector<vector<int>> &mat){
 
 
 
+//Cherry Pickup OR Chocolate Pickup
+int cherryPickupHelper_brute(int x,int y1,int y2,int n,int m,vector<vector<int>> &mat){
+    if(x==n-1){//We need to check if they have reached the same cell or not
+        if(y1==y2) return mat[x][y1];//If they reach same cell, we return the value of that cell only once
+        return (mat[x][y1]+mat[x][y2]);//If they reach different cells, then we return the sum of those two cells
+    }
+    if(y1<0 || y1>=m || y2<0 || y2>=m) return -1e9;
+
+    int maxi=INT_MIN;
+    int point=(y1==y2 ? mat[x][y1] : mat[x][y1]+mat[x][y2]);
+    for(int i=-1;i<=1;i++){
+        for(int j=-1;j<=1;j++){
+            point=point+cherryPickupHelper_brute(x+1,y1+i,y2+j,n,m,mat);
+            maxi=max(maxi,point);
+        }
+    }
+    return maxi;
+
+}
+int cherryPickup_brute(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    return cherryPickupHelper_brute(0,0,m-1,n,m,mat);
+}
 
 //DP On Subsequences
 
