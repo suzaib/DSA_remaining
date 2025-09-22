@@ -146,6 +146,23 @@ int recursiveAtoI(string &str){
 //Space Complexity will be O(n)
 
 
+//Recursive Implementation of pow(x,n) function
+double powerHelper(double x,int n){
+    if(n==0) return 1.00;
+    if(n%2==0) return powerHelper(x*x,n/2);
+    else return 1.0*x*powerHelper(x,n-1);
+}
+double power(double x,int n){
+    if(n==0) return 1.00;
+    bool sign=n>0;
+    int abs_n=abs(n);
+    double ans=powerHelper(x,abs_n);
+    if(sign) return ans;
+    ans=(1.00)/(1.00*ans);
+    return ans;
+}
+
+
 
 //Functions with multiple recursions calls
 //A thing to be noted in multiple recursion calls is that for eg: return = recursion1 + recursion2 , then only after
