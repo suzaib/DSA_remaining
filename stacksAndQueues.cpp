@@ -795,9 +795,14 @@ vector<int> findPGE(vector<int> &arr){
     vector<int> ans;
     return ans;
 }
+
+
+
+
 //Trapping Rainwater : Formula --> min(leftMaxElement,rightMaxElement)-height of building, this give the water logged on that building
+//Naive Approach
 //Add water logged on all the buildings to get the total trapped water
-int trappingRainwater_brute(vector<int> arr){
+int trappingRainwater_naive(vector<int> arr){
     int n=arr.size();
     int leftMax=-1;
     int rightMax=-1;
@@ -815,8 +820,8 @@ int trappingRainwater_brute(vector<int> arr){
 //Time Complexity will be O(n2)
 
 //We can create two arrays and keep track of left max and right max in them
-//Better Approach
-int trappingRainwater_better(vector<int> arr){
+//Brute Force Approach
+int trappingRainwater_brute(vector<int> arr){
     int n=arr.size();
     int totalWaterLogged;
     vector<int> prefixMax=arr;
@@ -832,8 +837,29 @@ int trappingRainwater_better(vector<int> arr){
 //Time Complexity will be O(3n)
 //Space Complexity will be O(2n)
 
+//We can just use a single array, since when we are calculating water trapped, we are traversing from 0 to n-1, therefore we can keep track of leftMax
+//Better Method
+int trappingRainwater_better(vector<int> &arr){
+    int n=arr.size();
+    int totalWaterTrapped=0;
+    vector<int> suffixMax(n);
+    suffixMax[n-1]=arr[n-1];
+    for(int i=n-2;i>=0;i--) suffixMax[i]=max(suffixMax[i+1],arr[i]);
+    int leftMax=-1;
+    int rightMax;
+    for(int i=0;i<n;i++){
+        leftMax=max(leftMax,arr[i]);
+        rightMax=suffixMax[i];
+        int waterTrapped=min(leftMax,rightMax)-arr[i];
+        totalWaterTrapped+=(waterTrapped>0 ? waterTrapped : 0);
+    }
+    return totalWaterTrapped;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(n)
+
 //Optimal Approach
-int trappingRainwater(vector<int> arr){
+int trappingRainwater1(vector<int> arr){
     int n=arr.size();
     int leftMax=0;
     int rightMax=0;
@@ -855,6 +881,32 @@ int trappingRainwater(vector<int> arr){
     return total;
 }
 //Time Complexity will be O(n)
+
+//Optimal Approach 2
+//Same Logic, but more understandable code
+int trappingRainwater2(vector<int> arr){
+    int n=arr.size();
+    int totalWaterTrapped=0;
+    int lMax=0;
+    int rMax=0;
+    int i=0;
+    int j=n-1;
+    while(i<j){
+        lMax=max(lMax,arr[i]);
+        rMax=max(rMax,arr[j]);
+        int waterTrapped;
+        if(lMax>rMax){
+            waterTrapped=rMax-arr[j];
+            j--;
+        }
+        else{
+            waterTrapped=lMax-arr[i];
+            i++;
+        }
+        totalWaterTrapped+=waterTrapped;
+    }
+    return totalWaterTrapped;
+}
 
 //Sum of Subarray minimum
 //Form all possible subarrays, then find out the minimum element in each one of them, then sum all these minimum element
