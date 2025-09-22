@@ -859,32 +859,7 @@ int trappingRainwater_better(vector<int> &arr){
 //Space Complexity will be O(n)
 
 //Optimal Approach
-int trappingRainwater1(vector<int> arr){
-    int n=arr.size();
-    int leftMax=0;
-    int rightMax=0;
-    int total=0;
-    int left=0;
-    int right=n-1;
-    while(left<right){
-        if(arr[left]<=arr[right]){
-            if(leftMax>arr[left]) total+=(leftMax-arr[left]);
-            else leftMax=arr[left];
-            left++;
-        }
-        else{
-            if(rightMax>arr[right]) total+=(rightMax-arr[right]);
-            else rightMax=arr[right];
-            right--;
-        }
-    }
-    return total;
-}
-//Time Complexity will be O(n)
-
-//Optimal Approach 2
-//Same Logic, but more understandable code
-int trappingRainwater2(vector<int> arr){
+int trappingRainwater(vector<int> arr){
     int n=arr.size();
     int totalWaterTrapped=0;
     int lMax=0;
@@ -907,6 +882,8 @@ int trappingRainwater2(vector<int> arr){
     }
     return totalWaterTrapped;
 }
+//Time Complexity will be O(n)
+
 
 //Sum of Subarray minimum
 //Form all possible subarrays, then find out the minimum element in each one of them, then sum all these minimum element
