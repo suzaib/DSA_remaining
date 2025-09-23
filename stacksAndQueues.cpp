@@ -784,9 +784,17 @@ vector<int> findNSE(vector<int> &arr){
 vector<int> findNGE(vector<int> &arr){
     int n=arr.size();
     stack<pair<int,int>> st;
-    vector<int> ans;
+    vector<int> ans(n);
+    for(int i=n-1;i>=0;i--){
+        while(!st.empty() && st.top().first<=arr[i]) st.pop();
+        if(st.empty()) ans[i]=n;
+        else ans[i]=st.top().second;
+        st.push({arr[i],i});
+    }
     return ans;
 }
+//Time Complexity will be O(2n)
+//Space Complexity wil be O(2n)
 
 //Find Previous Greater Element
 vector<int> findPGE(vector<int> &arr){
@@ -1192,11 +1200,14 @@ int largestRectangle_brute(vector<int> &arr){
     }
     return maxArea;
 }
+//Time Complexity will be O(n2)
+
+
 
 int main(){
     vector<int> arr={3,1,2,4};
     cout<<sumOfSubarrMin_brute(arr);
 }
-//Complete findNGE and findPGE functions(they should give index)
+//Complete findPGE functions(they should give index)
 
 
