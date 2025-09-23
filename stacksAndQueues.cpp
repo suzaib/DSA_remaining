@@ -1238,18 +1238,17 @@ int largestRectangle(vector<int> &arr){
     for(int i=0;i<n;i++){
         if(st.empty()) st.push({i,arr[i]});
         else{
-            if(arr[i]<st.top().second){
+            while(!st.empty() && arr[i]<st.top().second){
                 nse=arr[i];
                 int x=st.top().second;
                 st.pop();
                 pse=(st.empty() ? -1 : st.top().first);
                 maxArea=max((nse-pse-1)*x,maxArea);
             }
-            else{
-                
-            }
+            st.push({i,arr[i]});
         }
     }
+    return maxArea;
 }
 
 
