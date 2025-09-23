@@ -800,9 +800,17 @@ vector<int> findNGE(vector<int> &arr){
 vector<int> findPGE(vector<int> &arr){
     int n=arr.size();
     stack<pair<int,int>> st;
-    vector<int> ans;
+    vector<int> ans(n);
+    for(int i=0;i<n;i++){
+        while(!st.empty() && st.top().first<=arr[i]) st.pop();
+        if(st.empty()) ans[i]=-1;
+        else ans[i]=st.top().second;
+        st.push({arr[i],i});
+    }
     return ans;
 }
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
 
 
 
@@ -1201,6 +1209,49 @@ int largestRectangle_brute(vector<int> &arr){
     return maxArea;
 }
 //Time Complexity will be O(n2)
+
+//Better Approach
+//We can also use the concepts of pse and nse to solve this
+int largestRectangle_better(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    vector<int> nse=findNSE(arr);
+    vector<int> pse=findPSE(arr);
+    for(int i=0;i<n;i++){
+        int l=pse[i];
+        int r=nse[i];
+        int area=(r-l-1)*arr[i];
+        maxArea=max(maxArea,area);
+    }
+    return maxArea;
+}
+//Time Complexity will be O(2n+2n+n)
+//Space Complexity will be O(2n+2n+n+n)
+
+//Optimal Approach
+//Quite Complex Approach hence video is recommended
+int largestRectangle(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    int nse,pse;
+    stack<pair<int,int>> st;
+    for(int i=0;i<n;i++){
+        if(st.empty()) st.push({i,arr[i]});
+        else{
+            if(arr[i]<st.top().second){
+                nse=arr[i];
+                int x=st.top().second;
+                st.pop();
+                pse=(st.empty() ? -1 : st.top().first);
+                maxArea=max((nse-pse-1)*x,maxArea);
+            }
+            else{
+                
+            }
+        }
+    }
+}
+
 
 
 
