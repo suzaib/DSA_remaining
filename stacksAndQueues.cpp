@@ -1239,7 +1239,7 @@ int largestRectangle(vector<int> &arr){
         if(st.empty()) st.push({i,arr[i]});
         else{
             while(!st.empty() && arr[i]<st.top().second){
-                nse=arr[i];
+                nse=i;
                 int x=st.top().second;
                 st.pop();
                 pse=(st.empty() ? -1 : st.top().first);
@@ -1248,8 +1248,17 @@ int largestRectangle(vector<int> &arr){
             st.push({i,arr[i]});
         }
     }
+    nse=n;
+    while(!st.empty()){
+        int x=st.top().second;
+        st.pop();
+        int pse=(st.empty()? -1:st.top().first);
+        maxArea=max((nse-pse-1)*x,maxArea);
+    }
     return maxArea;
 }
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
 
 
 
