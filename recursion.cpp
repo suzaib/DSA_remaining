@@ -161,6 +161,7 @@ double power(double x,int n){
     ans=(1.00)/(1.00*ans);
     return ans;
 }
+//Time Complexity will be O(log n)
 
 
 

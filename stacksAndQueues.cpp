@@ -1176,7 +1176,22 @@ vector<int> asteroidCollision(vector<int> &arr){
 //No space is required to solve the question, to give the answer only we need the ans array so Space Complexity will be O(1)
 
 
-//Largest Rectangle in a Histogram
+//Area of Largest Rectangle in a Histogram
+//Brute Force Approach
+//Just try to count in leftwards and rightwards direction
+int largestRectangle_brute(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    for(int i=0;i<n;i++){
+        int r=i;
+        int l=i;
+        while(r<n && arr[r]>=arr[i]) r++;
+        while(l>=0 && arr[l]>=arr[i]) l--;
+        int area=(r-l-1)*(arr[i]);
+        maxArea=max(area,maxArea);
+    }
+    return maxArea;
+}
 
 int main(){
     vector<int> arr={3,1,2,4};
