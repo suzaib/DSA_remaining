@@ -1094,8 +1094,9 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 
 //Optimal Method for cycle in directed graph
 
+//Lecture 30 Word Ladder 2
 
-
+//Dijkstra's Algorithm Lecture 32
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
     cout<<countDistIslands(matrix);
