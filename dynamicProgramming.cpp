@@ -1168,7 +1168,7 @@ bool existenceOfSubsetSum(vector<int> arr,int k){
 
 //Partition Equal Subset Sum
 //Check whether or not you can form two subsequences(exhaustive) which will have the same sum
-bool partitionEqualSubsetSum_brute(vector<int> &arr){
+bool partitionEqualSubsetSum(vector<int> &arr){
     int n=arr.size();
     
     //If the sum of all the elements is odd, then the answer will be false
@@ -1178,6 +1178,12 @@ bool partitionEqualSubsetSum_brute(vector<int> &arr){
     //We just now need to find whether a subset exists with half of the total sum
     return existenceOfSubsetSum(arr,totalSum/2);
 }
+
+
+
+//DP 16
+//Partition a set into two subsets with minimum absolute difference
+//Brute Force
 
 
 //DP On Strings
