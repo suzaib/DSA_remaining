@@ -1255,7 +1255,7 @@ int minDiffSubsets_better(vector<int> &arr){
 
 //Optimal Method
 //Using the Space Optimization Approach
-int minDiffSubsets(vector<int> &arr){
+int minDiffSubsets_spaceOptimized(vector<int> &arr){
     int n=arr.size();
     int totalSum=accumulate(arr.begin(),arr.end(),0);
     vector<int> prev(totalSum+1,0);
@@ -1281,6 +1281,23 @@ int minDiffSubsets(vector<int> &arr){
 //Time Complexity will be O(NK)
 //Space Complexity will be O(2K)
 
+//Further Optimization
+int minDiffSubsets(vector<int> &arr){
+    int n=arr.size();
+    int totalSum=accumulate(arr.begin(),arr.end(),0);
+    vector<int> dp(totalSum+1,0);
+    dp[0]=true;
+    for(int idx=1;idx<n;idx++){
+        for(int target=1;target<=totalSum;target++){
+            if(target>=arr[idx]) dp[target]=(dp[target] || dp[target-arr[i]]);
+        }
+    }
+
+    for(int i=totalSum/2;i>=0;i--){
+        if(dp[i]) return abs(i-(totalSum-i));
+    }
+    return 0;
+}
 //DP On Strings
 
 //Longest Common Subsequence
