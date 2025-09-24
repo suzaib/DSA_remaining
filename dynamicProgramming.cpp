@@ -1178,7 +1178,8 @@ bool partitionEqualSubsetSum(vector<int> &arr){
     //We just now need to find whether a subset exists with half of the total sum
     return existenceOfSubsetSum(arr,totalSum/2);
 }
-
+//Time Complexity will be O(MN + N)
+//Space Complexity will be O(2M)
 
 
 //DP 16
@@ -1195,6 +1196,7 @@ int minDiffSubsets_brute(vector<int> &arr){
             return abs(x-y);
         }
     }
+    return 0;
 }
 
 
