@@ -1188,7 +1188,13 @@ bool partitionEqualSubsetSum(vector<int> &arr){
 int minDiffSubsets_brute(vector<int> &arr){
     int n=arr.size();
     int totalSum=accumulate(arr.begin(),arr.end(),0);
-    
+    for(int sum=totalSum/2;sum>=0;sum--){
+        if(existenceOfSubsetSum(arr,sum)){
+            int x=sum;
+            int y=totalSum-sum;
+            return abs(x-y);
+        }
+    }
 }
 
 
