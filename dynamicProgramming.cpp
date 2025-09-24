@@ -1142,9 +1142,11 @@ bool existenceOfSubsetSum_tabulation(vector<int> arr,int target){
     }
     return dp[n-1][target];
 }
+//Time Complexity will be O(MN)
+//Space Complexity will be O(MN)
 
 //Space Optimization
-bool existenceOfSubsetSum(vector<int> arr,int k){
+bool existenceOfSubsetSum_spaceOptimized(vector<int> arr,int k){
     int n=arr.size();
     vector<bool> prev(k+1,0);
     vector<bool> curr(k+1,0);
@@ -1163,6 +1165,24 @@ bool existenceOfSubsetSum(vector<int> arr,int k){
 }
 //Time Complexity will be O(MN)
 //Space Complexity will be O(2M)
+
+//Further Optimization
+//Using only one array
+bool existenceOfSubsetSum(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(k+1,0);
+    dp[0]=true;
+    if(arr[0]<=k) dp[arr[0]]=true;
+    for(int idx=1;idx<n;idx++){
+        for(int target=k;target>=0;target--){
+            if(arr[idx]<=target) dp[target]=(dp[target] || dp[target-arr[idx]]);
+        }
+    }
+    return dp[k];
+}
+//Time Complexity will be O(MN)
+//Space Complexity will be O(M)
+
 
 
 
@@ -1213,9 +1233,9 @@ int minDiffSubsets_better(vector<int> &arr){
     dp[0][arr[0]]=true;
     for(int i=1;i<n;i++){
         for(int j=1;j<=totalSum;j++){
-            int pick=false;
+            bool pick=false;
             if(arr[i]<=j) pick=dp[i-1][j-arr[i]];
-            int notPick=dp[i-1][j];
+            bool notPick=dp[i-1][j];
             dp[i][j]=(notPick || pick);
         }
     }
@@ -1229,8 +1249,37 @@ int minDiffSubsets_better(vector<int> &arr){
         }
     }
     return minSum;
-
 }
+//Time Complexity will be O(MN + M/2)
+//Space Complexity will be O(MN)
+
+//Optimal Method
+//Using the Space Optimization Approach
+int minDiffSubsets(vector<int> &arr){
+    int n=arr.size();
+    int totalSum=accumulate(arr.begin(),arr.end(),0);
+    vector<int> prev(totalSum+1,0);
+    vector<int> curr(totalSum+1,0);
+    prev[0]=curr[0]=1;
+    prev[arr[0]]=1;
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=totalSum;j++){
+            bool pick=false;
+            if(arr[i]<=j) pick=prev[j-arr[i]];
+            bool notPick=prev[j];
+            curr[j]=(pick || notPick);
+        }
+        prev=curr;
+    }
+
+    for(int i=totalSum/2;i>=0;i--){
+        if(curr[i]) return abs(i-(totalSum-i));
+    }
+    return 0;
+}
+//The loop runs for n*totalSum(k)
+//Time Complexity will be O(NK)
+//Space Complexity will be O(2K)
 
 //DP On Strings
 
