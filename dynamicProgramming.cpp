@@ -1198,7 +1198,39 @@ int minDiffSubsets_brute(vector<int> &arr){
     }
     return 0;
 }
+//The loop will run for (k/2)*(mn) times, here k is the total sum of array
+//Time Complexity will be O(MN)*O(K/2)
+//Space Complexity will be O(2M)
 
+//Better Approach 
+//The dp we form in tabulation stores every index and sum combination that can be formed
+//Therefore we should simply generate that dp
+int minDiffSubsets_better(vector<int> &arr){
+    int n=arr.size();
+    int totalSum=accumulate(arr.begin(),arr.end(),0);
+    vector<vector<int>> dp(n,vector<int> (totalSum+1,0));
+    for(int i=0;i<n;i++) dp[i][0]=true;
+    dp[0][arr[0]]=true;
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=totalSum;j++){
+            int pick=false;
+            if(arr[i]<=j) pick=dp[i-1][j-arr[i]];
+            int notPick=dp[i-1][j];
+            dp[i][j]=(notPick || pick);
+        }
+    }
+    
+    int minSum=INT_MAX;
+    for(int i=0;i<=totalSum/2;i++){
+        if(dp[n-1][i]){
+            int x=i;
+            int y=totalSum-i;
+            minSum=min(minSum,abs(x-y));
+        }
+    }
+    return minSum;
+
+}
 
 //DP On Strings
 
