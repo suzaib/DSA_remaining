@@ -1184,6 +1184,12 @@ bool partitionEqualSubsetSum(vector<int> &arr){
 //DP 16
 //Partition a set into two subsets with minimum absolute difference
 //Brute Force
+//Start from half of the sum and see if you can find a subset with the closest sum to half
+int minDiffSubsets_brute(vector<int> &arr){
+    int n=arr.size();
+    int totalSum=accumulate(arr.begin(),arr.end(),0);
+    
+}
 
 
 //DP On Strings
