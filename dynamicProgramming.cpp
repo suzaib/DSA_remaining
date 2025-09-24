@@ -1287,10 +1287,9 @@ int minDiffSubsets(vector<int> &arr){
     int totalSum=accumulate(arr.begin(),arr.end(),0);
     vector<int> dp(totalSum+1,0);
     dp[0]=true;
+    dp[arr[0]]=true;
     for(int idx=1;idx<n;idx++){
-        for(int target=1;target<=totalSum;target++){
-            if(target>=arr[idx]) dp[target]=(dp[target] || dp[target-arr[i]]);
-        }
+        for(int target=totalSum;target>=arr[idx];target--) dp[target]=(dp[target] || dp[target-arr[idx]]);
     }
 
     for(int i=totalSum/2;i>=0;i--){
@@ -1298,6 +1297,12 @@ int minDiffSubsets(vector<int> &arr){
     }
     return 0;
 }
+//Time Complexity will be O(KN)
+//Space Compexity will be O(K)
+
+
+
+
 //DP On Strings
 
 //Longest Common Subsequence
