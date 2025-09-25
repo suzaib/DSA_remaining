@@ -1302,6 +1302,30 @@ int minDiffSubsets(vector<int> &arr){
 
 
 
+//Number of subsets with the given sum
+//Brute Force 
+//Same as in recursion where we count number of subsequences
+int noOfSubsetsWithSumKHelper_brute(int idx,int target,vector<int> &arr){
+    if(idx==0){
+        if(arr[idx]==0 && target==0) return 2;
+        if(target==0 || arr[idx]==target) return 1;
+        return 0;
+    }
+    if(target==0) return 1;
+    int pick=0;
+    if(target>=arr[idx]) pick=noOfSubsetsWithSumKHelper_brute(idx-1,target-arr[idx],arr);
+    int notPick=noOfSubsetsWithSumKHelper_brute(idx-1,target,arr);
+    return pick+notPick;
+}
+int noOfSubsetsWithSumK_brute(vector<int> &arr,int k){
+    int n=arr.size();
+    return noOfSubsetsWithSumKHelper_brute(n-1,k,arr);
+}
+//For each element we have a choice if we want to pick or not Pick, therefore 2^n ways
+//A stack space of n is used, since there are total of n levels in recursion stack
+//Time Complexity will be O(2^n)
+//Space Complexity will be O(n)
+
 
 //DP On Strings
 
