@@ -1346,7 +1346,18 @@ int noOfSubsetsWithSumK_memoization(vector<int> &arr,int k){
     vector<vector<int>> dp(n,vector<int> (k+1,-1));
     return noOfSubsetsWithSumKHelper_memoization(n-1,k,dp,arr);
 }
+//The code runs for N*K times in total
+//Space occupied will be the dp (N*K) along with N recursion stack space
+//Time Complexity will be O(NK)
+//Space Complexity will be O(NK+N)
 
+//Tabulation
+int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (k+1,0));
+    for(int i=0;i<n;i++) dp[i][0]=1;
+    dp[0][arr[idx]]=2;
+}
 //DP On Strings
 
 //Longest Common Subsequence
