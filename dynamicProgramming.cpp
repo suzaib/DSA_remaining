@@ -1356,7 +1356,8 @@ int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (k+1,0));
     for(int i=0;i<n;i++) dp[i][0]=1;
-    dp[0][arr[idx]]=2;
+    dp[0][arr[0]]=1;
+    if(arr[0]=0) 
 }
 //DP On Strings
 
