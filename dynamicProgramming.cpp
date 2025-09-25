@@ -2126,7 +2126,9 @@ int lengthOfLIS(vector<int> &arr){
 //DP 42
 
 //Dp 17
+class Node{
 
+}
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
