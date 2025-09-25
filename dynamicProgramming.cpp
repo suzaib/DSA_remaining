@@ -1368,6 +1368,18 @@ int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
     }
     return dp[n-1][k];
 }
+//Time Complexity will be O(NK)
+//Space Complexity will be O(NK)
+
+//Space Optimization
+int noOfSubsetsWithSumK(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> curr=(k+1,0);
+    vector<int> prev=(k+1,0);
+    prev[0]=1;
+    if(arr[0]<=k) prev[arr[0]]=1;
+    if(arr[0]=0) prev[0]
+}
 //DP On Strings
 
 //Longest Common Subsequence
