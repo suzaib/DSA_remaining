@@ -1326,6 +1326,12 @@ int noOfSubsetsWithSumK_brute(vector<int> &arr,int k){
 //Time Complexity will be O(2^n)
 //Space Complexity will be O(n)
 
+//Memoization
+int noOfSubsetsWithSumK_memoization(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (k+1,-1));
+    return noOfSubsetsWithSumKHelper_memoization()
+}
 
 //DP On Strings
 
