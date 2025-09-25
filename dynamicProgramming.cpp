@@ -1327,10 +1327,24 @@ int noOfSubsetsWithSumK_brute(vector<int> &arr,int k){
 //Space Complexity will be O(n)
 
 //Memoization
+int noOfSubsetsWithSumKHelper_memoization(int idx,int target,vector<vector<int>> &dp,vector<int> &arr){
+    if(dp[idx][target]!=-1) return dp[idx][target];
+    if(idx==0){
+        if(arr[idx]==0 && target==0) return dp[idx][target]=2;
+        if(target==0 || arr[idx]==target) return dp[idx][target]=1;
+        return dp[idx][target]=0;
+    }
+    if(target==0) return dp[idx][target]=1;
+
+    int pick=0;
+    if(arr[idx]<=target) pick=noOfSubsetsWithSumKHelper_memoization(idx-1,target-arr[idx],dp,arr);
+    int notPick=noOfSubsetsWithSumKHelper_memoization(idx-1,target,dp,arr);
+    return dp[idx][target]=(pick+notPick);
+}
 int noOfSubsetsWithSumK_memoization(vector<int> &arr,int k){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (k+1,-1));
-    return noOfSubsetsWithSumKHelper_memoization()
+    return noOfSubsetsWithSumKHelper_memoization(n-1,k,dp,arr);
 }
 
 //DP On Strings
