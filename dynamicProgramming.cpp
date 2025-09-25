@@ -1372,15 +1372,15 @@ int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
 //Space Complexity will be O(NK)
 
 //Space Optimization
-int noOfSubsetsWithSumK(vector<int> &arr,int k){
+int noOfSubsetsWithSumK_spaceOptimization(vector<int> &arr,int k){
     int n=arr.size();
     vector<int> curr(k+1,0);
     vector<int> prev(k+1,0);
     prev[0]=1;
     if(arr[0]<=k) prev[arr[0]]=1;
-    if(arr[0]=0) prev[0]=0;
+    if(arr[0]==0) prev[0]=2;
     for(int i=1;i<n;i++){
-        for(int j=1;j<=k+1;j++){
+        for(int j=1;j<=k;j++){
             int pick=0;
             if(arr[i]<=j) pick=prev[j-arr[i]];
             int notPick=prev[j];
@@ -1388,8 +1388,18 @@ int noOfSubsetsWithSumK(vector<int> &arr,int k){
         }
         prev=curr;
     }
-    return prev[n-1];
+    return prev[k];
 }
+//Time Complexity will be O(NK)
+//Space Complexity will be O(2K)
+
+//Further Optimization
+int noOfSubsetsWithSumK(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(k+1,0);
+    dp[0]=
+}
+
 //DP On Strings
 
 //Longest Common Subsequence
