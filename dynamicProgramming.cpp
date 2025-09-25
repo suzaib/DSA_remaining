@@ -1374,11 +1374,21 @@ int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
 //Space Optimization
 int noOfSubsetsWithSumK(vector<int> &arr,int k){
     int n=arr.size();
-    vector<int> curr=(k+1,0);
-    vector<int> prev=(k+1,0);
+    vector<int> curr(k+1,0);
+    vector<int> prev(k+1,0);
     prev[0]=1;
     if(arr[0]<=k) prev[arr[0]]=1;
-    if(arr[0]=0) prev[0]
+    if(arr[0]=0) prev[0]=0;
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=k+1;j++){
+            int pick=0;
+            if(arr[i]<=j) pick=prev[j-arr[i]];
+            int notPick=prev[j];
+            curr[j]=pick+notPick;
+        }
+        prev=curr;
+    }
+    return prev[n-1];
 }
 //DP On Strings
 
