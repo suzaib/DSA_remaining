@@ -1455,6 +1455,31 @@ int longestCommonSubseq_mem(string str1,string str2){
 //Time Complexity will be O(NM)
 //Space Complexity will be O(NM) + O(N+M)(auxiliary stack space) (recursion, since we move in two directions)
 
+//Tabulation
+int longestCommonSubseq_tabulation(string s1,string s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,0));
+    for(int i=0;i<n;i++){
+        if(s1[i]==s2[0]) dp[i][0]=1;
+    }
+    for(int j=0;j<m;j++){
+        if(s1[0]==s2[j]) dp[0][j]=1;
+    }
+    for(int i=1;i<n;i++){
+        for(int j=1;j<m;j++){
+            int total;
+            if(i==j) total=1+dp[i-1][j-1];
+            else{
+                int ls=dp[i-1][j];
+                int rs=dp[i][j-1];
+                total=max(ls,rs);
+            }
+            dp[i][j]=total;
+        }
+    }
+}
+
 
 
 
