@@ -7,6 +7,6 @@ int main(){
 
 int fx(vector<int> &arr){
     int n=arr.size();
-    vector<vector<int>> dp(n,vector<int> (n+1,-1));
-    return 
+    vector<vector<int>> dp(n+1,vector<int> (n+1,-1));
+    for(int i=)
 }
