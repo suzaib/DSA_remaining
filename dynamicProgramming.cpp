@@ -1557,18 +1557,21 @@ int longestCommonSubseq_tabulation(string s1,string s2){
 //Space Complexity will be O(NM)
 
 //Space Optimization
-int longestCommonSubseq_spaceOptimization(string &s1,string &s2){
+int longestCommonSubseq(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
     vector<int> curr(m+1,0);
     vector<int> prev(m+1,0);
     for(int i=1;i<=n;i--){
         for(int j=1;j<=m;j--){
-            
+            if(s1[i-1]==s2[j-1]) curr[j]=1+prev[j-1];
+            else curr[j]=max(curr[j-1],prev[j]);
         }
+        prev=curr;
     }
-
 }
+//Time Complexity will be O(NM)
+//Space Complexity will be O(N+M+2)
 
 
 
@@ -2156,7 +2159,6 @@ int lengthOfLIS_naive(vector<int> &arr){
 }
 //Time Complexity will be ~ O(2^n)
 //Space Complexity will be O(n) recursion stack space
-//See if you can further optimize stocks II problem
 
 //Brute Force
 //Using the same pick / not pick technique
@@ -2257,6 +2259,7 @@ int lengthOfLIS(vector<int> &arr){
 //DP 42
 
 //Dp 17
+//See if you can further optimize stocks II problem
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
