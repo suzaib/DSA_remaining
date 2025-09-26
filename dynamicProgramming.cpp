@@ -2178,6 +2178,7 @@ int lengthOfLIS_brute(vector<int> &arr){
 //Space Complexity will be O(n)
 
 //Memoization
+//We use the index shifting here since -1 can't be used as dp[prevIdx]
 int lengthOfLISHelper_memoization(int idx,int prevIdx,int n,vector<vector<int>> &dp,vector<int> &arr){
     if(idx==n) return 0;
     if(dp[idx][prevIdx+1]!=-1) return dp[idx][prevIdx+1];
