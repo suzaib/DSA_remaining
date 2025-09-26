@@ -1481,7 +1481,9 @@ int longestCommonSubseq_brute(string str1,string str2){
     return lcsHelper_brute(n-1,m-1,str1,str2);
 }
 //Since there are a total pow(2,n) subsequences for first string and pow(2,m) subsequences for the second string, time complexity will be pow(2,n)*pow(2,m)
-//Time Complexity will be exponential
+//A recursion stack space of N+M is also used
+//Time Complexity will be O(2^n)*O(2^m)
+//Space Complexity will be O(N+M)
 
 //Memoization
 int lcsHelper_mem(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
@@ -1503,6 +1505,30 @@ int longestCommonSubseq_mem(string str1,string str2){
 //Space Complexity will be O(NM) + O(N+M)(auxiliary stack space) (recursion, since we move in two directions)
 
 //Tabulation
+//The tabulation in such cases can be written in two ways
+//First is the usual method, taught by most, striver also
+//It tries to copy the base case used in memoization, since there it is when any index < 0 , return 0
+//But since array don't have negative index, therefore we do a shifting of indices in the above problem
+//So every i becomes i-1 and every j is j-1
+//This method uses a dp of (n+1)*(m+1) but it is important as this method will be used in several other problems
+int longestCommonSubseq_tabulation_shiftingIndexMethod(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=1+dp[i-1][j-1];
+            else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    return dp[n][m];
+}
+//Time Complexity will be O(nm)
+//Space Complexity will be O((n+1)*(m+1))
+
+//This is the second method
+//This one is more intuitive but runs extra loops
+//In this we clearly build the base case 
 int longestCommonSubseq_tabulation(string s1,string s2){
     int n=s1.size();
     int m=s2.size();
@@ -1536,6 +1562,11 @@ int longestCommonSubseq_spaceOptimization(string &s1,string &s2){
     int m=s2.size();
     vector<int> curr(m+1,0);
     vector<int> prev(m+1,0);
+    for(int i=1;i<=n;i--){
+        for(int j=1;j<=m;j--){
+            
+        }
+    }
 
 }
 
