@@ -1421,6 +1421,53 @@ int noOfSubsetsWithSumK(vector<int> &arr,int k){
 //Longest Common Subsequence
 //Two Strings given and you have to find the longest common subsequence between them
 //Return the length of such a subsequence
+
+//Naive Method
+//Generate all the subsequences of string s1 and string s2 and then compare which are common subsequences then find which one of them is the longest
+
+//Generating all subsequences, by using take and not take approach
+void allSubsequencesHelper(int idx,int n,vector<vector<char>> &ans,vector<char> &temp,string &str){
+    if(idx==n){
+        ans.push_back(temp);
+        return;
+    }
+    
+    //Pick
+    temp.push_back(str[idx]);
+    allSubsequencesHelper(idx+1,n,ans,temp,str);
+
+    //Not Pick
+    temp.pop_back();
+    allSubsequencesHelper(idx+1,n,ans,temp,str);
+}
+vector<vector<char>> allSubsequences(string &str){
+    int n=str.size();
+    vector<vector<char>> ans;
+    vector<char> temp;
+    allSubsequencesHelper(0,n,ans,temp,str);
+    return ans;
+}
+//Each element has two choices, can be picked or not picked, therefore code will run 2^n times
+//Also the thing to be noted is that at the base case when we say ans.push_back(temp), it takes n time as well, where n is the length of temp
+//Therefore it can be n in the worst case, therefore the total time code will run will be O(n*2^n)
+//Recursion stack space of n is used along with n more due to temp array. The space used to return the ans is not counted
+//Time Complexity will be O(n*2^n)
+//Space Complexity will be O(2n)
+
+//Now we will write our function
+int longestCommonSubsequences_naive(string &s1,string &s2){
+    vector<vector<char>> sub1=allSubsequences(s1);
+    vector<vector<char>> sub2=allSubsequences(s2);
+    int maxLen=0;
+    for(auto it:sub1){
+        for(auto pq:sub2){
+
+            //We can just use the comparison operator, it takes O(n) time, where n is the length of subsequence
+            if(it==pq) maxLen=max(maxLen,(int)pq.size());
+        }
+    }
+    return maxLen;
+}
 int lcsHelper_brute(int i,int j,string &s1,string &s2){
     if(i<0 || j<0) return 0;
     if(s1[i]==s2[j]) return (1+lcsHelper_brute(i-1,j-1,s1,s2));
@@ -1469,7 +1516,7 @@ int longestCommonSubseq_tabulation(string s1,string s2){
     for(int i=1;i<n;i++){
         for(int j=1;j<m;j++){
             int total;
-            if(i==j) total=1+dp[i-1][j-1];
+            if(s1[i]==s2[j]) total=1+dp[i-1][j-1];
             else{
                 int ls=dp[i-1][j];
                 int rs=dp[i][j-1];
@@ -1478,6 +1525,18 @@ int longestCommonSubseq_tabulation(string s1,string s2){
             dp[i][j]=total;
         }
     }
+    return dp[n-1][m-1];
+}
+//Time Complexity will be O(NM+M+N)
+//Space Complexity will be O(NM)
+
+//Space Optimization
+int longestCommonSubseq_spaceOptimization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> curr(m+1,0);
+    vector<int> prev(m+1,0);
+
 }
 
 
@@ -2167,9 +2226,6 @@ int lengthOfLIS(vector<int> &arr){
 //DP 42
 
 //Dp 17
-class Node{
-
-}
 
 int main(){
     vector<int> arr={7,1,5,3,6,4};
