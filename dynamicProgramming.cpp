@@ -2235,6 +2235,7 @@ int lengthOfLIS_spaceOptimization(vector<int> &arr){
 //Time Complexity will be O(n^2)
 //Space Complexity will be O(2n)
 
+//Further Optimization
 //The most optimized approach is quite different this time
 //It uses tabulation in a more neat way, try to see video for explanation
 int lengthOfLIS(vector<int> &arr){
@@ -2247,17 +2248,44 @@ int lengthOfLIS(vector<int> &arr){
         }
     }
 
-    int maxi=1;
-    for(int i=0;i<n;i++) maxi=max(maxi,dp[i]);
-    return maxi;
+    return *(max_element(dp.begin(),dp.end()));
 }
 //Time Complexity will be O(n2)
 //Space Complexity will be O(n)
 
-//DP 25
+
+//Printing The LIS
+//Similar to the upper approach
+//Watch video for clear explanation
+vector<int> printLIS(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp(n,1);
+    vector<int> hash(n);
+    iota(hash.begin(),hash.end(),0); //This fills the array as arr[0]=0, arr[1]=1 ..
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(dp[j]<=dp[i]){
+                if(1+dp[j]>dp[i]){
+                    dp[i]=1+dp[j];
+                    hash[i]=j;
+                }
+            }
+        }
+    }
+    auto it=max_element(dp.begin(),dp.end());
+    int maxLen=*it;
+    int maxIdx=it-arr.begin();
+    vector<int> ans;
+    while(ans.size()!=maxLen){
+        ans.push_back(arr[maxIdx]);
+        maxIdx=hash[maxIdx];
+    }
+    return ans;
+}
+//DP 26
 //DP 42
 
-//Dp 17
+//Dp 18
 //See if you can further optimize stocks II problem
 
 int main(){
