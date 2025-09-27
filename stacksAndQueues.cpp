@@ -1313,7 +1313,7 @@ string removeKDigits(string str,int k){
     string ans="";
     ans.push_back(str[0]);
     int i=1;
-    while(i<n && k>0){
+    while(i<n){
         while(k>0 && ans.size()>0 && ans.back()>str[i]){
             ans.pop_back();
             k--;
@@ -1326,7 +1326,10 @@ string removeKDigits(string str,int k){
         ans.pop_back();
         k--;
     }
-    while(ans[0]=='0') ans.erase(ans.begin());   
+    int idx=0;
+    while(idx<ans.size() && ans[idx]=='0') idx++;
+    ans=ans.substr(idx);  
+    if(ans.empty()) return "0";
     return ans;
 }
 //Lecture 15
