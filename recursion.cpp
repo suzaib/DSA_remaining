@@ -747,18 +747,34 @@ bool mColorGraph(int n,vector<vector<int>> &edges,int m){
 //Palindrome Partitioning
 //Watch Video for better explanation
 
-bool isPartitionAllowed(int idx,vector<int> &arr){
-
+bool isPartitionAllowed(string &str,int start,int end){
+    while(start<=end){
+        if(str[start++]!=str[end--]) return false;
+    }
+    return true;
 }
-void palindromePartitionHeler(int idx,string str,vector<string> &path,vector<vector<string>> &res){
-    
+void palindromePartitionHelper(int idx,string &str,vector<string> &path,vector<vector<string>> &res){
+    if(idx==str.size()){
+        res.push_back(path);
+        return;
+    }
+    for(int i=idx;i<str.size();i++){
+        if(isPartitionAllowed(str,idx,i)){
+            path.push_back(str.substr(idx,i-idx+1));
+            palindromePartitionHelper(i+1,str,path,res);
+            path.pop_back();
+        }
+    }
 }
 vector<vector<string>> palindromePartition(string str){
     vector<vector<string>> res;
     vector<string> path;
     palindromePartitionHelper(0,str,path,res);
+    return res;
 }
-
+//Recursion stack space of n will be used and n space will be used for pushing path to res
+//Time Complexity will be O(2^(n-1))
+//Space Complexity will be O(n)+O(n)
 //Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
 //Lecture 17 Palindrom Partitioning
 int main(){
