@@ -741,12 +741,12 @@ bool mColorGraph(int n,vector<vector<int>> &edges,int m){
 }
 //We are trying m colours at every node(n in total)=> n^m
 //Time Complexity will be O(n^m)
+//Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
 
 
 
 //Palindrome Partitioning
 //Watch Video for better explanation
-
 bool isPartitionAllowed(string &str,int start,int end){
     while(start<=end){
         if(str[start++]!=str[end--]) return false;
@@ -775,8 +775,7 @@ vector<vector<string>> palindromePartition(string str){
 //Recursion stack space of n will be used and n space will be used for pushing path to res
 //Time Complexity will be O(2^(n-1))
 //Space Complexity will be O(n)+O(n)
-//Space Complexity will be O(n+n)(excluding the space used for adjacency matrix)
-//Lecture 17 Palindrom Partitioning
+//Lecture 18 Rat in a maze
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);
