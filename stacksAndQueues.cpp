@@ -1302,11 +1302,35 @@ int maximalRectangle(vector<vector<int>> &mat){
     }
     return maxArea;
 }
-//Time Complexity will be O(MN)
-//Space Complexity will be O(M)
+//Time Complexity will be O(MN)*O(2N)(for largest Rectangle)
+//Space Complexity will be O(M)+O(2N) (for largest Rectangle)
 
-//Lecture 14
 
+//Remove K digits to form the smallest number
+string removeKDigits(string str,int k){
+    int n=str.size();
+    if(k>=n) return "0";
+    string ans="";
+    ans.push_back(str[0]);
+    int i=1;
+    while(i<n && k>0){
+        while(k>0 && ans.size()>0 && ans.back()>str[i]){
+            ans.pop_back();
+            k--;
+        } 
+        ans.push_back(str[i]);
+        i++;
+    }
+
+    while(k>0){
+        ans.pop_back();
+        k--;
+    }
+    while(ans[0]=='0') ans.erase(ans.begin());   
+    return ans;
+}
+//Lecture 15
+//Revise Largest histogram once
 
 
 
