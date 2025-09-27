@@ -1263,8 +1263,9 @@ int largestRectangle(vector<int> &arr){
 
 //Maximal Rectangle
 //This uses the previous question, largest histogram.
-int maximalRectangle(vector<vector<int>> &mat){
+int maximalRectangle_brute(vector<vector<int>> &mat){
     int n=mat.size();
+    if(n==0) return 0;
     int m=mat[0].size();
     vector<vector<int>> grid(n,vector<int> (m,0));
     for(int j=0;j<m;j++){
@@ -1284,7 +1285,27 @@ int maximalRectangle(vector<vector<int>> &mat){
     }
     return maxArea;
 }
-//Lecture 13 Maximal Rectangle
+//Time Complexity will be O(2MN)
+//Space Complexity will be O(MN)
+
+//Optimal Method
+//We can shrink down the space a bit
+int maximalRectangle(vector<vector<int>> &mat){
+    int n=mat.size();
+    if(n==0) return 0;
+    int m=mat[0].size();
+    vector<int> hist(m,0);
+    int maxArea=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++) hist[j]=(mat[i][j]==0? 0:hist[j]+1);
+        maxArea=max(maxArea,largestRectangle(hist));
+    }
+    return maxArea;
+}
+//Time Complexity will be O(MN)
+//Space Complexity will be O(M)
+
+//Lecture 14
 
 
 
