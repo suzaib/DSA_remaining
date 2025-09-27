@@ -1277,7 +1277,12 @@ int maximalRectangle(vector<vector<int>> &mat){
             }
         }
     }
-    return grid;
+    int maxArea=0;
+    for(auto it:grid){
+        int area=largestRectangle(it);
+        maxArea=max(maxArea,area);
+    }
+    return maxArea;
 }
 //Lecture 13 Maximal Rectangle
 
@@ -1285,12 +1290,7 @@ int maximalRectangle(vector<vector<int>> &mat){
 
 
 int main(){
-    vector<vector<int>> arr={{1,0,1,0,1},{1,0,1,1,1},{1,1,1,1,1},{1,0,0,1,0}};
-    arr=maximalRectangle(arr);
-    for(auto it:arr){
-        for(auto p:it) cout<<p<<",";
-        cout<<"\n";
-    }
+    return 0;
 }
 //Complete findPGE functions(they should give index)
 
