@@ -2240,7 +2240,7 @@ int lengthOfLIS_spaceOptimization(vector<int> &arr){
 //Further Optimization
 //The most optimized approach is quite different this time
 //It uses tabulation in a more neat way, try to see video for explanation
-int lengthOfLIS(vector<int> &arr){
+int lengthOfLIS_furtherOptimization(vector<int> &arr){
     int n=arr.size();
     vector<int> dp(n,1);
     for(int i=0;i<n;i++){
@@ -2289,7 +2289,32 @@ vector<int> printLIS(vector<int> &arr){
 
 
 //LIS Using Binary Search
-
+//We just print the length of LIS
+int lengthOfLIS(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans;
+    ans.push_back(arr[0]);
+    for(int i=1;i<n;i++){
+        if(arr[i]>ans.back()) ans.push_back(arr[i]);
+        else{
+            int low=0;
+            int high=ans.size()-1;
+            int pos=high;
+            while(low<=high){
+                int mid=(low+high)>>1;
+                if(ans[mid]>=arr[i]){
+                    pos=mid;
+                    high=mid-1;
+                }
+                else low=mid+1;
+            }
+            ans[pos]=arr[i];
+        }
+    }
+    return ans.size();
+}
+//Time Complexity will be O(nlogn)
+//Space Complexity will be O(n)
 //DP 26
 //DP 43
 
