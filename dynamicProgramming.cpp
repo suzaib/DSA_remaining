@@ -1719,6 +1719,7 @@ int buySellStocksII(vector<int> &arr){
         }
         ahead=curr;
     }
+    return ahead[1];
 }
 //Time Complexity will be O(2N)
 //Space Complexity will be O(4)
@@ -2254,6 +2255,8 @@ int lengthOfLIS(vector<int> &arr){
 //Time Complexity will be O(n2)
 //Space Complexity will be O(n)
 
+//There's another method to doing these kind of problems
+//First sort the array then find LCS of the sorted array and the original array, that will be the LIS
 
 //Printing The LIS
 //Similar to the upper approach
@@ -2265,32 +2268,37 @@ vector<int> printLIS(vector<int> &arr){
     iota(hash.begin(),hash.end(),0); //This fills the array as arr[0]=0, arr[1]=1 ..
     for(int i=0;i<n;i++){
         for(int j=0;j<i;j++){
-            if(dp[j]<=dp[i]){
-                if(1+dp[j]>dp[i]){
-                    dp[i]=1+dp[j];
-                    hash[i]=j;
-                }
+            if(arr[j]<arr[i] && 1+dp[j]>dp[i]){
+                dp[i]=1+dp[j];
+                hash[i]=j;
             }
         }
     }
     auto it=max_element(dp.begin(),dp.end());
     int maxLen=*it;
-    int maxIdx=it-arr.begin();
+    int maxIdx=it-dp.begin();
     vector<int> ans;
     while(ans.size()!=maxLen){
         ans.push_back(arr[maxIdx]);
         maxIdx=hash[maxIdx];
     }
+    reverse(ans.begin(),ans.end());
     return ans;
 }
+
+
+
+//LIS Using Binary Search
+
 //DP 26
-//DP 42
+//DP 43
 
 //Dp 18
 //See if you can further optimize stocks II problem
 
 int main(){
-    vector<int> arr={7,1,5,3,6,4};
-    cout<<buySellStocksII_brute(arr);
+    vector<int> arr={5,4,11,1,16,8};
+    vector<int> ans=printLIS(arr);
+    for(auto it:ans) cout<<it<<",";
     return 0;
 }
