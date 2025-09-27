@@ -1261,14 +1261,36 @@ int largestRectangle(vector<int> &arr){
 //Space Complexity will be O(2n)
 
 
+//Maximal Rectangle
+//This uses the previous question, largest histogram.
+int maximalRectangle(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<int>> grid(n,vector<int> (m,0));
+    for(int j=0;j<m;j++){
+        int cnt=0;
+        for(int i=0;i<n;i++){
+            if(mat[i][j]==0) cnt=0;
+            else{
+                cnt+=mat[i][j];
+                grid[i][j]=cnt;
+            }
+        }
+    }
+    return grid;
+}
 //Lecture 13 Maximal Rectangle
 
 
 
 
 int main(){
-    vector<int> arr={3,1,2,4};
-    cout<<sumOfSubarrMin_brute(arr);
+    vector<vector<int>> arr={{1,0,1,0,1},{1,0,1,1,1},{1,1,1,1,1},{1,0,0,1,0}};
+    arr=maximalRectangle(arr);
+    for(auto it:arr){
+        for(auto p:it) cout<<p<<",";
+        cout<<"\n";
+    }
 }
 //Complete findPGE functions(they should give index)
 
