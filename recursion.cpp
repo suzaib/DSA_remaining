@@ -775,6 +775,52 @@ vector<vector<string>> palindromePartition(string str){
 //Recursion stack space of n will be used and n space will be used for pushing path to res
 //Time Complexity will be O(2^(n-1))
 //Space Complexity will be O(n)+O(n)
+
+
+//Rat in a Maze
+//Rat can move UP(U),DOWN(D),RIGHT(R),LEFT(L)
+//The matrix has 0 and 1, a rat can't move through 0
+//We need to return all the paths and that too in lexicographical order
+//The matrix is n*n size
+//The rat will start from (0,0) and need to go to (n-1,n-1)
+void mazeHelper(int i,int j,int n,vector<vector<int>> &mat,vector<vector<int>> &vis,string &temp,vector<string> &ans){
+    if(i==n-1 && j==n-1){
+        ans.push_back(temp);
+        return;
+    }
+
+    //Moving in four directions
+    //We move in order : D then L then R then U, so to maintain lexicographical order
+    vector<int> dx={1,0,0,-1};
+    vector<int> dy={0,-1,1,0};
+    string dir="DLRU";
+    for(int k=0;k<4;k++){
+        int ni=i+dx[k];
+        int nj=j+dy[k];
+        if(ni>=0 && ni<n && nj>=0 && nj<n && mat[ni][nj]==1 && vis[ni][nj]==false){
+            char c=dir[k];
+            temp.push_back(c);
+            vis[ni][nj]=true;
+            mazeHelper(ni,nj,n,mat,vis,temp,ans);
+            temp.pop_back();
+            vis[ni][nj]=false;
+        }
+    }
+}
+vector<string> ratInAMaze(vector<vector<int>> &mat){
+    int n=mat.size();
+    vector<string> ans;
+    string temp="";
+    vector<vector<int>> vis(n,vector<int> (n,0));
+    vis[0][0]=true;
+    mazeHelper(0,0,n,mat,vis,temp,ans);
+    return ans;
+}
+//At each point we have 4 choices, and there are total of n*n such cells therefore the code will run for 4^(n*n) times
+//A vis array means a space of n*n, temp uses n, and recursion stack space is n2
+//Time Complexity will be O(4^(n2))
+//Space Complexity will be O(n2+n+n2)
+
 //Lecture 18 Rat in a maze
 int main(){
     vector<int> arr={1,2,3};
