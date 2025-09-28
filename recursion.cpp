@@ -856,12 +856,7 @@ string kthPermutation(int n,int k){
 //Space Complexity wiill be O(n)
 
 int main(){
-    vector<int> arr={1,2,3};
-    vector<vector<int>> ans=allPermutations(arr);
-    for(auto it:ans){
-        cout<<"{";
-        for(auto p:it) cout<<p<<",";
-        cout<<"}";
-    }
+
+    //Your code here
     return 0;
 }
