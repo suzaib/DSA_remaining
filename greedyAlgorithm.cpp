@@ -97,6 +97,20 @@ bool jumpGame(vector<int> arr){
 
 
 
+// Q.5) Jump Game II
+int jumpGameHelper(int idx,int jumps,int endIdx,vector<int> &arr){
+    if(idx==endIdx) return jumps;
+    int jumps=1e9;
+    for(int i=1;i<=arr[idx];i++){
+        if(i>endIdx) continue;
+        jumps=min(jumps,jumpGameHelper(i+idx,jumps+1,endIdx,arr));
+    }
+    return jumps;
+}
+int jumpGameII(vector<int> &arr){
+    int n=arr.size();
+    return jumpGameHelper(0,0,n-1,arr);
+}
 
 // Q.6) Job Sequencing Problem
 class Job{
