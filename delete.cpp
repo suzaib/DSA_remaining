@@ -4,17 +4,25 @@ using namespace std;
 int main(){
     return 0;
 }
+string kthPermutation(int n,int k){
+    int fact=1;
+    vector<int> numbers;
+    for(int i=1;i<n;i++){
+        fact=fact*i;
+        numbers.push_back(i);
+    }
+    numbers.push_back(n);
+    string ans="";
+    k=k-1;//Due to 0 based indexing
 
-void f(int idx,int n,vector<int> &arr,vector<vector<int>> &ans){
-    if(idx==n){
-        ans.push_back(arr);
-        return;
+    while(true){
+        ans=ans+to_string(numbers[k/fact]);
+        numbers.erase(numbers.begin()+k/fact);
+        if(numbers.size()==0) break;
+        k=k%fact;
+        fact=fact/numbers.size();
     }
-    for(int i=idx;i<n;i++){
-        swap(arr[i],arr[idx]);
-        f(idx+1,n,arr,ans);
-        swap(arr[i],arr[idx]);
-    }
+    return ans;
 }
 vector<vector<int>> fx(vector<int> &arr){
     int n=arr.size();
