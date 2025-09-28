@@ -24,9 +24,4 @@ string kthPermutation(int n,int k){
     }
     return ans;
 }
-vector<vector<int>> fx(vector<int> &arr){
-    int n=arr.size();
-    vector<vector<int>> ans;
-    f(0,n,arr,ans);
-    return ans;
-}
+
