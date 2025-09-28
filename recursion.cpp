@@ -265,7 +265,6 @@ void subSeqWithSumK_brute(vector<int> arr,int k){
 
 //This is however not preferred because of the use of global variables
 //We will try having a condition in the base case and the subsequent function will be executed only if the condition is met
-
 bool printF3(int ind,int sum,vector<int> temp,vector<int> arr,int k){
     int n=arr.size();
     if(ind==n){
