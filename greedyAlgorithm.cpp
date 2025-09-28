@@ -141,7 +141,8 @@ vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
     //Creating an ans array to store the values
     vector<int> ans;
     ans.push_back(jobCount);
-    ans.push_back(totalProfit);    
+    ans.push_back(totalProfit);  
+    return ans;  
 }
 
 
