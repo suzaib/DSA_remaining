@@ -828,7 +828,32 @@ vector<string> ratInAMaze(vector<vector<int>> &mat){
 //Brute Force 
 //Generate all the permutations, store them in a vector<string> then sort the vector
 //Sorting will happen in lexicographical order, but if digits are same then lexicographical sort = numeric sort
-//We can use our previous function that generates all permutations
+
+//Optimal Method
+//Same concept as the one question in mathematics where we used to find the position of a word in dictionary
+//Indexing starts at 0, therefore first permuation is 0th and hence we need to find the (k-1)th permutation
+string kthPermutation(int n,int k){
+    int fact=1;
+    vector<int> numbers;
+    for(int i=1;i<n;i++){
+        fact=fact*i;
+        numbers.push_back(i);
+    }
+    numbers.push_back(n);
+    string ans="";
+    k=k-1;//Due to 0 based indexing
+
+    while(true){
+        ans=ans+to_string(numbers[k/fact]);
+        numbers.erase(numbers.begin()+k/fact);
+        if(numbers.size()==0) break;
+        k=k%fact;
+        fact=fact/numbers.size();
+    }
+    return ans;
+}
+//Time Complexity will be O(n2)
+//Space Complexity wiill be O(n)
 
 int main(){
     vector<int> arr={1,2,3};
