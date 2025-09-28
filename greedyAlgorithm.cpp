@@ -99,18 +99,23 @@ bool jumpGame(vector<int> arr){
 
 // Q.5) Jump Game II
 int jumpGameHelper(int idx,int jumps,int endIdx,vector<int> &arr){
-    if(idx==endIdx) return jumps;
-    int jumps=1e9;
+    if(idx>=endIdx) return jumps;
+    int minJumps=1e9;
     for(int i=1;i<=arr[idx];i++){
-        if(i>endIdx) continue;
-        jumps=min(jumps,jumpGameHelper(i+idx,jumps+1,endIdx,arr));
+        if(i+idx>endIdx) continue;
+        minJumps=min(minJumps,jumpGameHelper(i+idx,jumps+1,endIdx,arr));
     }
-    return jumps;
+    return minJumps;
 }
 int jumpGameII(vector<int> &arr){
     int n=arr.size();
     return jumpGameHelper(0,0,n-1,arr);
 }
+//The worst case we assume that at each index we can jump n times, we have n choices to jump at n elements each
+//Therefore the code will run for about N^N times
+//A recursion stack space of n will be used as well
+//Time Complexity will be O(n^n)
+//Space Complexity will be O(n)
 
 // Q.6) Job Sequencing Problem
 class Job{
@@ -200,8 +205,8 @@ int nMeetings(vector<int> start,vector<int> end){
 //To be done after learning dynamic programming
 
 int main(){
-    vector<int> arr={1,2,4,1,1,0,2,5};
-    cout<<jumpGame(arr);
+    vector<int> arr={1,4,3,6,2,7};
+    cout<<jumpGameII(arr);
     return 0;
 }
 
