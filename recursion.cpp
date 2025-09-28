@@ -821,7 +821,15 @@ vector<string> ratInAMaze(vector<vector<int>> &mat){
 //Time Complexity will be O(4^(n2))
 //Space Complexity will be O(n2+n+n2)
 
-//Lecture 18 Rat in a maze
+
+//Kth Permutation
+//Find out the permutation that appears in kth number if all the permutations are arranged in increasing order
+//You will be given n and k, if n=3 and k=2 then the kth permutation is 132(first is 123)
+//Brute Force 
+//Generate all the permutations, store them in a vector<string> then sort the vector
+//Sorting will happen in lexicographical order, but if digits are same then lexicographical sort = numeric sort
+//We can use our previous function that generates all permutations
+
 int main(){
     vector<int> arr={1,2,3};
     vector<vector<int>> ans=allPermutations(arr);
