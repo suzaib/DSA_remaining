@@ -301,6 +301,14 @@ bool validParenthesisII_brute(string &str){
 //Time Complexity will be O(3^n)
 //Space Complexity will be O(n)
 
+//Memoization
+bool parenthesisHelper_memoization()
+bool validParenthesis_memoization(string &str){
+    int n=str.size();
+    vector<vector<int>> dp(n,vector<int> (n,-1));
+    return parenthesisHelper_memoization(0,0,dp,str);
+}
+
 
 
 
