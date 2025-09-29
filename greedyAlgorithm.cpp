@@ -107,7 +107,7 @@ int jumpGameHelper(int idx,int jumps,int endIdx,vector<int> &arr){
     }
     return minJumps;
 }
-int jumpGameII(vector<int> &arr){
+int jumpGameII_brute(vector<int> &arr){
     int n=arr.size();
     return jumpGameHelper(0,0,n-1,arr);
 }
@@ -116,6 +116,27 @@ int jumpGameII(vector<int> &arr){
 //A recursion stack space of n will be used as well
 //Time Complexity will be O(n^n)
 //Space Complexity will be O(n)
+
+//Optimal Method
+int jumpGameII(vector<int> &arr){
+    int n=arr.size();
+    int r=0;
+    int l=0;
+    int jumps=0;
+    while(r<n-1 && r>=l){
+        int temp=r+1;
+        for(int i=l;i<=r;i++){
+            r=max(r,i+arr[i]);
+        }
+        l=temp;
+        jumps++;
+    }
+    return jumps;
+}
+//Each element is only visited once
+//No extra space is used
+//Time Complexity will be O(n)
+
 
 // Q.6) Job Sequencing Problem
 class Job{
@@ -201,8 +222,8 @@ int nMeetings(vector<int> start,vector<int> end){
     return meetCount;
 }
 
-//Q.5) Jump Game Part 2
-//To be done after learning dynamic programming
+//Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
+
 
 int main(){
     vector<int> arr={1,4,3,6,2,7};
