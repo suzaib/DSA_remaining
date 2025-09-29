@@ -227,6 +227,20 @@ int nMeetings(vector<int> start,vector<int> end){
 //Q.9) Lecture 9
 //Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
 
+//Q.10) Minimum Platforms Required
+int minPlatforms(vector<int> &arr,vector<int> &dep){
+    int n=arr.size();//same is the size for dep(departure array)
+    stack<pair<int,int>> st;
+    st.push({arr[0],dep[0]});
+    int ans=0;
+    for(int i=1;i<n;i++){
+        int newArr=arr[i];
+        while(!st.empty() && newArr>=st.top().second) st.pop();
+        st.push({arr[i],dep[i]});
+        ans=st.size();
+    }
+    return ans;
+}
 
 int main(){
     vector<int> arr={1,4,3,6,2,7};
