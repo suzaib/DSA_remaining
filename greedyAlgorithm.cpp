@@ -302,8 +302,21 @@ bool validParenthesisII_brute(string &str){
 //Space Complexity will be O(n)
 
 //Memoization
-//DP table, say dp[idx][cnt] represents how many net open brackets are there till 
-bool parenthesisHelper_memoization()
+//DP table, say dp[idx][cnt], here idx is the index and cnt is the number of net opening brackets present till there
+bool parenthesisHelper_memoization(int idx,int cnt,vector<vector<int>> &dp,string &str){
+    if(cnt<0) return false;
+    if(idx==str.size()) return cnt==0;
+    if(dp[idx][cnt]!=-1) return dp[idx][cnt];
+    if(str[idx]=='(') return dp[idx][cnt]=parenthesisHelper_memoization(idx+1,cnt+1,dp,str);
+    else if(str[idx]==')') return dp[idx][cnt]=parenthesisHelper_memoization(idx+1,cnt-1,dp,str);
+    else{
+        bool open=parenthesisHelper_memoization(idx+1,cnt+1,dp,str);
+        bool closed=parenthesisHelper_memoization(idx+1,cnt-1,dp,str);
+        bool blank=parenthesisHelper_memoization(idx+1,cnt,dp,str);
+        return dp[idx][cnt]=(open || closed || blank);
+    }
+    return dp[idx][cnt];
+}
 bool validParenthesis_memoization(string &str){
     int n=str.size();
     vector<vector<int>> dp(n,vector<int> (n,-1));
