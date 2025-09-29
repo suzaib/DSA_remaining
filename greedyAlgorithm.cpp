@@ -222,11 +222,6 @@ int nMeetings(vector<int> start,vector<int> end){
 }
 
 
-
-//Q.8) Lecture 8(First revise n jobs and n meetings)
-//Q.9) Lecture 9
-//Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
-
 //Q.10) Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
     int n=arr.size();
@@ -254,6 +249,64 @@ int minPlatforms(vector<int> &arr,vector<int> &dep){
 //Sorting the two arrays take 2nlogn time and the loop takes n time
 //Time Complexity will be O(2nlogn+n)
 
+
+
+//Q.11) Valid Parenthesis
+//To do this question, first let us solve a simpler question
+//Given an expression, containing only ( and ) , tell if it is a valid parenthesis
+//Intuition : Use a counter variable, increase it by one when you encounter ( and decrease it by one when you encounter )
+//If at last value reaches 0, the parenthesis is valid
+//Edge Case : Consider  ())( , in this also the counter gets to 0 at end, however, in such cases, the counter gets negative at one moment
+//Therefore if counter<0 at any moment, return false
+bool validParenthesisI(string &str){
+    int n=str.size();
+
+    //If size of string is odd, parenthesis can never be valid
+    if(n%2!=0) return false;
+
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        if(str[i]=='(') cnt++;
+        else cnt--;
+        if(cnt<0) return false;
+    }
+    if(cnt==0) return true;
+    return false;
+}
+//Time Complexity will be O(n)
+
+//Part II
+//In this, the string also contains a * which has to be converted to either (, or ) or empty character
+//After that the expression will contain only (), then tell if it is valid parenthesis or not
+//Since we have three options to convert * , and we need to try all three ways, the question can be solved by recursion
+bool parenthesisHelper(int idx,int cnt,string &str){
+    if(cnt<0) return false;
+    if(idx==str.size()) return cnt==0;
+    if(str[idx]=='(') return parenthesisHelper(idx+1,cnt+1,str);
+    else if(str[idx]==')') return parenthesisHelper(idx+1,cnt-1,str);
+    else{
+        bool open=parenthesisHelper(idx+1,cnt+1,str);
+        bool closed=parenthesisHelper(idx+1,cnt-1,str);
+        bool blank=parenthesisHelper(idx+1,cnt,str);
+        return (open || closed || blank);
+    }
+    return true;
+
+}
+bool validParenthesisII_brute(string &str){
+    return parenthesisHelper(0,0,str);
+}
+//At each point we have 3 choices to go, in the worst case, the string can be all asterisk, therefore the code will run atmost 3^n times in worst case
+//A recursion stack space of n will be used as well
+//Time Complexity will be O(3^n)
+//Space Complexity will be O(n)
+
+
+
+
+//Q.8) Lecture 8(First revise n jobs and n meetings)
+//Q.9) Lecture 9
+//Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
 
 int main(){
     vector<int> arr={1,4,3,6,2,7};
