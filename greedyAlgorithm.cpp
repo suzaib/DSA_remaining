@@ -302,6 +302,7 @@ bool validParenthesisII_brute(string &str){
 //Space Complexity will be O(n)
 
 //Memoization
+//DP table, say dp[idx][cnt] represents how many net open brackets are there till 
 bool parenthesisHelper_memoization()
 bool validParenthesis_memoization(string &str){
     int n=str.size();
