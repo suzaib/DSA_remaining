@@ -319,9 +319,11 @@ bool parenthesisHelper_memoization(int idx,int cnt,vector<vector<int>> &dp,strin
 }
 bool validParenthesis_memoization(string &str){
     int n=str.size();
-    vector<vector<int>> dp(n,vector<int> (n,-1));
+    vector<vector<int>> dp(n,vector<int> (n+1,-1));
     return parenthesisHelper_memoization(0,0,dp,str);
 }
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n2+n)
 
 
 
