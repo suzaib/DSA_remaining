@@ -229,18 +229,31 @@ int nMeetings(vector<int> start,vector<int> end){
 
 //Q.10) Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
-    int n=arr.size();//same is the size for dep(departure array)
-    stack<pair<int,int>> st;
-    st.push({arr[0],dep[0]});
-    int ans=0;
-    for(int i=1;i<n;i++){
-        int newArr=arr[i];
-        while(!st.empty() && newArr>=st.top().second) st.pop();
-        st.push({arr[i],dep[i]});
-        ans=st.size();
+    int n=arr.size();
+    sort(arr.begin(),arr.end());
+    sort(dep.begin(),dep.end());
+    //The above steps take 2nlogn time
+
+    int i=0;
+    int j=0;
+    int maxCnt=0;
+    int cnt=0;
+    while(i<n){
+        if(arr[i]<dep[j]){
+            cnt++;
+            maxCnt=max(maxCnt,cnt);
+            i++;
+        }
+        else{
+            cnt--;
+            j++;
+        }
     }
-    return ans;
+    return maxCnt;
 }
+//Sorting the two arrays take 2nlogn time and the loop takes n time
+//Time Complexity will be O(2nlogn+n)
+
 
 int main(){
     vector<int> arr={1,4,3,6,2,7};
