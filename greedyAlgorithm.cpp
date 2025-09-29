@@ -138,6 +138,7 @@ int jumpGameII(vector<int> &arr){
 //Time Complexity will be O(n)
 
 
+
 // Q.6) Job Sequencing Problem
 class Job{
     public:
@@ -187,8 +188,6 @@ vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
 
 
 
-
-
 //Q.7 N Meetings in one room
 class Meeting{
     public:
@@ -222,6 +221,10 @@ int nMeetings(vector<int> start,vector<int> end){
     return meetCount;
 }
 
+
+
+//Q.8) Lecture 8(First revise n jobs and n meetings)
+//Q.9) Lecture 9
 //Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
 
 
