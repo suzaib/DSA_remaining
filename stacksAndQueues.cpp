@@ -1332,6 +1332,29 @@ string removeKDigits(string str,int k){
     if(ans.empty()) return "0";
     return ans;
 }
+
+
+//Stock Span Problem
+class StockSpan{
+    vector<int> arr;
+    StockSpan(){
+        vector<int> arr;
+    }
+    int next(int nextVal){
+        arr.push_back(nextVal);
+        int cnt=1;
+        for(int i=arr.size()-2;i>=0;i--){
+            if(arr[i]<=nextVal) cnt++;
+            else break;
+        }
+        return cnt;
+    }
+}
+//At each next function we traverse the whole array back, therefore total number of times the code runs will be O(k) where k is the number of days behind
+//Space used will be equal to the number of next calls made, since at each next call, the array size is increased by one, therefore for three next calls, the size wouuld be 3
+//Time Complexity will be O(k)  (k is the number of elements behind)
+//Space Complexity will be O(m) (m is the number of next calls)
+//Time Complexity will be O(n)
 //Lecture 15
 //Revise Largest histogram once
 
