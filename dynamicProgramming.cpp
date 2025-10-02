@@ -1311,7 +1311,6 @@ int noOfSubsetsWithSumKHelper_brute(int idx,int target,vector<int> &arr){
         if(target==0 || arr[idx]==target) return 1;
         return 0;
     }
-    if(target==0) return 1;
     int pick=0;
     if(target>=arr[idx]) pick=noOfSubsetsWithSumKHelper_brute(idx-1,target-arr[idx],arr);
     int notPick=noOfSubsetsWithSumKHelper_brute(idx-1,target,arr);
@@ -1334,7 +1333,6 @@ int noOfSubsetsWithSumKHelper_memoization(int idx,int target,vector<vector<int>>
         if(target==0 || arr[idx]==target) return dp[idx][target]=1;
         return dp[idx][target]=0;
     }
-    if(target==0) return dp[idx][target]=1;
 
     int pick=0;
     if(arr[idx]<=target) pick=noOfSubsetsWithSumKHelper_memoization(idx-1,target-arr[idx],dp,arr);
@@ -1414,6 +1412,18 @@ int noOfSubsetsWithSumK(vector<int> &arr,int k){
 //Space Complexity will be O(K)
 
 
+
+//Partitions With Given Difference
+//Divide into two sets s1 and s2 such that s1-s2=d (s1>s2)
+//Method
+//Since we know s1+s2=t(total sum)
+//Solving the two equations, we get s1=(t+d)/2 and s2=(t-d)/2
+//Now we just need to find the number of subsets whose sum is (t+d)/2
+//We will just apply the previous question's solution
+int partitionsWithGivenDiff(vector<int> &arr,int d){
+    int n=arr.size();
+    int ans=
+}
 
 
 //DP On Strings
@@ -2316,7 +2326,7 @@ int lengthOfLIS(vector<int> &arr){
 //Time Complexity will be O(nlogn)
 //Space Complexity will be O(n)
 //DP 26
-//DP 44
+//DP 44 
 
 //Dp 18
 //See if you can further optimize stocks II problem
