@@ -1480,7 +1480,7 @@ int celebrityProblem_brute(vector<vector<int>> &mat){
     vector<int> iKnow(n,0);
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
-            if(i==j) continue;
+            if(i==j || mat[i][j]==0) continue;
 
             //(i,j) means j is known by someone therefore : 
             knowMe[j]++;
@@ -1511,17 +1511,48 @@ bool isArrAll0(vector<int> &arr){
 }
 //Time Complexity will be O(n)
 
-int celebrityProblem_brute(vector<vector<int>> &mat){
+int celebrityProblem_better(vector<vector<int>> &mat){
     int n=mat.size();//Obviously the matrix is a squared matrix
+
+    //We are declaring this array only for the variation of the problem in which there can be no celebrity
+    //In such case there can be 0 or more than 1 rows with all 0s
+    vector<int> ans;
     for(int i=0;i<n;i++){
 
         //If there's a row which has all 0s then it means only two things, that row is the celebrity or there's no celebrity
-        if(isArrAll0(mat[i])) return i;
+        if(isArrAll0(mat[i])) ans.push_back(i);
+        if(ans.size()==2) return -1;
     }
     //We can return -1 in case there is no celebrity.
-    return -1;
+    if(ans.size()==0) return -1;
+    return ans[0];
 }
 //Time Complexity will be O(n2)
+
+//Optimal Method
+//Watch Video
+int celebrityProblem(vector<vector<int>> &mat){
+    int n=mat.size();
+    int i=0;
+    int j=n-1;
+    while(i<j){
+        if(mat[i][j]==1) i++;
+        else if(mat[j][i]==1) j--;
+        else{
+            i++;
+            j--;
+        }
+    }
+    if(i>j) return -1;
+    for(int k=0;k<n;k++){
+        if(mat[i][k]==1) return -1;
+        if(k!=i && mat[k][i]==0) return -1;
+    }
+    return i;
+}
+//Time Complexity will be O(2n)
+
+
 
 //Time Complexity will be O(n)
 //Lecture 15
