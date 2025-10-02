@@ -4,43 +4,20 @@ using namespace std;
 int main(){
     return 0;
 }
-string kthPermutation(int n,int k){
-    int fact=1;
-    vector<int> numbers;
-    for(int i=1;i<n;i++){
-        fact=fact*i;
-        numbers.push_back(i);
-    }
-    numbers.push_back(n);
-    string ans="";
-    k=k-1;//Due to 0 based indexing
 
-    while(true){
-        ans=ans+to_string(numbers[k/fact]);
-        numbers.erase(numbers.begin()+k/fact);
-        if(numbers.size()==0) break;
-        k=k%fact;
-        fact=fact/numbers.size();
-    }
-    return ans;
-}
-
-string fx(int n,int k){
-    int fact=1;
-    vector<int> numbers;
+int fx(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(k+1,0);
+    dp[0]=1;
+    if(arr[0]<=k) dp[arr[0]]=1;
+    if(arr[0]==0) dp[0]=1;
     for(int i=1;i<n;i++){
-        fact=fact*i;
-        numbers.push_back(i);
+        for(int j=k;j>=1;j--){
+            int pick=0;
+            if(arr[i]<=j) pick=dp[j-arr[i]];
+            int notPick=dp[j];
+            dp[j]=(pick+notPick);
+        }
     }
-    numbers.push_back(n);
-    string ans="";
-    k=k-1;
-    while(true){
-        ans=ans+to_string(numbers[k/fact]);
-        numbers.erase(numbers.begin()+k/fact);
-        if(numbers.size()==0) break;
-        k=k%fact;
-        fact=fact/numbers.size();
-    }
-    return ans;
+    return dp[k];
 }
