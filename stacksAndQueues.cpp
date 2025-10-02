@@ -1481,12 +1481,28 @@ int celebrityProblem_brute(vector<vector<int>> &mat){
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             if(i==j) continue;
-            knowMe[i]++;
-            iKnow
+
+            //(i,j) means j is known by someone therefore : 
+            knowMe[j]++;
+
+            //And that i knows someone
+            iKnow[i]++;
         }
     }
+
+    //Now we just need to find which element in knowMe array has n-1 and which element in iKnow array has 0
+    for(int i=0;i<n;i++){
+        if(knowMe[i]==n-1 && iKnow[i]==0) return i;
+    }
+
+    //In case of no celebrity
+    return -1;
 }
-//Find the row with all 0s and the col with all 1s except in (i,i) place
+//Time Complexity will be O(n2 + n)
+//Space Complexity will be O(2n)
+
+//Better Method
+//Find the row with all 0s 
 //Let's create a function that checks whether an array has all 0s
 bool isArrAll0(vector<int> &arr){
     int n=arr.size();
@@ -1495,7 +1511,7 @@ bool isArrAll0(vector<int> &arr){
 }
 //Time Complexity will be O(n)
 
-int celebrityProblem(vector<vector<int>> &mat){
+int celebrityProblem_brute(vector<vector<int>> &mat){
     int n=mat.size();//Obviously the matrix is a squared matrix
     for(int i=0;i<n;i++){
 
