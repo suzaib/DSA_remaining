@@ -1471,6 +1471,21 @@ vector<int> slidingWindowMax(vector<int> &arr, int k){
 //The expression mat[i][j]=1 represents i knows j
 //We will take mat[i][i]=0
 //Brute Force 
+//Consider there are n people, and if 1 is celebrity then number of people who know 1 will be n-1(we assume 1 doesn't know himself)
+//And the number of people whom 1 knows will be 0
+//We declare two array, knowMe and Iknow arrays
+int celebrityProblem_brute(vector<vector<int>> &mat){
+    int n=mat.size();
+    vector<int> knowMe(n,0);
+    vector<int> iKnow(n,0);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(i==j) continue;
+            knowMe[i]++;
+            iKnow
+        }
+    }
+}
 //Find the row with all 0s and the col with all 1s except in (i,i) place
 //Let's create a function that checks whether an array has all 0s
 bool isArrAll0(vector<int> &arr){
@@ -1485,7 +1500,7 @@ int celebrityProblem(vector<vector<int>> &mat){
     for(int i=0;i<n;i++){
 
         //If there's a row which has all 0s then it means only two things, that row is the celebrity or there's no celebrity
-        if(isArrAll0) return i;
+        if(isArrAll0(mat[i])) return i;
     }
     //We can return -1 in case there is no celebrity.
     return -1;
