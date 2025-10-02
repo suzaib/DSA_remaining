@@ -1464,6 +1464,34 @@ vector<int> slidingWindowMax(vector<int> &arr, int k){
 //Time Complexity will be O(2n)
 //Space Complexity will be O(k)
 
+
+
+//Celebrity Problem
+//Persons say 1,2,3,4 and if one is celebrity then everyone knows 1 but 1 knows no one
+//The expression mat[i][j]=1 represents i knows j
+//We will take mat[i][i]=0
+//Brute Force 
+//Find the row with all 0s and the col with all 1s except in (i,i) place
+//Let's create a function that checks whether an array has all 0s
+bool isArrAll0(vector<int> &arr){
+    int n=arr.size();
+    for(int i=0;i<n;i++) if(arr[i]!=0) return false;
+    return true;
+}
+//Time Complexity will be O(n)
+
+int celebrityProblem(vector<vector<int>> &mat){
+    int n=mat.size();//Obviously the matrix is a squared matrix
+    for(int i=0;i<n;i++){
+
+        //If there's a row which has all 0s then it means only two things, that row is the celebrity or there's no celebrity
+        if(isArrAll0) return i;
+    }
+    //We can return -1 in case there is no celebrity.
+    return -1;
+}
+//Time Complexity will be O(n2)
+
 //Time Complexity will be O(n)
 //Lecture 15
 //Revise Largest histogram once
