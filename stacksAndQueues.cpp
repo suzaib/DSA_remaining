@@ -1414,8 +1414,15 @@ vector<int> slidingWindowMax_basic_brute(vector<int> &arr){
 //In the upcoming questions, we will just assume that n>=k
 vector<int> slidingWindowMax_basic(vector<int> &arr){
     int n=arr.size();
+    deque<int> dq;
+    vector<int> ans;
     int i=0;
-    int j=
+    for(int i=0;i<n;i++){
+        if(!dq.empty() && dq.front()<=i-3) dq.pop_front();
+        while(!dq.empty() && arr[dq.back()]<=arr[i]) dq.pop_back();
+        dq.push_back(i);
+        if(i>=3-1) ans.push_back(arr[dq.front()]);
+    }
 }
 
 //Sliding Window Maximum
