@@ -1416,14 +1416,18 @@ vector<int> slidingWindowMax_basic(vector<int> &arr){
     int n=arr.size();
     deque<int> dq;
     vector<int> ans;
-    int i=0;
     for(int i=0;i<n;i++){
         if(!dq.empty() && dq.front()<=i-3) dq.pop_front();
         while(!dq.empty() && arr[dq.back()]<=arr[i]) dq.pop_back();
         dq.push_back(i);
         if(i>=3-1) ans.push_back(arr[dq.front()]);
     }
+    return ans;
 }
+//Time Complexity will be O(2n)
+//Space Complexity will be O(3)
+
+
 
 //Sliding Window Maximum
 //Generalised Version
@@ -1445,7 +1449,20 @@ vector<int> slidingWindowMax_brute(vector<int> &arr,int k){
 }
 //Time Complexity will be O(nk)
 
-
+//Optimal Method
+vector<int> slidingWindowMax(vector<int> &arr, int k){
+    int n=arr.size();
+    vector<int> ans;
+    deque<int> dq;
+    for(int i=0;i<n;i++){
+        if(!dq.empty() && dq.front()<=i-k) dq.pop_front();
+        while(!dq.empty() && arr[dq.back()]<=arr[i]) dq.pop_back();
+        if(i>=k-1) ans.push_back(arr[dq.front()]);
+    }
+    return ans;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(k)
 
 //Time Complexity will be O(n)
 //Lecture 15
