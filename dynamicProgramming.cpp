@@ -1598,6 +1598,40 @@ int longestCommonSubseq(string &s1,string &s2){
 
 
 
+//Printing The LCS
+string printingLCS(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=(1+dp[i-1][j-1]);
+            else dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+        }
+    }
+
+    int len=dp[n][m];
+    string s(len,' ');
+
+    int i=n;
+    int j=m;
+    while(i>0 && j>0){
+        if(s1[i-1]==s2[j-1]){
+            s[len-1]=s1[i-1];
+            i--;
+            j--;
+            len--;
+        }
+        else if(dp[i][j-1]>dp[i-1][j]) j--;
+        else i--;
+    }
+    return s;
+}
+//Time Complexity will be O(MN + M+N)
+//Space Complexity will be O(MN)
+
+
+
 
 //DP on Stocks
 //Buy and Sell stocks (Only one transaction allowed)
