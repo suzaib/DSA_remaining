@@ -1419,11 +1419,23 @@ int noOfSubsetsWithSumK(vector<int> &arr,int k){
 //Since we know s1+s2=t(total sum)
 //Solving the two equations, we get s1=(t+d)/2 and s2=(t-d)/2
 //Now we just need to find the number of subsets whose sum is (t+d)/2
+//Also the constraint is that all elements >=0 so s1 will definitely be greater(as none of t or d is negative) 
+//Edge Cases:
+    //What if s2=t-d<0, we must ensure that t>=d atleast
+    //Also since we are diving by 2, we must ensure t-d or t+d must be even
+//For obvious reason we will work on t-d (s2) since we can study both edge cases with s2
 //We will just apply the previous question's solution
+//Also since the answer can be too large, we have to return it modulo 10^9+7
 int partitionsWithGivenDiff(vector<int> &arr,int d){
+    int mod=(1e9+7);
     int n=arr.size();
-    int ans=
+    int t=accumulate(arr.begin(),arr.end(),0);
+    if(t<d || (t-d)%2!=0) return 0;
+    return (noOfSubsetsWithSumK(arr,((t-d)/2)))%mod;
 }
+//Time Complexity will be O(NK + N)
+//Space Complexity will be O(K)
+
 
 
 //DP On Strings
@@ -2328,7 +2340,7 @@ int lengthOfLIS(vector<int> &arr){
 //DP 26
 //DP 44 
 
-//Dp 18
+//Dp 19
 //See if you can further optimize stocks II problem
 
 int main(){
