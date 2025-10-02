@@ -4,20 +4,17 @@ using namespace std;
 int main(){
     return 0;
 }
-
-int fx(vector<int> &arr,int k){
-    int n=arr.size();
-    vector<int> dp(k+1,0);
-    dp[0]=1;
-    if(arr[0]<=k) dp[arr[0]]=1;
-    if(arr[0]==0) dp[0]=1;
-    for(int i=1;i<n;i++){
-        for(int j=k;j>=1;j--){
-            int pick=0;
-            if(arr[i]<=j) pick=dp[j-arr[i]];
-            int notPick=dp[j];
-            dp[j]=(pick+notPick);
-        }
-    }
-    return dp[k];
+int f(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+    if(i<0 || j<0) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(s1[i]==s2[j]) return dp[i][j]=(1+f(i-1,j-1,s1,s2,dp));
+    int ls=f(i-1,j,s1,s2,dp);
+    int rs=f(i,j-1,s1,s2,dp);
+    return dp[i][j]=max(ls,rs);
+}
+int fx(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    return f(n-1,m-1,s1,s2,dp);
 }
