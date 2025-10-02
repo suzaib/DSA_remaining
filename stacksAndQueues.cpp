@@ -1335,10 +1335,9 @@ string removeKDigits(string str,int k){
 
 
 //Stock Span Problem
-class StockSpan{
+class StockSpan_brute{
     vector<int> arr;
-    StockSpan(){
-        vector<int> arr;
+    StockSpan_brute(){
     }
     int next(int nextVal){
         arr.push_back(nextVal);
@@ -1349,11 +1348,98 @@ class StockSpan{
         }
         return cnt;
     }
-}
+};
 //At each next function we traverse the whole array back, therefore total number of times the code runs will be O(k) where k is the number of days behind
 //Space used will be equal to the number of next calls made, since at each next call, the array size is increased by one, therefore for three next calls, the size wouuld be 3
 //Time Complexity will be O(k)  (k is the number of elements behind)
 //Space Complexity will be O(m) (m is the number of next calls)
+
+//Optimal Method
+//Using the same concept as previous greater element
+class StockSpan{
+    public:
+        stack<pair<int,int>> st;
+        int cnt=0;
+        StockSpan(){
+            st=stack<pair<int,int>> ();
+            cnt=0;
+        }
+
+        int next(int nextVal){
+            while(!st.empty() && nextVal>=st.top().first) st.pop();
+            int prevIdx=(st.empty()? -1:st.top().second);
+            st.push({nextVal,cnt});
+            int ans=cnt-prevIdx;
+            cnt++;
+            return ans;
+        }
+};
+//In total across the gross operations, the time taken will be O(2n)
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+
+//Sliding Window Maximum
+//The window will be of 3 length
+//Brute Force
+//Just compute the maximum in each window by running a loop
+vector<int> slidingWindowMax_basic_brute(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans;
+    if(n==0) return ans;
+    if(n==1){
+        ans.push_back(arr[0]);
+        return ans;
+    }
+    if(n==2){
+        ans.push_back(max(arr[0],arr[1]));
+        return ans;
+    }
+
+    int i=0;
+    int j=2;
+    while(j<n){
+        int maxi=INT_MIN;
+        for(int k=i;k<=j;k++) maxi=max(maxi,arr[k]);
+        ans.push_back(maxi);
+        j++;
+        i++;
+    }
+    return ans;
+}
+//No space is used to solve the answer
+//Time Complexity will be O(3n)
+
+//Optimal Method 
+//In the upcoming questions, we will just assume that n>=k
+vector<int> slidingWindowMax_basic(vector<int> &arr){
+    int n=arr.size();
+    int i=0;
+    int j=
+}
+
+//Sliding Window Maximum
+//Generalised Version
+//K sized window
+vector<int> slidingWindowMax_brute(vector<int> &arr,int k){
+    int n=arr.size();
+    //We will assume that n>=k
+
+    int i=0;
+    int j=k-1;
+    vector<int> ans;
+    while(j<n){
+        int maxi=INT_MIN;
+        for(int p=i;p<=j;p++) maxi=max(maxi,arr[p]);
+        ans.push_back(maxi);
+        i++;
+        j++;
+    }
+}
+//Time Complexity will be O(nk)
+
+
+
 //Time Complexity will be O(n)
 //Lecture 15
 //Revise Largest histogram once
