@@ -1632,8 +1632,74 @@ string printingLCS(string &s1,string &s2){
 
 
 
+//Longest Common Substring 
+//Substrings are continuous, unlike subsequences
+int lcssHelper_brute(int i,int j,string &s1,string &s2){
+    if(i<0 || j<0) return 0;
+    if(s1[i]==s2[j]) return 1+lcssHelper_brute(i-1,j-1,s1,s2);
+    else return 0;
+}
+int longestCommonSubstr_brute(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    int ans=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++) ans=max(ans,lcssHelper_brute(i,j,s1,s2));
+    }
+    return ans;
+}
+//Outer loop runs mn times, the helper function can run in worst case for (since the code stops whenever anyone of i or j <0, whichever is minimum, does that first) min(n,m) therefore the code runs for (mn*min(m,n)), if we consider m==n, then code runs for n3
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n)
+
+//Memoization
+int lcssHelper_memoization(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+    if(i<0 || j<0) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(s1[i]==s2[j]) dp[i][j]=1+lcssHelper_memoization(i-1,j-1,s1,s2,dp);
+    else dp[i][j]=0;
+    return dp[i][j];
+}
+int longestCommonSubstr_memoization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    int ans=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            ans=max(ans,lcssHelper_memoization(i,j,s1,s2,dp));
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(mn+min(m,n))
+//Space Complexity will be O(mn+min(m,n))
+
+//Tabulation
+//Index shifting takes place here
+int longestCommonSubstr_tabulation(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    int ans=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]){
+                dp[i][j]=1+dp[i-1][j-1];
+                ans=max(ans,dp[i][j]);
+            }
+            else dp[i][j]=0;
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be O(mn)
+
 
 //DP on Stocks
+
+
 //Buy and Sell stocks (Only one transaction allowed)
 //This problem was already done in arrays, still the code is being attached here
 int buySellStocksI_brute(vector<int> arr){
@@ -2371,7 +2437,7 @@ int lengthOfLIS(vector<int> &arr){
 }
 //Time Complexity will be O(nlogn)
 //Space Complexity will be O(n)
-//DP 26
+//DP 27
 //DP 44 
 
 //Dp 19
