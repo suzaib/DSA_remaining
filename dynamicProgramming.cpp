@@ -1696,6 +1696,66 @@ int longestCommonSubstr_tabulation(string &s1,string &s2){
 //Time Complexity will be O(mn)
 //Space Complexity will be O(mn)
 
+//Space Optimization
+int longestCommonSubstr_spaceOptimization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> curr(m+1,0);
+    vector<int> prev(m+1,0);
+    int ans=0;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]){
+                curr[j]=1+prev[j-1];
+                ans=max(ans,curr[j]);
+            }
+            else curr[j]=0;
+        }
+        prev=curr;
+    }
+    return ans;
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be O(2m)
+
+//Further Optimization
+int longestCommonSubstr(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> dp(m+1,0);
+    int ans=0;
+    for(int i=1;i<=n;i++){
+        int prevDiag=0;
+        for(int j=1;j<=m;j++){
+            int temp=dp[j];
+            if(s1[i-1]==s2[j-1]){
+                dp[j]=1+prevDiag;
+                ans=max(ans,dp[j]);
+            }
+            else dp[j]=0;
+            prevDiag=temp;
+        }
+    }
+    return ans;
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be O(m)
+
+
+//Longest Palindromic Subsequence
+//Brute Force 
+//Generate All Subsequences then find out the length of the longest one
+
+//Optimal Method
+//If we take string s1 as original string and string s2 as s1 but reversed, then if we find out the LCS of s1 and s2, that will be the longest palindromic subsequence of string s
+int longestPalindromicSubseq(string &s1){
+    string s2=s1;
+    reverse(s2.begin(),s2.end());
+    return longestCommonSubseq(s1,s2);
+}
+//Time Complexity will be O(n2+n)
+//Space Complexity will be O(2n)
+
 
 //DP on Stocks
 
