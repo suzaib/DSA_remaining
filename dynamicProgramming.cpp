@@ -1820,6 +1820,7 @@ int buySellStocksII_brute(vector<int> &arr){
 //Time Complexity will be O(pow(2,n)) (exponential)
 //Space Complexity will be O(N)
 
+//Memoization
 //We can memoize it using a dp of size n*2
 //At each index, we can have the choice of whether we are allowed to buy or not
 int stocksIIHelper_mem(int idx,int canBuy,vector<vector<int>> &dp,vector<int> &arr){
