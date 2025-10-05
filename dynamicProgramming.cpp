@@ -1437,7 +1437,20 @@ int partitionsWithGivenDiff(vector<int> &arr,int d){
 //Space Complexity will be O(K)
 
 
-
+//O/1 Knapsack Problem
+//See the problem description first
+//Brute Force
+int knapsackHelper_brute(int idx,int currWt,vector<int> &weights,vector<int> &val,int maxWt){
+    if(idx==val.size()) return 0;
+    int pick=0;
+    if(currWt+weights[idx]<=maxWt) pick=val[idx]+knapsackHelper_brute(idx+1,currWt+weights[idx],weights,val,maxWt);
+    int notPick=knapsackHelper_brute(idx+1,currWt,weights,val,maxWt);
+    return max(pick,notPick);
+}
+int knapsack_brute(int n,vector<int> &weight,vector<int> &val,int maxWt){
+    int currWt=0;
+    return knapsackHelper_brute(0,currWt,weight,val,maxWt);
+}
 //DP On Strings
 
 //Longest Common Subsequence
