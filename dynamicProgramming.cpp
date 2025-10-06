@@ -1507,8 +1507,42 @@ int knapsack_spaceOptimization(vector<int> &weights,vector<int> &val,int maxWt){
     int n=val.size();
     vector<int> prev(maxWt+1,0);
     vector<int> curr(maxWt+1,0);
-    
+    for(int i=0;i<=maxWt;i++){
+        if(i>=weights[0]) prev[i]=val[0];
+    }
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=maxWt;j++){
+            int pick=0;
+            if(j>=weights[i]) pick=val[i]+prev[j-weights[i]];
+            int notPick=prev[j];
+            curr[j]=max(pick,notPick);
+        }
+        prev=curr;
+    }
+    return prev[maxWt];
 }
+//Time Complexity will be O(mn)
+//Space Complexity will be O(2m)
+
+//Further Optimization
+int knapsack(vector<int> &weights,vector<int> &val,int maxWt){
+    int n=val.size();
+    vector<int> dp(maxWt+1,0);
+    for(int i=0;i<=maxWt;i++){
+        if(i>=weights[0]) dp[i]=val[0];
+    }
+    for(int i=1;i<n;i++){
+        for(int j=maxWt;j>=1;j--){
+            int pick=0;
+            if(j>=weights[i]) pick=val[i]+dp[j-weights[i]];
+            int notPick=dp[j];
+            dp[j]=max(pick,notPick);
+        }
+    }
+    return dp[maxWt];
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be O(m)
 
 //DP On Strings
 
