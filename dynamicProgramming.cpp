@@ -1450,7 +1450,8 @@ int knapsackHelper_brute(int idx,int bagWt,vector<int> &weights,vector<int> &val
     int notPick=knapsackHelper_brute(idx-1,bagWt,weights,val);
     return max(pick,notPick);
 }
-int knapsack_brute(int n,vector<int> &weight,vector<int> &val,int maxWt){
+int knapsack_brute(vector<int> &weight,vector<int> &val,int maxWt){
+    int n=val.size();
     return knapsackHelper_brute(n-1,maxWt,weight,val);
 }
 //Each element can either be picked or not picked, therefore the code will run about 2^n times
@@ -1470,7 +1471,8 @@ int knapsackHelper_memoization(int idx,int bagWt,vector<int> &weights,vector<int
     int notPick=knapsackHelper_memoization(idx-1,bagWt,weights,val,dp);
     return dp[idx][bagWt]=max(pick,notPick);
 }
-int knapsack_memoization(int n,vector<int> &weights,vector<int> &val,int maxWt){
+int knapsack_memoization(vector<int> &weights,vector<int> &val,int maxWt){
+    int n=val.size();
     vector<vector<int>> dp(n,vector<int> (maxWt+1,-1));
     return knapsackHelper_memoization(n-1,maxWt,weights,val,dp);
 }
@@ -1481,7 +1483,7 @@ int knapsack_memoization(int n,vector<int> &weights,vector<int> &val,int maxWt){
 //Space Complexity will be O(nm+n)
 
 //Tabulation
-int knapsackHelper_tabulation(int n,vector<int> weights,vector<int> &val,int maxWt){
+int knapsack_tabulation(int n,vector<int> &weights,vector<int> &val,int maxWt){
     vector<vector<int>> dp(n,vector<int> (maxWt+1,0));
     for(int i=0;i<=maxWt;i++){
         if(i>=weights[0]) dp[0][i]=val[0];
@@ -1489,7 +1491,7 @@ int knapsackHelper_tabulation(int n,vector<int> weights,vector<int> &val,int max
     for(int i=1;i<n;i++){
         for(int j=1;j<=maxWt;j++){
             int pick=0;
-            if(j>=weights[i]) pick=dp[i-1][j-weights[i]];
+            if(j>=weights[i]) pick=val[i]+dp[i-1][j-weights[i]];
             int notPick=dp[i-1][j];
             dp[i][j]=max(pick,notPick);
         }
@@ -1500,6 +1502,9 @@ int knapsackHelper_tabulation(int n,vector<int> weights,vector<int> &val,int max
 //Space Complexity will be O(mn)
 
 //Space Optimization
+int knapsack_spaceOptimization(int n,vector<int> &weights,vector<int> &val,int maxWt){
+    
+}
 
 //DP On Strings
 
