@@ -1440,17 +1440,67 @@ int partitionsWithGivenDiff(vector<int> &arr,int d){
 //O/1 Knapsack Problem
 //See the problem description first
 //Brute Force
-int knapsackHelper_brute(int idx,int currWt,vector<int> &weights,vector<int> &val,int maxWt){
-    if(idx==val.size()) return 0;
+int knapsackHelper_brute(int idx,int bagWt,vector<int> &weights,vector<int> &val){
+    if(idx==0){
+        if(weights[0]<=bagWt) return val[0];
+        else return 0;
+    }
     int pick=0;
-    if(currWt+weights[idx]<=maxWt) pick=val[idx]+knapsackHelper_brute(idx+1,currWt+weights[idx],weights,val,maxWt);
-    int notPick=knapsackHelper_brute(idx+1,currWt,weights,val,maxWt);
+    if(bagWt>=weights[idx]) pick=val[idx]+knapsackHelper_brute(idx-1,bagWt-weights[idx],weights,val);
+    int notPick=knapsackHelper_brute(idx-1,bagWt,weights,val);
     return max(pick,notPick);
 }
 int knapsack_brute(int n,vector<int> &weight,vector<int> &val,int maxWt){
-    int currWt=0;
-    return knapsackHelper_brute(0,currWt,weight,val,maxWt);
+    return knapsackHelper_brute(n-1,maxWt,weight,val);
 }
+//Each element can either be picked or not picked, therefore the code will run about 2^n times
+//A recursion stack space of n will be used as well
+//Time Complexity will be O(2^n)
+//Space Complexity will be O(n)
+
+//Memoization
+int knapsackHelper_memoization(int idx,int bagWt,vector<int> &weights,vector<int> &val,vector<vector<int>> &dp){
+    if(dp[idx][bagWt]!=-1) return dp[idx][bagWt];
+    if(idx==0){
+        if(bagWt>=weights[idx]) return dp[idx][bagWt]=val[0];
+        else return dp[idx][bagWt]=0;
+    }
+    int pick=0;
+    if(bagWt>=weights[idx]) pick=val[idx]+knapsackHelper_memoization(idx-1,bagWt-weights[idx],weights,val,dp);
+    int notPick=knapsackHelper_memoization(idx-1,bagWt,weights,val,dp);
+    return dp[idx][bagWt]=max(pick,notPick);
+}
+int knapsack_memoization(int n,vector<int> &weights,vector<int> &val,int maxWt){
+    vector<vector<int>> dp(n,vector<int> (maxWt+1,-1));
+    return knapsackHelper_memoization(n-1,maxWt,weights,val,dp);
+}
+//The code will eventually run for n*(bagWt+1) at most, since these many states are to be calculated
+//The space occupied will be due to recursion stack space (n) and dp grid(n*maxWt)
+//Let's take maxWt as m
+//Time Complexity will be O(nm)
+//Space Complexity will be O(nm+n)
+
+//Tabulation
+int knapsackHelper_tabulation(int n,vector<int> weights,vector<int> &val,int maxWt){
+    vector<vector<int>> dp(n,vector<int> (maxWt+1,0));
+    for(int i=0;i<=maxWt;i++){
+        if(i>=weights[0]) dp[0][i]=val[0];
+    }
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=maxWt;j++){
+            int pick=0;
+            if(j>=weights[i]) pick=dp[i-1][j-weights[i]];
+            int notPick=dp[i-1][j];
+            dp[i][j]=max(pick,notPick);
+        }
+    }
+    return dp[n-1][maxWt];
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be O(mn)
+
+//Space Optimization
+
 //DP On Strings
 
 //Longest Common Subsequence
