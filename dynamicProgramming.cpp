@@ -1483,7 +1483,8 @@ int knapsack_memoization(vector<int> &weights,vector<int> &val,int maxWt){
 //Space Complexity will be O(nm+n)
 
 //Tabulation
-int knapsack_tabulation(int n,vector<int> &weights,vector<int> &val,int maxWt){
+int knapsack_tabulation(vector<int> &weights,vector<int> &val,int maxWt){
+    int n=val.size();
     vector<vector<int>> dp(n,vector<int> (maxWt+1,0));
     for(int i=0;i<=maxWt;i++){
         if(i>=weights[0]) dp[0][i]=val[0];
@@ -1502,7 +1503,9 @@ int knapsack_tabulation(int n,vector<int> &weights,vector<int> &val,int maxWt){
 //Space Complexity will be O(mn)
 
 //Space Optimization
-int knapsack_spaceOptimization(int n,vector<int> &weights,vector<int> &val,int maxWt){
+int knapsack_spaceOptimization(vector<int> &weights,vector<int> &val,int maxWt){
+    int n=val.size();
+    
     
 }
 
