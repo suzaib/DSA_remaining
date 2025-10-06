@@ -1505,7 +1505,8 @@ int knapsack_tabulation(vector<int> &weights,vector<int> &val,int maxWt){
 //Space Optimization
 int knapsack_spaceOptimization(vector<int> &weights,vector<int> &val,int maxWt){
     int n=val.size();
-    
+    vector<int> prev(maxWt+1,0);
+    vector<int> curr(maxWt+1,0);
     
 }
 
