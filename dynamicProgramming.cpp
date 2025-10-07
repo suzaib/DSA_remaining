@@ -2735,6 +2735,7 @@ int lengthOfLIS(vector<int> &arr){
 //Dp 19
 //See if you can further optimize stocks II problem
 //Just revise the LCS printing once more
+//In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
 
 
 int main(){
