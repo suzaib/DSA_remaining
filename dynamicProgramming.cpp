@@ -1544,6 +1544,60 @@ int knapsack(vector<int> &weights,vector<int> &val,int maxWt){
 //Time Complexity will be O(mn)
 //Space Complexity will be O(m)
 
+
+//Minimum Coins
+//In this problem, we are allowed to use a coin multiple times(unbounded knapsack), therefore in the pick case, we do not reduce index, instead we remain at the same index to see if that index can be picked again or not
+int minCoinsHelper_brute(int idx,int target,vector<int> &coins){
+    if(idx==0){
+        if(target%coins[idx]==0) return (target/(coins[idx]));
+        else return 1e9;
+    }
+    if(target==0) return 0;
+    int pick=INT_MAX;
+    if(target>=coins[idx]) pick=1+minCoinsHelper_brute(idx,target-coins[idx],coins);
+    int notPick=minCoinsHelper_brute(idx-1,target,coins);
+    return min(pick,notPick);
+}
+
+int minCoins_brute(vector<int> &coins,int target){
+    int n=coins.size();
+    return minCoinsHelper_brute(n-1,target,coins);
+}
+//At each element we have two choices, either to pick that particular coin or not, that is two choices, and hence for a total of n elements the code will run for 2^n times
+//A recursion stack space of size n will be used up as well
+//Time Complexity will be O(2^n)
+//Space Compelexity will be O(n)
+
+//Memoization
+int minCoinsHelper_memoization(int idx,int target,vector<vector<int>> &dp,vector<int> &coins){
+    if(dp[idx][target]!=-1) return dp[idx][target];
+    if(idx==0){
+        if(target%coins[idx]==0) return dp[idx][target]=(target/(coins[idx]));
+        else return dp[idx][target]=1e9;
+    }
+    if(target==0) return dp[idx][target]=0;
+    int pick=INT_MAX;
+    if(target>=coins[idx]) pick=1+minCoinsHelper_memoization(idx,target-coins[idx],dp,coins);
+    int notPick=minCoinsHelper_memoization(idx-1,target,dp,coins);
+    return dp[idx][target]=min(pick,notPick);
+}
+int minCoins_memoization(vector<int> &coins,int target){
+    int n=coins.size();
+    vector<vector<int>> dp(n,vector<int> (target+1,-1));
+    return minCoinsHelper_memoization(n-1,target,dp,coins);
+}
+//Consider the target to be k, then the code runs in total to calculate all the elements of dp grid, which are equal to nk
+//Time Complexity will be O(nk)
+//Space Complexity will be O(nk+n)
+
+//Tabulation
+int minCoinsHelper_tabulation(vector<int> &coins,int target){
+    int n=coins.size();
+    vector<vector<int>> dp(n,vector<int>(target+1,1e9));
+    for(int i=0;i<=;i++){
+        if()
+    }
+}
 //DP On Strings
 
 //Longest Common Subsequence
