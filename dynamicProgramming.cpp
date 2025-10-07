@@ -1594,9 +1594,19 @@ int minCoins_memoization(vector<int> &coins,int target){
 int minCoinsHelper_tabulation(vector<int> &coins,int target){
     int n=coins.size();
     vector<vector<int>> dp(n,vector<int>(target+1,1e9));
-    for(int i=0;i<=;i++){
-        if()
+    for(int i=0;i<=target;i++){
+        if(i%coins[0]==0) dp[0][i]=i/coins[0];
     }
+    for(int i=0;i<n;i++) dp[i][0]=0;
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=target;j++){
+            int pick=1e9;
+            if(j>=coins[i]) pick=dp[i][j-coins[i]];
+            int notPick=dp[i-1][j];
+            dp[i][j]=min(pick,notPick);
+        }
+    }
+    return dp[n-1][target];
 }
 //DP On Strings
 
