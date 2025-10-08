@@ -4,6 +4,10 @@ A full binary tree is one in which every node has 0 or 2 offsprings
 Complete binary tree is filled at all levels except the last one, please see some examples, it is not exactly what you think
 Remember a tree is always filled(just basic convention) from the left hand side, in the inOrder way
 This convention is highly important when we talk about complete binary tree
+We have yet another definition for complete binary trees which will help us in understanding them
+A binary tree is said to be a complete binary tree if all its levels, except possibly the last level, have the maximum number of possible nodes,
+And all the nodes in the last level appear as far left as possible
+
 Heap order property is of two types, max heap, min heap
 Max heap means that every child is smaller than the parent
 Min heap means that every child is bigger than the parent
