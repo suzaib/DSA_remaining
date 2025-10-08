@@ -2747,7 +2747,7 @@ int lengthOfLIS(vector<int> &arr){
 
 //Largest Divisible Subset
 //Logic is same as LIS using the tabulation method, just change the if condition
-int largestDivisibleSubset(vector<int> &arr){
+vector<int> largestDivisibleSubset(vector<int> &arr){
     int n=arr.size();
     vector<int> dp(n,1);
     vector<int> hash(n);
@@ -2761,16 +2761,37 @@ int largestDivisibleSubset(vector<int> &arr){
             }
         }
     }
-
+    vector<int> ans;
     auto it=max_element(dp.begin(),dp.end());
     int maxLen=*(it);
-    int maxIdx=it-arr.begin();
+    int maxIdx=it-dp.begin();
     while(ans.size()!=maxLen){
-        
+        ans.push_back(arr[maxIdx]);
+        maxIdx=hash[maxIdx];
     }
+    return ans;
 }
+//No need to include n space of ans array as it is used to show answer
+//Time Complexity will be O(n2+3n)
+//Space Complexity will be O(2n)
 
 
+
+//Partition DP
+//Toughest Pattern Till Now
+//Partition DP comes into picture whenever there are more than one ways to solve the problem, see below question for more understanding
+
+//Matrix Chain Multiplication
+//Consider matrix A (m*n) and a matrix B (p*q), The multiplication between them is possible only if p==n and the total number of operations done will be equal to m*(n or p)*q
+//Suppose we are given three matrices, A, B and C
+//Now we have two choices to multiply them : (AB)C or A(BC), both of these will have different number of operations
+//For example, let's consider A of order (3x4) B of order (4x5) and C of order (5x6)
+//Multiplying as (AB)C we first get AB of order 3x5 (operations done will be 3x4x5 => 60) then we multiply it by C
+//The order will be 3x6 and the operations done will be 3x5x6 => 90, therefore total operations will be 90+60 = 150
+//Doing the same in second operation A(BC) we get total operations as 192
+//Clearly going by the approach of (AB)C will result in fewer operations, therefore that one is preferable
+//This is what we have to return
+int minOperationsInMCM(){}
 //DP 30
 //DP 44 
 
