@@ -2741,10 +2741,10 @@ int lengthOfLIS(vector<int> &arr){
 }
 //Time Complexity will be O(nlogn)
 //Space Complexity will be O(n)
-//DP 29
+//DP 30
 //DP 44 
 
-//Dp 19
+//Dp 21
 //See if you can further optimize stocks II problem
 //Just revise the LCS printing once more
 //In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
