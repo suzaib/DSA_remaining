@@ -2791,6 +2791,9 @@ vector<int> largestDivisibleSubset(vector<int> &arr){
 //Doing the same in second operation A(BC) we get total operations as 192
 //Clearly going by the approach of (AB)C will result in fewer operations, therefore that one is preferable
 //This is what we have to return
+
+//We will be given an array as say [10,20,30,40,50], this has dimensions of n-1 matrices
+//The dimensions are 10x20, 20x30, 30x40, 40x50 (4 Matrices)
 int minOperationsInMCM(){}
 //DP 30
 //DP 44 
