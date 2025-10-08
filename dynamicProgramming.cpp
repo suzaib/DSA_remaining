@@ -2747,6 +2747,28 @@ int lengthOfLIS(vector<int> &arr){
 
 //Largest Divisible Subset
 //Logic is same as LIS using the tabulation method, just change the if condition
+int largestDivisibleSubset(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp(n,1);
+    vector<int> hash(n);
+    sort(arr.begin(),arr.end());
+    iota(hash.begin(),hash.end(),0);//fills the array as 0,1,2...
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(arr[i]%arr[j]==0 && dp[i]<dp[j]+1){
+                dp[i]=1+dp[j];
+                hash[i]=j;
+            }
+        }
+    }
+
+    auto it=max_element(dp.begin(),dp.end());
+    int maxLen=*(it);
+    int maxIdx=it-arr.begin();
+    while(ans.size()!=maxLen){
+        
+    }
+}
 
 
 //DP 30
