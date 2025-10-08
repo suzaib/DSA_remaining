@@ -1988,6 +1988,18 @@ int longestPalindromicSubseq(string &s1){
 //Space Complexity will be O(2n)
 
 
+//Minimum Insertions to make string palindromic
+//One way is to insert the whole string at the back in reverse order(try it), then the new string becomes palindromic
+//For eg consider string abc now add reverse of it at back, it becomes abccba, now that is a palindrome, therefore we know the ans would be <=n
+//Remember, we have to do insertions(new characters, and not replacement)
+//Insertions can be done anywhere, in the middle, end or front, anywhere
+//Watch the video to get the ans which is n-length of longest palindromic sequence
+int minInsertionsToMakePalindrome(string &s){
+    int n=s.size();
+    return (n-longestPalindromicSubseq(s));
+}
+//Time Complexity will be O(n2+n)
+//Space Complexity will be O(2n)
 //DP on Stocks
 
 
@@ -2729,7 +2741,7 @@ int lengthOfLIS(vector<int> &arr){
 }
 //Time Complexity will be O(nlogn)
 //Space Complexity will be O(n)
-//DP 27
+//DP 29
 //DP 44 
 
 //Dp 19
