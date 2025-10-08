@@ -1,6 +1,6 @@
 /*Heap is just a binary tree, a complete binary tree, with heap order property
-We will first discuss two types of binary trees, one is complete binary tree and the other is full binary tree
-A complete binary tree is one in which every node has 0 or 2 offsprings
+We will first discuss two types of binary trees, one is full binary tree and the other is complete binary tree
+A full binary tree is one in which every node has 0 or 2 offsprings
 Complete binary tree is filled at all levels except the last one, please see some examples, it is not exactly what you think
 Remember a tree is always filled(just basic convention) from the left hand side, in the inOrder way
 This convention is highly important when we talk about complete binary tree
