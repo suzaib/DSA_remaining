@@ -2794,6 +2794,7 @@ vector<int> largestDivisibleSubset(vector<int> &arr){
 
 //We will be given an array as say [10,20,30,40,50], this has dimensions of n-1 matrices
 //The dimensions are 10x20, 20x30, 30x40, 40x50 (4 Matrices)
+//Therefore the dimensions of ith matrix is A[i-1]xA[i]
 int minOperationsInMCM(){}
 //DP 30
 //DP 44 

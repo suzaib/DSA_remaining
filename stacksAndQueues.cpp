@@ -1553,10 +1553,80 @@ int celebrityProblem(vector<vector<int>> &mat){
 //Time Complexity will be O(2n)
 
 
+//Implement LRU Cache
+//We will need Doubly Linked List for this, so first we will create that
+class Node{
+    public:
+        pair<int,int> node;
+        Node* prev;
+        Node* next;
+
+        Node(int val){
+            this->val=val;
+            this->prev=nullptr;
+            this->next=nullptr;
+        }
+};
+class LRUCache{
+    public:
+        map<int,Node*> mpp;
+        int capacity;
+        Node* head;
+        Node* tail;
+
+        LRUCache(int capacity){
+            this->capacity=capacity;
+            mpp.clear();
+            this->head->next=tail;
+            this->head->prev=nullptr;
+            this->tail->next=nullptr;
+            this->tail->prev=head;
+        }
+
+        void deleteNode(Node* node){
+
+        }
+
+        void insertAfterHead(Node* node){
+
+        }
+
+        void put(int key,int val){
+
+            //If the map already has this, then just change the value
+            if(mpp.find(key)!=mpp.end()){
+                Node* node=mpp[key];
+                node->val=val;
+                deleteNode(node);
+                insertAfterHead(node);
+            }
+
+            //Otherwise, there can be two conditions
+            else{
+                //In case the map is already full
+                if(mpp.size()==capacity){
+                    Node* lastUsed=tail->prev;
+                    mpp.erase(node);
+                    deleteNode(prev);
+                }
+                Node* newNode=new Node(key,val);
+                mpp[key]=newNode;
+                insertAfterHead(node);
+            }
+
+        }
+        int get(int key){
+            if(mpp.find(key)==mpp.end()) return -1;
+            Node* node=mpp[key];
+            deleteNode(node);
+            insertAfterHead(node);
+            return node->val;
+        }
+};
+
 //Lecture 18 Next
 
 //Time Complexity will be O(n)
-//Lecture 15
 //Revise Largest histogram once
 //Just write down sliding window maximum code once(optimal one, general one)
 
