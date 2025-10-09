@@ -47,8 +47,6 @@ void insertInMaxHeap(vector<int> &arr,int k){
 //Time Complexity will be O(logn)
 //No extra space is needed, the original array is although changed
 
-//
-
 
 //Insertion in a Min Heap
 //Follow the reverse logic used in the max heap
