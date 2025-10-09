@@ -46,16 +46,7 @@ void insertInMaxHeap(vector<int> &arr,int k){
 }
 //Time Complexity will be O(logn)
 //No extra space is needed, the original array is although changed
-void fx(vector<int> &arr,int k){
-    int n=arr.size();
-    arr.push_back(k);
-    int idx=n;
-    while(idx>1){
-        int parentIdx=idx/2;
-        if(arr[idx]>arr[parentIdx]) swap(arr[idx],arr[parentIdx]);
-        else return;
-    }
-}
+
 
 
 
