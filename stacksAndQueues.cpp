@@ -1557,11 +1557,13 @@ int celebrityProblem(vector<vector<int>> &mat){
 //We will need Doubly Linked List for this, so first we will create that
 class Node{
     public:
-        pair<int,int> node;
+        int key;
+        int val;
         Node* prev;
         Node* next;
 
-        Node(int val){
+        Node(int key,int val){
+            this->key=key;
             this->val=val;
             this->prev=nullptr;
             this->next=nullptr;
@@ -1577,18 +1579,27 @@ class LRUCache{
         LRUCache(int capacity){
             this->capacity=capacity;
             mpp.clear();
-            this->head->next=tail;
-            this->head->prev=nullptr;
-            this->tail->next=nullptr;
-            this->tail->prev=head;
+            head=new Node(-1,-1);
+            tail=new Node(-1,-1);
+            head->next=tail;
+            head->prev=nullptr;
+            tail->next=nullptr;
+            tail->prev=head;
         }
 
         void deleteNode(Node* node){
-
+            Node* prevNode=node->prev;
+            Node* nextNode=node->next;
+            prevNode->next=nextNode;
+            nextNode->prev=prevNode;
         }
 
         void insertAfterHead(Node* node){
-
+            Node* nextNode=head->next;
+            node->next=nextNode;
+            node->prev=head;
+            head->next=node;
+            nextNode->prev=node;
         }
 
         void put(int key,int val){
@@ -1606,12 +1617,13 @@ class LRUCache{
                 //In case the map is already full
                 if(mpp.size()==capacity){
                     Node* lastUsed=tail->prev;
-                    mpp.erase(node);
-                    deleteNode(prev);
+                    mpp.erase(lastUsed->key);
+                    deleteNode(lastUsed);
+                    delete lastUsed;
                 }
                 Node* newNode=new Node(key,val);
                 mpp[key]=newNode;
-                insertAfterHead(node);
+                insertAfterHead(newNode);
             }
 
         }
