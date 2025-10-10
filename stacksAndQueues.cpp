@@ -27,9 +27,10 @@ Top function also gives the first element entered in the array(not removes it, p
 #include<bits/stdc++.h>
 using namespace std;
 
+//Time Complexity, if not mentioned is either constant or very easy to figure out, most probably O(n) where n can be known by reading the function
+//Space Complexity if not mentioned is constant, that is O(1)
+
 //We can use a class to understand the operations of push ,pop etc:
-
-
 
 //Implementing Stack using array
 class StackImplementation{
@@ -100,9 +101,11 @@ class QueueImplementation{
         currSize--;
         return;
     }
+
     int curSize(){
         return currSize;
     }
+
 };
 
 
@@ -301,6 +304,11 @@ bool validParenthesis(string str){
 //Time Complexity will be O(n)
 //Space Complexity will be O(n)
 
+
+
+//Expression Conversions
+//For this, we first need to understand the priority of operators
+
 /*Priority Order of Operators
 ^,(*,/),(+,-);
 
@@ -323,6 +331,7 @@ int priority(char ch){
     else return -1;
 };
 
+//Infix to Postfix
 string infixToPostfix(string str){
     int n=str.size();
     string ans="";
@@ -356,6 +365,7 @@ string infixToPostfix(string str){
     }
     return ans;
 }
+//Since stack and ans both store 2n elements, therefore space used will be 2n
 //Time Complexity will be O(2N) 
 //Space Complexity will be O(2N) (stack and ans both store 2n elements at max)
 
@@ -379,6 +389,7 @@ void revStrWithBrackets(string &str){
 }
 //Time Complexity will be O(n/2)
 
+//Now a function to reverse string
 void revStr(string &str){
     int n=str.size();
     int i=0;
@@ -398,6 +409,7 @@ int priority2(char ch){
     else return -1;
 }
 
+//Controlled infix to postfix conversion
 string controlledInfixToPostfix(string str){
     int n=str.size();
     stack<char> st;
@@ -444,6 +456,7 @@ string controlledInfixToPostfix(string str){
     return ans;
 }
 //Time complexity will be O(n)
+//Space Complexity will be O(n)
 
 //Step 3 : Reverse the string obtained, This is your answer
 string infixToPrefix(string str){
@@ -479,10 +492,12 @@ string postfixToInfix(string str){
     }
     return st.top();
 }
-//Time Complexity will be O(n) (for loop) + O(n) (since string addition takes time as well) for eg adding two string of n1 and n2 length takes O(n1+n2)
+//Time used will be due to loop (n) and due to addition of strings which can take n at most
+//Time Complexity will be O(2n)
 //Space Complexity will be O(n)
 
 
+//Prefix To Infix
 string prefixToInfix(string str){
     int n=str.size();
     stack<string> st;
@@ -500,7 +515,8 @@ string prefixToInfix(string str){
     }
     return st.top();
 }
-//Time Complexity will be O(n)+O(n) (for loop and addition)
+//Similar to previous case, time will be used for loop(n) and addition(n at worst)
+//Time Complexity will be O(2n)
 //Space Comlexity will be O(n) 
 
 
@@ -557,15 +573,17 @@ class minStack_brute{
             else st.push({val,min(val,st.top().second)});
             
         }
+
         int getMin(){
             return st.top().second;
         }
+
         int top(){
             return st.top().first;
         }
 };
-//Time Complexity will be O(1), that is constant time
-//Space Complexity will be O(2n) since pair stores two elements
+//Time is constant but stack stores pair, therefore 2n space
+//Space Complexity will be O(2n)
 
 //We can optimise the space
 class minStack{
@@ -603,7 +621,7 @@ class minStack{
             st.pop();
         }
 };
-//Time Complexity will be O(1) 
+//Constant time but we now use only n space
 //Space Complexity will be O(n)
 
 
@@ -622,9 +640,10 @@ void nextGreater_brute(vector<int> &arr){
         arr[i]=nextGreater;
     }
 }
-//Time Complexity will be O(pow(n,2))
+//Time Complexity will be O(n2)
 
-//Optimal approach will be to keep track of the greatest element from the back
+//Optimal Method
+//Keep track of the greatest element from the back
 void nextGreater(vector<int> &arr){
     int n=arr.size();
     vector<int> nge(n);
@@ -637,8 +656,10 @@ void nextGreater(vector<int> &arr){
     }
     arr=nge;
 }
-//Time Complexity will be O(2n) since the inner loop run at most n times(it removes at max n elements)
-//Space Complexity will be O(n) (stack may store all elements at worst)
+//The inner loop runs at most n times, since it can remove a max of n elements, therefore the code runs at max 2n
+//The stack may store all elements at worst
+//Time Complexity will be O(2n) 
+//Space Complexity will be O(n)
 
 
 //Next Greater Element : Variation 2
@@ -1149,8 +1170,8 @@ vector<int> asteroidCollision_brute(vector<int> &arr){
 //Time Complexity is almost O(6n)
 //Space Complexity will be O(2n)
 
-//Better Method : Can be done by using only a stack
-
+//Better Method
+//Can be done by using only a stack
 vector<int> asteroidCollision_better(vector<int> &arr){
     int n=arr.size();
     stack<int> st;
@@ -1332,6 +1353,7 @@ string removeKDigits(string str,int k){
     if(ans.empty()) return "0";
     return ans;
 }
+//Time Complexity will be O(n)
 
 
 //Stock Span Problem
@@ -1557,14 +1579,14 @@ int celebrityProblem(vector<vector<int>> &mat){
 //LRU means least recently used
 //We keep track of recently used cache
 //We will need Doubly Linked List for this, so first we will create that
-class Node{
+class NodeLRU{
     public:
         int key;
         int val;
-        Node* prev;
-        Node* next;
+        NodeLRU* prev;
+        NodeLRU* next;
 
-        Node(int key,int val){
+        NodeLRU(int key,int val){
             this->key=key;
             this->val=val;
             this->prev=nullptr;
@@ -1573,31 +1595,31 @@ class Node{
 };
 class LRUCache{
     public:
-        unordered_map<int,Node*> mpp;
+        unordered_map<int,NodeLRU*> mpp;
         int capacity;
-        Node* head;
-        Node* tail;
+        NodeLRU* head;
+        NodeLRU* tail;
 
         LRUCache(int capacity){
             this->capacity=capacity;
             mpp.clear();
-            head=new Node(-1,-1);
-            tail=new Node(-1,-1);
+            head=new NodeLRU(-1,-1);
+            tail=new NodeLRU(-1,-1);
             head->next=tail;
             tail->prev=head;
         }
 
-        void deleteNode(Node* node){
-            Node* prevNode=node->prev;
-            Node* nextNode=node->next;
+        void deleteNode(NodeLRU* node){
+            NodeLRU* prevNode=node->prev;
+            NodeLRU* nextNode=node->next;
             prevNode->next=nextNode;
             nextNode->prev=prevNode;
         }
         //Time Complexity will be O(1)
         //Space Complexity will be O(1)
 
-        void insertAfterHead(Node* node){
-            Node* nextNode=head->next;
+        void insertAfterHead(NodeLRU* node){
+            NodeLRU* nextNode=head->next;
             node->next=nextNode;
             node->prev=head;
             head->next=node;
@@ -1610,7 +1632,7 @@ class LRUCache{
 
             //If the map already has this, then just change the value
             if(mpp.find(key)!=mpp.end()){
-                Node* node=mpp[key];
+                NodeLRU* node=mpp[key];
                 node->val=val;
                 deleteNode(node);
                 insertAfterHead(node);
@@ -1620,12 +1642,12 @@ class LRUCache{
             else{
                 //In case the map is already full
                 if(mpp.size()==capacity){
-                    Node* lastUsed=tail->prev;
+                    NodeLRU* lastUsed=tail->prev;
                     mpp.erase(lastUsed->key);
                     deleteNode(lastUsed);
                     delete lastUsed;
                 }
-                Node* newNode=new Node(key,val);
+                NodeLRU* newNode=new NodeLRU(key,val);
                 mpp[key]=newNode;
                 insertAfterHead(newNode);
             }
@@ -1635,14 +1657,13 @@ class LRUCache{
 
         int get(int key){
             if(mpp.find(key)==mpp.end()) return -1;
-            Node* node=mpp[key];
+            NodeLRU* node=mpp[key];
             deleteNode(node);
             insertAfterHead(node);
             return node->val;
         }
         //Time Complexity will be O(1)
         //Space Complexity will be O(1)
-
 };
 
 
@@ -1697,14 +1718,14 @@ class List{
         }
 };
 class LFUCache{
-    private:
+    public:
         map<int,NodeLFU*> keyNode;
         map<int,List*> freqListMap;
         int maxSize;
         int minFreq;
         int currSize;
     
-    private:
+    public:
         LFUCache(int capacity){
             maxSize=capacity;
             minFreq=0;
@@ -1712,12 +1733,12 @@ class LFUCache{
         }
 
         void updateFreqListMap(NodeLFU* node){
-            keyNode.erase(node->key);
             freqListMap[node->freq]->removeNode(node);
             if(node->freq==minFreq && freqListMap[node->freq]->size==0) minFreq++;
 
-            List* nextHigherFreqList=new List();
+            List* nextHigherFreqList;
             if(freqListMap.find(node->freq+1)!=freqListMap.end()) nextHigherFreqList=freqListMap[node->freq+1];
+            else nextHigherFreqList=new List();
             node->freq+=1;
             nextHigherFreqList->addFront(node);
             freqListMap[node->freq]=nextHigherFreqList;
@@ -1764,15 +1785,15 @@ class LFUCache{
 };
 //Lecture 18 Next
 
-//Time Complexity will be O(n)
 //Revise Largest histogram once
 //Just write down sliding window maximum code once(optimal one, general one)
 
 
 
 int main(){
+    
+    //Your function here
     return 0;
 }
-//Complete findPGE functions(they should give index)
 
 
