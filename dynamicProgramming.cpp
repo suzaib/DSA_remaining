@@ -2776,6 +2776,62 @@ vector<int> largestDivisibleSubset(vector<int> &arr){
 //Space Complexity will be O(2n)
 
 
+//Longest String Chain
+//First we will write a compare function to check if two strings(of lengths x and x-1, differ by just one character)
+bool compare(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    if(n!=m+1) return false;
+    //We assume that n=m+1
+
+    int i=0;
+    int j=0;
+    while(i<n){
+        if(s1[i]==s2[j]){
+            i++;
+            j++;
+        }
+        else i++;
+        if(i==s1.size() && j==s2.size()) return true;
+    }
+    return false;
+}
+//The function runs for n times where n is the length of bigger string
+
+//Let us discuss the sort method in more detail
+//sort(iterator_beginning,iterator_ending,comparator function)
+//The third argument is optional and is a comparator function that defines how the comparison should be done
+/*
+Consider for eg a comparator function :
+bool cmp(string &a,string &b){
+    return a.size()<b.size();
+}
+This comparator function means put a before if it is smaller
+sort function after this looks like : sort(arr.begin(),arr.end(),cmp)
+
+Lambda Expressions
+They are anonymous functions
+We can use them like : 
+sort(arr.begin(),arr.end(),[](string &a,string &b){
+    return a.size()<b.size();
+});
+*/
+//Now we write our code
+int longestStringChain(vector<string> arr){
+    int n=arr.size();
+    vector<int> dp(n,1);
+    int maxi=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(compare(arr[i],arr[j])){
+                dp[i]=max(dp[i],1+dp[j]);
+                maxi=max(maxi,dp[i]);
+            }
+        }
+    }
+    return maxi;
+}
+
 
 //Partition DP
 //Toughest Pattern Till Now
