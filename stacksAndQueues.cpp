@@ -1646,7 +1646,122 @@ class LRUCache{
 };
 
 
+//LFU Cache
+//Least Frequently Used element is to be kept tracked of
+//First we create a node class since we need doubly linked list for this
+class NodeLFU{
+    public:
+        int key;
+        int val;
+        int freq;
+        NodeLFU* next;
+        NodeLFU* prev;
 
+        NodeLFU(int key,int val){
+            this->key=key;
+            this->val=val;
+            this->freq=1;
+            this->next=nullptr;
+            this->prev=nullptr;
+        }
+};
+
+class List{
+    public:
+        int size;
+        NodeLFU* head;
+        NodeLFU* tail;
+        List(){
+            head=new NodeLFU(0,0);
+            tail=new NodeLFU(0,0);
+            head->next=tail;
+            tail->prev=head;
+            size=0;
+        }
+
+        void addFront(NodeLFU* node){
+            NodeLFU* temp=head->next;
+            node->next=temp;
+            node->prev=head;
+            head->next=node;
+            temp->prev=node;
+            size++;
+        }
+
+        void removeNode(NodeLFU* delNode){
+            NodeLFU* delPrev=delNode->prev;
+            NodeLFU* delNext=delNode->next;
+            delPrev->next=delNext;
+            delNext->prev=delPrev;
+            size--; 
+        }
+};
+class LFUCache{
+    private:
+        map<int,NodeLFU*> keyNode;
+        map<int,List*> freqListMap;
+        int maxSize;
+        int minFreq;
+        int currSize;
+    
+    private:
+        LFUCache(int capacity){
+            maxSize=capacity;
+            minFreq=0;
+            currSize=0;
+        }
+
+        void updateFreqListMap(NodeLFU* node){
+            keyNode.erase(node->key);
+            freqListMap[node->freq]->removeNode(node);
+            if(node->freq==minFreq && freqListMap[node->freq]->size==0) minFreq++;
+
+            List* nextHigherFreqList=new List();
+            if(freqListMap.find(node->freq+1)!=freqListMap.end()) nextHigherFreqList=freqListMap[node->freq+1];
+            node->freq+=1;
+            nextHigherFreqList->addFront(node);
+            freqListMap[node->freq]=nextHigherFreqList;
+            keyNode[node->key]=node;
+        }
+
+        int get(int key){
+            if(keyNode.find(key)!=keyNode.end()){
+                NodeLFU* node=keyNode[key];
+                int val=node->val;
+                updateFreqListMap(node);
+                return val;
+            }
+            return -1;
+        }
+
+        void put(int key,int val){
+            if(maxSize==0) return;
+            if(keyNode.find(key)!=keyNode.end()){
+                NodeLFU* node=keyNode[key];
+                node->val=val;
+                updateFreqListMap(node);
+            }
+            else{
+                if(currSize==maxSize){
+                    List* list=freqListMap[minFreq];
+                    keyNode.erase(list->tail->prev->key);
+                    freqListMap[minFreq]->removeNode(list->tail->prev);
+                    currSize--;
+                }
+                currSize++;
+
+                //New value has to be added which is not here previously
+                minFreq=1;
+                List* listFreq=new List();
+                if(freqListMap.find(minFreq)!=freqListMap.end()) listFreq=freqListMap[minFreq];
+                NodeLFU* node=new NodeLFU(key,val);
+                listFreq->addFront(node);
+                keyNode[key]=node;
+                freqListMap[minFreq]=listFreq;
+            }
+        }
+
+};
 //Lecture 18 Next
 
 //Time Complexity will be O(n)
