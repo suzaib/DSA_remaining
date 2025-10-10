@@ -2820,6 +2820,9 @@ sort(arr.begin(),arr.end(),[](string &a,string &b){
 int longestStringChain(vector<string> arr){
     int n=arr.size();
     vector<int> dp(n,1);
+    sort(arr.begin(),arr.end(),[](string &a,string &b){
+        return a.size()<b.size();
+    });
     int maxi=0;
     for(int i=0;i<n;i++){
         for(int j=0;j<i;j++){
@@ -2831,6 +2834,11 @@ int longestStringChain(vector<string> arr){
     }
     return maxi;
 }
+//Time used is due to sorting (nlogn) and two loops (n2) multiplied by the time taken by compare function (n2*l) where l is the length of string
+//Time Complexity will be O(n2*l+nlogn)
+//Space Complexity will be O(n)
+
+
 
 
 //Partition DP
@@ -2859,7 +2867,7 @@ int minOperationsInMCM(){}
 //See if you can further optimize stocks II problem
 //Just revise the LCS printing once more
 //In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
-
+//See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
 int main(){
     vector<int> arr={5,4,11,1,16,8};
     vector<int> ans=printLIS(arr);
