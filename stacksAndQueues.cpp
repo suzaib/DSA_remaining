@@ -1554,6 +1554,8 @@ int celebrityProblem(vector<vector<int>> &mat){
 
 
 //Implement LRU Cache
+//LRU means least recently used
+//We keep track of recently used cache
 //We will need Doubly Linked List for this, so first we will create that
 class Node{
     public:
@@ -1571,7 +1573,7 @@ class Node{
 };
 class LRUCache{
     public:
-        map<int,Node*> mpp;
+        unordered_map<int,Node*> mpp;
         int capacity;
         Node* head;
         Node* tail;
@@ -1582,8 +1584,6 @@ class LRUCache{
             head=new Node(-1,-1);
             tail=new Node(-1,-1);
             head->next=tail;
-            head->prev=nullptr;
-            tail->next=nullptr;
             tail->prev=head;
         }
 
@@ -1593,6 +1593,8 @@ class LRUCache{
             prevNode->next=nextNode;
             nextNode->prev=prevNode;
         }
+        //Time Complexity will be O(1)
+        //Space Complexity will be O(1)
 
         void insertAfterHead(Node* node){
             Node* nextNode=head->next;
@@ -1601,6 +1603,8 @@ class LRUCache{
             head->next=node;
             nextNode->prev=node;
         }
+        //Time Complexity will be O(1)
+        //Space Complexity will be O(1)
 
         void put(int key,int val){
 
@@ -1625,8 +1629,10 @@ class LRUCache{
                 mpp[key]=newNode;
                 insertAfterHead(newNode);
             }
-
         }
+        //Time Complexity will be O(1)
+        //Space Complexity will be O(1)
+
         int get(int key){
             if(mpp.find(key)==mpp.end()) return -1;
             Node* node=mpp[key];
@@ -1634,7 +1640,12 @@ class LRUCache{
             insertAfterHead(node);
             return node->val;
         }
+        //Time Complexity will be O(1)
+        //Space Complexity will be O(1)
+
 };
+
+
 
 //Lecture 18 Next
 
