@@ -2874,3 +2874,4 @@ int main(){
     for(auto it:ans) cout<<it<<",";
     return 0;
 }
+Anuj was not like the rest of these robots that disguised themselves as students, the students who wouldn't question but would just follow what everyone else was doing. The professors taught horrible, they were talented, no doubt,perhaps the most knowledgable in the country, however their teaching skills were simply pathetic. Instead of giving any useful information, they would just give a overview and if asked, they would tell that this is college and they can't spoonfeed people. Anuj had just one problem there, if they only taught 50%, and the rest 50% we have to figure out on ourselves, let us do that 100% figuring ourselves. According to him, why are they even giving 50%. 
