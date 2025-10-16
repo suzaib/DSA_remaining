@@ -2872,6 +2872,28 @@ int minOperationsInMCM_brute(vector<int> &arr){
     int n=arr.size();
     return minOperationsInMCMHelper_brute(1,n-1,arr);
 }
+//Time Complexity will be exponential O(2^n)
+//Space Complexity will be O(n)
+
+//Memoization
+int minOperationsInMCMHelper_memoization(int i,int j,vector<vector<int>> &dp,vector<int> &arr){
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(i==j) return dp[i][j]=0;
+    int mini=1e9;
+    for(int k=i;k<j;k++){
+        int steps=arr[i-1]*arr[k]*arr[j]+minOperationsInMCMHelper_memoization(i,k,dp,arr)+minOperationsInMCMHelper_memoization(k+1,j,dp,arr);
+        mini=min(mini,steps);
+    }
+    return dp[i][j]=mini;
+}
+int minOperationsInMCM_memoization(vector<int> &arr){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (n,-1));
+    return minOperationsInMCMHelper_memoization(1,n-1,dp,arr);
+}
+//Time taken will be due to the loop which can go upto O(n) and due to counting of states which are n2 in total, so total time will be O(n)*O(n2)
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n2)+O(n)
 //DP 30
 //DP 44 
 
