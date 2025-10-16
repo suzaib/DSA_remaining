@@ -2859,7 +2859,19 @@ int longestStringChain(vector<string> arr){
 //We will be given an array as say [10,20,30,40,50], this has dimensions of n-1 matrices
 //The dimensions are 10x20, 20x30, 30x40, 40x50 (4 Matrices)
 //Therefore the dimensions of ith matrix is A[i-1]xA[i]
-int minOperationsInMCM(){}
+int minOperationsInMCMHelper_brute(int i,int j,vector<int> &arr){
+    if(i==j) return 0;
+    int mini=1e9;
+    for(int k=i;k<j;k++){
+        int steps=(arr[i-1]*arr[k]*arr[j])+minOperationsInMCMHelper_brute(i,k,arr)+minOperationsInMCMHelper_brute(k+1,j,arr);
+        mini=min(steps,mini);
+    }
+    return mini;
+}
+int minOperationsInMCM_brute(vector<int> &arr){
+    int n=arr.size();
+    return minOperationsInMCMHelper_brute(1,n-1,arr);
+}
 //DP 30
 //DP 44 
 
@@ -2874,4 +2886,3 @@ int main(){
     for(auto it:ans) cout<<it<<",";
     return 0;
 }
-Anuj was not like the rest of these robots that disguised themselves as students, the students who wouldn't question but would just follow what everyone else was doing. The professors taught horrible, they were talented, no doubt,perhaps the most knowledgable in the country, however their teaching skills were simply pathetic. Instead of giving any useful information, they would just give a overview and if asked, they would tell that this is college and they can't spoonfeed people. Anuj had just one problem there, if they only taught 50%, and the rest 50% we have to figure out on ourselves, let us do that 100% figuring ourselves. According to him, why are they even giving 50%. 
