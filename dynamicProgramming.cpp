@@ -2930,7 +2930,7 @@ int numberOfLIS(vector<int> &arr){
 //Toughest Pattern Till Now
 //Partition DP comes into picture whenever there are more than one ways to solve the problem, see below question for more understanding
 
-//Matrix Chain Multiplication
+//Matrix Chain Multiplication (MCM)
 //Consider matrix A (m*n) and a matrix B (p*q), The multiplication between them is possible only if p==n and the total number of operations done will be equal to m*(n or p)*q
 //Suppose we are given three matrices, A, B and C
 //Now we have two choices to multiply them : (AB)C or A(BC), both of these will have different number of operations
