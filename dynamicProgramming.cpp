@@ -2899,22 +2899,23 @@ int longestBitonicSubseq(vector<int> &arr){
 int numberOfLIS(vector<int> &arr){
     int n=arr.size();
     vector<int> dp(n,1);
-    vector<int> cnt(n,0);
+    vector<int> cnt(n,1);
+    int maxi=0;
     for(int i=0;i<n;i++){
         for(int j=0;j<i;j++){
             if(arr[i]>arr[j] && 1+dp[j]>=dp[i]){
-                if(1+dp[j]==dp[i]) cnt[i]=max(cnt[i],cnt[j]);
-                else cnt[i]=1;
+                if(1+dp[j]==dp[i]) cnt[i]=cnt[i]+cnt[j];
+                else{
+                    cnt[i]=cnt[j];
+                    dp[i]=1+dp[j];
+                }
             }
         }
+        maxi=max(maxi,dp[i]);
     }
-    int maxi=0;
-    int ans;
+    int ans=0;
     for(int i=0;i<n;i++){
-        if(dp[i]>maxi){
-            ans=cnt[i];
-            maxi=dp[i];
-        }
+        if(dp[i]==maxi) ans+=cnt[i];
     }
 
     return ans;
