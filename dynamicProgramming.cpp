@@ -2839,6 +2839,88 @@ int longestStringChain(vector<string> arr){
 //Space Complexity will be O(n)
 
 
+//Longest Bitonic Subsequence
+//An increasing or decreasing or inreasing first then decreasing or decreasing first then increasing, all of it constitutes a bitonic subsequence
+//Make the dp from the front and from the back then find the greatest sum in both and subtract 1 from it
+int longestBitonicSubseq_brute(vector<int> &arr){
+    int  n=arr.size();
+    vector<int> dp1(n,1);
+    vector<int> dp2(n,1);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if((arr[i]>arr[j]) && (1+dp1[j]>dp1[i])) dp1[i]=1+dp1[j];
+        }
+    }
+
+    //Backward Iteration
+    for(int i=n-1;i>=0;i--){
+        for(int j=n-1;j>i;j--){
+            if((arr[i]>arr[j]) && (1+dp2[j]>dp2[i])) dp2[i]=1+dp2[j];
+        }
+    }
+
+    int maxLen=0;
+    for(int i=0;i<n;i++){
+        maxLen=max(maxLen,dp1[i]+dp2[i]);
+    }
+    return (maxLen-1);
+}
+//Time Complexity will be O(2n2 + n)
+//Space Complexity will be O(2n)
+
+//Optimal Method
+//We can reduce time complexity to O(2n2) by calculating maxLen in the second loop itself
+int longestBitonicSubseq(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp1(n,1);
+    vector<int> dp2(n,1);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if((arr[i]>arr[j]) && (1+dp1[j]>dp1[i])) dp1[i]=1+dp1[j];
+        }
+    }
+
+    int maxLen=0;
+
+    for(int i=n-1;i>=0;i--){
+        for(int j=n-1;j>i;j--){
+            if((arr[i]>arr[j]) && (1+dp2[j]>dp2[i])) dp2[i]=1+dp2[j];
+        }
+        maxLen=max(maxLen,dp1[i]+dp2[i]);
+    }
+    return (maxLen-1);
+}
+//Time Complexity will be O(2n2)
+//Space Complexity will be O(2n)
+
+
+//Number of LIS
+//In this along with a dp array, we use a count array as well
+int numberOfLIS(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp(n,1);
+    vector<int> cnt(n,0);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(arr[i]>arr[j] && 1+dp[j]>=dp[i]){
+                if(1+dp[j]==dp[i]) cnt[i]=max(cnt[i],cnt[j]);
+                else cnt[i]=1;
+            }
+        }
+    }
+    int maxi=0;
+    int ans;
+    for(int i=0;i<n;i++){
+        if(dp[i]>maxi){
+            ans=cnt[i];
+            maxi=dp[i];
+        }
+    }
+
+    return ans;
+}
+//Time Complexity will be O(n2+n)
+//Space Complexity will be O(2n)
 
 
 //Partition DP
@@ -2894,6 +2976,8 @@ int minOperationsInMCM_memoization(vector<int> &arr){
 //Time taken will be due to the loop which can go upto O(n) and due to counting of states which are n2 in total, so total time will be O(n)*O(n2)
 //Time Complexity will be O(n3)
 //Space Complexity will be O(n2)+O(n)
+
+//Tabulation
 //DP 30
 //DP 44 
 
