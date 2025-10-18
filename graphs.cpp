@@ -1092,7 +1092,7 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 //Now try to implement dijktra's algorithm to find out. Practically if we are paid to go somewhere(negative wt), then we would just keep traversing that path for infinite money.
 
 //Dijktra's Algorithm using priority queue
-vector<int> dijkstrasAlgorithm(int n,vector<vector<pair<int,int>>> &adj,int src){
+vector<int> dijkstrasAlgorithmI(int n,vector<vector<pair<int,int>>> &adj,int src){
     priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
     vector<int> dist(n,1e9);
     dist[src]=0;
@@ -1115,6 +1115,31 @@ vector<int> dijkstrasAlgorithm(int n,vector<vector<pair<int,int>>> &adj,int src)
 
 //Dijstra's Algorithm using set
 //A set stores unique value and the smallest values at the top
+//Since a set can erase arbitrary elements, something which the priority_queue couldn't do, therefore we can erase element instead of waiting for them to be traversed
+//For bigger graphs, both method I and method II almost take same time
+vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int src){
+    vector<int> dist(n,1e9);
+    dist[src]=0;
+    set<pair<int,int>> st;
+    st.insert({0,src});
+    while(!st.empty()){
+        auto it=*(st.begin());
+        int dis=it.first;
+        int node=it.second;
+        st.erase(st.begin());
+        for(auto edge:adj[node]){
+            int adjNode=edge.first;
+            int edgeWt=edge.second;
+            int newDist=edgeWt+dis;
+            if(newDist<dist[adjNode]){
+                if(dist[adjNode]!=1e9) st.erase({dist[adjNode],adjNode});
+                dist[adjNode]=newDist;
+                st.insert({dist[adjNode],adjNode});
+            }
+        }
+    }
+    return dist;
+}
 
 
 
@@ -1129,7 +1154,8 @@ vector<int> dijkstrasAlgorithm(int n,vector<vector<pair<int,int>>> &adj,int src)
 //Lecture 28
 //Lecture 30 Word Ladder 2
 //Lecture 21
-//Dijkstra's Algorithm Lecture 32
+//Dijkstra's Algorithm Lecture 34
+//Calculate TC and SC for dijkstra's algorithm I and II
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
     cout<<countDistIslands(matrix);
