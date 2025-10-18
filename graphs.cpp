@@ -853,8 +853,6 @@ bool detectCycleInDG_brute_dfs(int n,vector<vector<int>> &adj){
 //Time Complexity will be O(V+E)(in directed graph, every node has a single edge, therefore only v+e and not v+2e)
 //Space Complexity will be O(2N)
 
-//Optimal Method
-//Use a single visited array, you can mark 2 for path visited and 1 for visited
 
 
 //Eventual Safe States
@@ -967,7 +965,7 @@ bool detectCycleInDG_bfs(int n,vector<vector<int>> &adj){
 //Course Schedule I
 //Check if courses can be performed or not
 //Just check if a cycle exists or not
-bool courseSchedule(int n,vector<pair<int,int>> schedule){
+bool courseScheduleI(int n,vector<pair<int,int>> schedule){
     vector<vector<int>> adj(n);
     for(auto it:schedule){
         adj[it.first].push_back(it.second);
@@ -1054,7 +1052,6 @@ vector<int> shortestPath(int n,int m,int src,vector<vector<int>> &edges){
 
 
 //Word Ladder I
-
 void findNextWord(string word,int dist,unordered_set<string> &st,queue<pair<string,int>> &q){
     int n=word.size();
     for(int i=0;i<n;i++){
@@ -1092,10 +1089,16 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 
 
 
-//Optimal Method for cycle in directed graph
 
+
+//Optimal Method for detect cycle in directed graph
+//Use a single visited array, you can mark 2 for path visited and 1 for visited
+
+//Lecture 25
+//Lecture 26
+//Lecture 28
 //Lecture 30 Word Ladder 2
-
+//Lecture 21
 //Dijkstra's Algorithm Lecture 32
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
