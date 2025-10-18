@@ -1087,6 +1087,36 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 //Space Complexity will be O(n*l+2*n+l)
 
 
+//Dijkstra's Algorithm
+//Dijktra's Algorithm is not applicable to any graph that has negative edge wt, since in code this will result in an infinite loop, try considering a graph like 1->2 with edge wt of -2 and src as 1
+//Now try to implement dijktra's algorithm to find out. Practically if we are paid to go somewhere(negative wt), then we would just keep traversing that path for infinite money.
+
+//Dijktra's Algorithm using priority queue
+vector<int> dijkstrasAlgorithm(int n,vector<vector<pair<int,int>>> &adj,int src){
+    priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    vector<int> dist(n,1e9);
+    dist[src]=0;
+    pq.push({0,src});
+    while(!pq.empty()){
+        int dis=pq.top().first;
+        int node=pq.top().second;
+        pq.pop();
+        for(auto it:adj[node]){
+            int adjNode=it.first;
+            int edgeWt=it.second;
+            if(dis+edgeWt<dist[adjNode]){
+                dist[adjNode]=dis+edgeWt;
+                pq.push({dis+edgeWt,adjNode});
+            }
+        }
+    }
+    return dist;
+}
+
+//Dijstra's Algorithm using set
+//A set stores unique value and the smallest values at the top
+
+
 
 
 
