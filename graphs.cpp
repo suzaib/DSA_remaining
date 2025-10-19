@@ -1142,7 +1142,12 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
 }
 
 
-
+//Bellman Ford Algorithm
+//This is also used to find the shortest path, but it works where dijkstra's algorithm fails
+//This can be used even when the edgeWts are negative
+//This however works only for directed graphs. 
+//Incase we want it for undirected graph, just convert the graph, for eg, 1->2 is a directed graph, convert this into 1 <=> 2, that is edge from 1 to 2 and from 2 to 1
+//This will make the graph undirected in somesense, then apply Bellman Ford
 
 
 
