@@ -1267,7 +1267,7 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 
 
 //Spanning Tree : Concept
-//A graph which has N nodes and N-1 edges and all nodes are reachable from each other
+//A graph which has N nodes and N-1 edges and all nodes are reachable from each other, ie, the graph doesn't have disjoint components
 //Search on internet for examples to better understand
 //Minimum Spanning Tree
 
