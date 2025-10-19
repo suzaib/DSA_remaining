@@ -1112,6 +1112,11 @@ vector<int> dijkstrasAlgorithmI(int n,vector<vector<pair<int,int>>> &adj,int src
     }
     return dist;
 }
+//At first it seems we are inserting each node so O(V), but remember each node can be inserted multiple times hence a better way to say will be we check each edge once
+//Total edges are V and we may end up putting all of them in the priority queue, also each push or pop operation in priority queue takes logV
+//Also since we may end up storing all the edges in the priority queue, therefore space needed to solve the question will be 2E
+//Time Complexity will be O(E*logV)
+//Space Complexity will be O(2E)
 
 //Dijstra's Algorithm using set
 //A set stores unique value and the smallest values at the top
@@ -1140,7 +1145,10 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
     }
     return dist;
 }
-
+//Each operation in a set costs logV
+//This time we are sure that a node can't be stored multiple times, therefore space taken will be V, that is we may end up storing all nodes once
+//Time Complexity will be O((V+E)logV)
+//Space Complexity wil be O(2V)
 
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
@@ -1182,6 +1190,69 @@ vector<int> bellmanFordAlgorithm(int n,vector<vector<int>> &edges,int src){
 //Space Complexity will be O(1)
 
 
+//Multi Source Shortest Path
+//In Dijkstra's and Bellman gives the shortest distance of a node from a source
+//However this time we need to find out the shortest distance of each node from every other node
+//One way is to use dijkstra's algorithm n times with each node as src
+//That will be Brute Force Method
+//Brute Force
+vector<vector<int>> multiSrcShortestPath_brute(int n,vector<vector<pair<int,int>>> &adj){
+    vector<vector<int>> ans;
+    for(int i=0;i<n;i++){
+        vector<int> dist=dijkstrasAlgorithmI(n,adj,i);
+        ans.push_back(dist);
+    }
+    return ans;
+}
+//Time Complexity will be O(VE*logV)
+//Space Complexity will be O(2E)
+
+
+//Floyd Warshall Algorithm
+//Used for multisource shortest path and can also identify negative cycles
+//Watch video, explanation is very simple
+//Also to apply this method in a undirected graph, make the directed graph, bidirectional, then it will behave like undirected graph
+vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
+
+    //We will use a cost matrix, initialised with a big value
+    vector<vector<int>> cost(n,vector<int> (n,1e9));
+
+    //To reach from node i to i, cost is 0, therefore cost[i][i]=0
+    for(int i=0;i<n;i++) cost[i][i]=0;
+
+    //The adjacency list has three elements as {u,v,wt} where the edge from u->v has weight wt
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        int wt=it[2];
+        cost[u][v]=wt;
+
+        //Incase the graph is undirected, just add cost[v][u]=wt
+    }
+    //After this our cost matrix is ready to be implemented
+
+    for(int k=0;k<n;k++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(i==j || (cost[i][k]==1e9 || cost[k][j]==1e9)) continue;
+                cost[i][j]=min(cost[i][j],cost[i][k]+cost[k][j]);
+            }
+        }
+    }
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(cost[i][j]==1e9) cost[i][j]=-1;
+        }
+    }
+    return cost;
+}
+//The code runs three loops therefore time taken will be n3
+//Space is used to return the answer, no space is used to solve the question
+//Time Complexity will be O(n3)
+//Space Complexity will be O(1)
+
+
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
@@ -1192,7 +1263,7 @@ vector<int> bellmanFordAlgorithm(int n,vector<vector<int>> &edges,int src){
 //Lecture 30 Word Ladder 2
 //Lecture 21
 //Dijkstra's Algorithm Lecture 34
-//Calculate TC and SC for dijkstra's algorithm I and II
+//Revise TC and SC for dijkstra's algorithm I and II
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
     cout<<countDistIslands(matrix);
