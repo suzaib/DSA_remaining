@@ -1148,6 +1148,38 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
 //This however works only for directed graphs. 
 //Incase we want it for undirected graph, just convert the graph, for eg, 1->2 is a directed graph, convert this into 1 <=> 2, that is edge from 1 to 2 and from 2 to 1
 //This will make the graph undirected in somesense, then apply Bellman Ford
+//The edges in this case can be given in any order, they will be as (u,v,wt) that is edge from u->v and with a weight of wt
+//First relax all the edges (n-1) times sequentially 
+//Relaxing the edge means if dist[u]+wt<dist[v] then set dist[v]=dist[u]+wt and we have to do this n-1 times for each edge 
+//Also return an array of -1 if there exists a negative cycle
+//This method takes quadratic time but it works where dijkstra fails, therefore if it is known that all edge weights are positive then always go for dijkstra
+vector<int> bellmanFordAlgorithm(int n,vector<vector<int>> &edges,int src){
+    vector<int> dist(n,1e9);
+    dist[src]=0;
+    for(int i=0;i<n-1;i++){
+        for(auto it:edges){
+            int u=it[0];
+            int v=it[1];
+            int wt=it[2];
+            if(dist[u]!=1e9 && dist[u]+wt<dist[v]) dist[v]=dist[u]+wt;
+        }
+    }
+    
+    //We also do an nth relaxation to check for a negative cycle
+    //If in the nth cycle if any element in the distance array gets updated then the graph has a negative cycle
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        int wt=it[2];
+        if(dist[u]!=1e9 && dist[u]+wt<dist[v]) return {-1};
+    }
+
+    return dist;
+}
+//The first loop runs for V*E times and the second runs for E times
+//Distance array is only used to return the ans
+//Time Complexity will be O(E(V+1))
+//Space Complexity will be O(1)
 
 
 
