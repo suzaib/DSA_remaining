@@ -1194,9 +1194,8 @@ vector<int> bellmanFordAlgorithm(int n,vector<vector<int>> &edges,int src){
 //In Dijkstra's and Bellman gives the shortest distance of a node from a source
 //However this time we need to find out the shortest distance of each node from every other node
 //One way is to use dijkstra's algorithm n times with each node as src
-//That will be Brute Force Method
-//Brute Force
-vector<vector<int>> multiSrcShortestPath_brute(int n,vector<vector<pair<int,int>>> &adj){
+//That will be the optimal method only when the graph doesn't have negative edge weights
+vector<vector<int>> multiSrcShortestPath_dijkstra(int n,vector<vector<pair<int,int>>> &adj){
     vector<vector<int>> ans;
     for(int i=0;i<n;i++){
         vector<int> dist=dijkstrasAlgorithmI(n,adj,i);
@@ -1209,6 +1208,8 @@ vector<vector<int>> multiSrcShortestPath_brute(int n,vector<vector<pair<int,int>
 
 
 //Floyd Warshall Algorithm
+//In case the graph has negative edge weights, the dijkstra fails and we need to use Floyd Warshall Algorithm
+//It takes much more time than dijkstra, but we don't have a choice when the edge weights are negative
 //Used for multisource shortest path and can also identify negative cycles
 //Watch video, explanation is very simple
 //Also to apply this method in a undirected graph, make the directed graph, bidirectional, then it will behave like undirected graph
@@ -1216,9 +1217,11 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 
     //We will use a cost matrix, initialised with a big value
     vector<vector<int>> cost(n,vector<int> (n,1e9));
+    //Time Complexity : O(n2)
 
     //To reach from node i to i, cost is 0, therefore cost[i][i]=0
     for(int i=0;i<n;i++) cost[i][i]=0;
+    //Time Complexity : O(n)
 
     //The adjacency list has three elements as {u,v,wt} where the edge from u->v has weight wt
     for(auto it:edges){
@@ -1229,6 +1232,7 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 
         //Incase the graph is undirected, just add cost[v][u]=wt
     }
+    //Time Complexity : O(E)
     //After this our cost matrix is ready to be implemented
 
     for(int k=0;k<n;k++){
@@ -1239,18 +1243,34 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
             }
         }
     }
+    //Time Complexity : O(n3)
 
+    //We can detect a negative cycle if cost from node i to i itself is less than 0, that would mean there exists a negative cycle
+    for(int i=0;i<n;i++){
+        if(cost[i][i]<0) return {{-1}};
+    }
+    //Time Complexity : O(n)
+
+    //We also need to put -1 in the cost matrix for the nodes which are unreachable
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             if(cost[i][j]==1e9) cost[i][j]=-1;
         }
     }
+    //Time Complexity : O(n2)
     return cost;
 }
-//The code runs three loops therefore time taken will be n3
+//The total time will be 2n+2n2+E+n3, which will boil down to n3
 //Space is used to return the answer, no space is used to solve the question
 //Time Complexity will be O(n3)
 //Space Complexity will be O(1)
+
+
+//Spanning Tree : Concept
+//A graph which has N nodes and N-1 edges and all nodes are reachable from each other
+//Search on internet for examples to better understand
+//Minimum Spanning Tree
+
 
 
 
