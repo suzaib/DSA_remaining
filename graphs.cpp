@@ -1270,7 +1270,10 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 //A graph which has N nodes and N-1 edges and all nodes are reachable from each other, ie, the graph doesn't have disjoint components
 //Search on internet for examples to better understand
 //Minimum Spanning Tree
-
+//We will be given a graph, and we have to sketch the the MST from it
+//We can multiple spanning trees from a single graph
+//Among all such trees, the tree in which the sum of all edges is the least, is called MST
+//We need to sketch out the MST from a given graph
 
 
 
