@@ -1274,7 +1274,31 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 //We can multiple spanning trees from a single graph
 //Among all such trees, the tree in which the sum of all edges is the least, is called MST
 //We need to sketch out the MST from a given graph
+//The sum of edge weights is called MST weight of spanning tree's weight
 
+//Prim's Algorithm
+//Helps us to find the MST's weight and the MST itself
+//We will require two things, first is a priority queue(min heap, storing : wt, node, parent), and the other is a visited array
+vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
+    vector<pair<int,int>> mst;
+    vector<int> vis(n,0);
+    priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>> pq;
+    //priority queue will store elements as wt,node,parent
+
+    pq.push({0,0,-1});
+    //We push the starting node with -1 as parent
+    while(!pq.empty()){
+        auto t=pq.top();
+        int wt=t[0];
+        int node=t[1];
+        int parent=t[2];
+        pq.pop();
+        for(auto it:adj[node]){
+            int adjNode=it.first;
+            int adjWt=it.second;
+        }
+    }
+}
 
 
 //Optimal Method for detect cycle in directed graph

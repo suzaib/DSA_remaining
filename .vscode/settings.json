@@ -3,7 +3,9 @@
         "*.ejs": "html",
         "iostream": "cpp",
         "ostream": "cpp",
-        "complex": "cpp"
+        "complex": "cpp",
+        "chrono": "cpp",
+        "span": "cpp"
     },
     "task.terminal.promptOnClose": false,
     "task.terminal.reuse": "never"
