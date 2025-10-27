@@ -1279,12 +1279,16 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 //Prim's Algorithm
 //Helps us to find the MST's weight and the MST itself
 //We will require two things, first is a priority queue(min heap, storing : wt, node, parent), and the other is a visited array
+
+//We will first write the function to give mst weight
+int primsAlgorithm(int n,vector<vector<int>> &adj){}
 vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
     vector<pair<int,int>> mst;
     vector<int> vis(n,0);
     priority_queue<vector<int>,vector<vector<int>>,greater<vector<int>>> pq;
     //priority queue will store elements as wt,node,parent
 
+    int sum=0;
     pq.push({0,0,-1});
     //We push the starting node with -1 as parent
     while(!pq.empty()){
@@ -1292,10 +1296,17 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
         int wt=t[0];
         int node=t[1];
         int parent=t[2];
+        if(parent!=-1) mst.push_back({node,parent});
+        sum+=wt;
+        vis[node]=true;
         pq.pop();
         for(auto it:adj[node]){
             int adjNode=it.first;
             int adjWt=it.second;
+            if(vis[adjNode]) continue;
+            pq.push({adjWt,adjNode,node});
+
+
         }
     }
 }
