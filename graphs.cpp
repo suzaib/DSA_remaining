@@ -1091,6 +1091,28 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 //Dijktra's Algorithm is not applicable to any graph that has negative edge wt, since in code this will result in an infinite loop, try considering a graph like 1->2 with edge wt of -2 and src as 1
 //Now try to implement dijktra's algorithm to find out. Practically if we are paid to go somewhere(negative wt), then we would just keep traversing that path for infinite money.
 
+//Dijkstra's Algorithm using queues
+//This is just a brute force algorithm as it uses the most time
+vector<int> dijkstrasAlgorithm_brute(int n,vector<vector<pair<int,int>>> &adj,int src){
+    vector<int> dist(n,1e9);
+    queue<pair<int,int>> q;
+    dist[src]=0;
+    q.push({0,src});
+    while(!q.empty()){
+        int node=q.front().second;
+        int dis=q.front().first;
+        q.pop();
+        for(auto it:adj[node]){
+            int adjNode=it.first;
+            int newDist=it.second+dis;
+            if(newDist<dist[adjNode]){
+                dist[adjNode]=newDist;
+                q.push({newDist,adjNode});
+            }
+        }
+    }
+    return dist;
+}
 //Dijktra's Algorithm using priority queue
 vector<int> dijkstrasAlgorithmI(int n,vector<vector<pair<int,int>>> &adj,int src){
     priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
