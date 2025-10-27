@@ -1113,6 +1113,12 @@ vector<int> dijkstrasAlgorithm_brute(int n,vector<vector<pair<int,int>>> &adj,in
     }
     return dist;
 }
+//The outer loop will run for V times(or may be 2V or 3V times) and the inner loop will run at most E times
+//The Space is used by queue only, which can store all elements at worst case
+//Time Complexity will be O(VE)
+//Space Complexity will be O(V)
+
+//In brute force we travel by all paths, however we can reduce that time, if we take the smaller path first, this is the idea behind dijkstra's algorithm
 //Dijktra's Algorithm using priority queue
 vector<int> dijkstrasAlgorithmI(int n,vector<vector<pair<int,int>>> &adj,int src){
     priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
@@ -1134,10 +1140,16 @@ vector<int> dijkstrasAlgorithmI(int n,vector<vector<pair<int,int>>> &adj,int src
     }
     return dist;
 }
-//At first it seems we are inserting each node so O(V), but remember each node can be inserted multiple times hence a better way to say will be we check each edge once
-//Total edges are V and we may end up putting all of them in the priority queue, also each push or pop operation in priority queue takes logV
-//Also since we may end up storing all the edges in the priority queue, therefore space needed to solve the question will be 2E
-//Time Complexity will be O(E*logV)
+//We know each node can enter the priority queue several times, say if total of 2V times, but that won't matter in time complexity so we can say time taken for this part is still V
+//The pop function in priority queue takes log(heap_size) time
+//The inner for loop in the worst case can run for number of edges of a node, which will be equal to ne(say)
+//In the worst case, which is the case for the densest graph(assuming no self loops) ne=V-1
+//Inside the for function, there is a push function which will take log(heap_size) time again
+//Therefore total time taken will be V*(log(heap_size)+ne*(log(heap_size))) ==> V*(log(heap_size)*(ne+1)), now using ne=V-1, we get
+//Time equals V*V*log(heap_size)
+//Heap size can be in worse case equal to (n-1)+(n-1)+(n-1) ... => n2 in worst case(as discussed before)
+//In most densest graph, number of edges = V2, therefore this gives a final shape to our time complexity
+//Time Complexity will be O(ElogV)
 //Space Complexity will be O(2E)
 
 //Dijstra's Algorithm using set
