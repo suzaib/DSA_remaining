@@ -1188,8 +1188,9 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
 //Shortest Path in Weighted Graph
 //Use Dijkstra with slight modification, since in this also we have to find the shortest path, but we have to give the path and not the distance as we did in dijkstra
 //One thing to note here is that we this time have a 1 indexed graph 
-vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src){
-    vector<vector<pair<int,int>>> adj(n);
+vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src,int target){
+    if(src==target) return {src};
+    vector<vector<pair<int,int>>> adj(n+1);
     for(auto it:edges){
         int u=it[0];
         int v=it[1];
@@ -1197,19 +1198,20 @@ vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src){
         adj[u].push_back({v,wt});
         adj[v].push_back({u,wt});
     }
-    vector<int> dist(n,1e9);
-    vector<int> parent(n,1);
+    vector<int> dist(n+1,1e9);
+    vector<int> parent(n+1);
     priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
-    iota(parent.begin(),parent.end(),1);
+    iota(parent.begin(),parent.end(),0);
     pq.push({0,src});
     dist[src]=0;
     while(!pq.empty()){
         int node=pq.top().second;
         int dis=pq.top().first;
         pq.pop();
+        if(dis>dist[node]) continue;
         for(auto it:adj[node]){
-            int adjNode=it.second;
-            int edgeWt=it.first;
+            int adjNode=it.first;
+            int edgeWt=it.second;
             int newDist=edgeWt+dis;
             if(newDist<dist[adjNode]){
                 dist[adjNode]=newDist;
@@ -1218,16 +1220,23 @@ vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src){
             }
         }
     }
+    if(dist[target]==1e9) return {-1};
 
     vector<int> ans;
-    ans.push_back(n);
-    while(n>1){
-        ans.push_back(parent[n]);
-        n=parent[n];
+    ans.push_back(target);
+    while(parent[target]!=target){
+        ans.push_back(parent[target]);
+        target=parent[target];
     }
+    reverse(ans.begin(),ans.end());
     return ans;
-
 }
+//Time taken will be equal to dijkstra's algorithm + extra due to path formation which can be at max consisting of all nodes in a linear graph
+//Space will be used by adjacency list (V) , distance array (V), parent array (V), priority queue (V)
+//Time Complexity will be O(ElogV+V)
+//Space Complexity will be O(V)
+
+
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
 //This can be used even when the edgeWts are negative
