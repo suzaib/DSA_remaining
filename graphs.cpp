@@ -1184,6 +1184,50 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
 //Time Complexity will be O((V+E)logV)
 //Space Complexity wil be O(2V)
 
+
+//Shortest Path in Weighted Graph
+//Use Dijkstra with slight modification, since in this also we have to find the shortest path, but we have to give the path and not the distance as we did in dijkstra
+//One thing to note here is that we this time have a 1 indexed graph 
+vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src){
+    vector<vector<pair<int,int>>> adj(n);
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        int wt=it[2];
+        adj[u].push_back({v,wt});
+        adj[v].push_back({u,wt});
+    }
+    vector<int> dist(n,1e9);
+    vector<int> parent(n,1);
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    iota(parent.begin(),parent.end(),1);
+    pq.push({0,src});
+    dist[src]=0;
+    while(!pq.empty()){
+        int node=pq.top().second;
+        int dis=pq.top().first;
+        pq.pop();
+        for(auto it:adj[node]){
+            int adjNode=it.second;
+            int edgeWt=it.first;
+            int newDist=edgeWt+dis;
+            if(newDist<dist[adjNode]){
+                dist[adjNode]=newDist;
+                pq.push({newDist,adjNode});
+                parent[adjNode]=node;
+            }
+        }
+    }
+
+    vector<int> ans;
+    ans.push_back(n);
+    while(n>1){
+        ans.push_back(parent[n]);
+        n=parent[n];
+    }
+    return ans;
+
+}
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
 //This can be used even when the edgeWts are negative
