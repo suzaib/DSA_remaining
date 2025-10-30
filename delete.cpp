@@ -5,24 +5,15 @@ using namespace std;
     return 0;
 }
 
-vector<int> fx(int n,vector<vector<pair<int,int>>> &adj,int src){
-    vector<int> dist(n,1e9);
-    dist[src]=0;
-    set<pair<int,int>> st;
-    st.insert({0,src});
-    while(!st.empty()){
-        auto it=*st.begin();
-        int dis=it.first;
-        int node=it.second;
-        st.erase(st.begin());
-        for(auto it:adj[node]){
-            int adjNode=it.first;
-            int newDist=it.second+dis;
-            if(newDist<dist[adjNode]){
-                if(dist[adjNode]!=1e9) st.erase({dist[adjNode],adjNode});
-                dist[adjNode]=newDist;
-                st.insert({dist[adjNode],adjNode});
-            }
+bool existenceOf3Sum_better(vector<int> &arr,int target){
+    int n=arr.size();
+    for(int i=0;i<n;i++){
+        unordered_map<int,int> mp;
+        for(int j=i+1;j<n;j++){
+            int req=target-arr[i]-arr[j];
+            if(mp.find(req)!=mp.end()) return true;
+            mp[arr[j]]=j;
         }
     }
+    return false;
 }
