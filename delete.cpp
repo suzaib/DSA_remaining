@@ -4,16 +4,26 @@ using namespace std;
     int main(){
     return 0;
 }
-
-bool existenceOf3Sum_better(vector<int> &arr,int target){
+vector<vector<int>> threeSum_better(vector<int> &arr,int target){
     int n=arr.size();
+    set<vector<int>> st;
+    sort(arr.begin(),arr.end());
     for(int i=0;i<n;i++){
-        unordered_map<int,int> mp;
-        for(int j=i+1;j<n;j++){
-            int req=target-arr[i]-arr[j];
-            if(mp.find(req)!=mp.end()) return true;
-            mp[arr[j]]=j;
+        int j=i+1;
+        int k=n-1;
+        while(j<k){
+            int sum=arr[i]+arr[j]+arr[k];
+            if(sum>target) k--;
+            else if(sum<target) j++;
+            else{
+                vector<int> temp={arr[i],arr[j],arr[k]};
+                st.insert(temp);
+                j++;
+                k--;
+            }
         }
     }
-    return false;
+    vector<vector<int>> ans(st.begin(),st.end());
+    return ans;
+
 }
