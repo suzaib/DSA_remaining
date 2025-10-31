@@ -6,24 +6,22 @@ using namespace std;
 }
 vector<vector<int>> threeSum_better(vector<int> &arr,int target){
     int n=arr.size();
-    set<vector<int>> st;
-    sort(arr.begin(),arr.end());
+    vector<vector<int>> ans;
+    sort(ans.begin(),ans.end());
     for(int i=0;i<n;i++){
         int j=i+1;
         int k=n-1;
         while(j<k){
-            int sum=arr[i]+arr[j]+arr[k];
+            int sum=(arr[i]+arr[j]+arr[k]);
             if(sum>target) k--;
             else if(sum<target) j++;
             else{
-                vector<int> temp={arr[i],arr[j],arr[k]};
-                st.insert(temp);
-                j++;
-                k--;
+                ans.push_back({arr[i],arr[j],arr[k]});
+                while(j<k && arr[j]==arr[j-1]) j++;
+                while(j<k && arr[k]==arr[k-1]) k--;
             }
         }
     }
-    vector<vector<int>> ans(st.begin(),st.end());
     return ans;
 
 }
