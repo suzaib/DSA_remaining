@@ -8,10 +8,8 @@ vector<pair<int,int>> merge(vector<pair<int,int>> &intervals){
     vector<int> start(n);
     vector<int> end(n);
     for(int i=0;i<n;i++){
-        int s=intervals[i].first;
-        int e=intervals[i].second;
-        start[i]=s;
-        start[i]=e;
+        start[i]=intervals[i].first;
+        end[i]=intervals[i].second;
     }
     int i=0;
     int j=0;
@@ -21,12 +19,22 @@ vector<pair<int,int>> merge(vector<pair<int,int>> &intervals){
     i++;
     while(i<n && j<n){
         if(start[i]>end[j]){
+            //finalise the current interval and begin the new one
             ed=end[j];
             ans.push_back({st,ed});
             st=start[i];
+            i++;
+            j++;
         }
-        else i++;
-        j++;
+        else if(start[i]<end[j]){
+            //just move i
+            i++;
+        }
+        else {
+            //just move j
+            i++;
+            j++;
+        }
     }
     return ans;
 }
