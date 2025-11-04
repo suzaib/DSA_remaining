@@ -2,48 +2,49 @@
 using namespace std;
 
 
-vector<pair<int,int>> merge(vector<pair<int,int>> &intervals){
-    int n=intervals.size();
-    sort(intervals.begin(),intervals.end());
-    vector<int> start(n);
-    vector<int> end(n);
+//Count Inversions
+int fx(vector<int> &arr){
+    int n=arr.size();
+    int cnt=0;
     for(int i=0;i<n;i++){
-        start[i]=intervals[i].first;
-        end[i]=intervals[i].second;
+        for(int j=i+1;j<n;j++){
+            if(arr[j]<arr[i]) cnt++;
+        }
     }
+    return cnt;
+}
+
+//Median of two sorted arrays
+//Brute Force
+//Merge two sorted arrays
+vector<int> mergeTwoSortedArrays(vector<int> &arr1,vector<int> &arr2){
+    int n=arr1.size();
+    int m=arr2.size();
+    vector<int> ans;
     int i=0;
     int j=0;
-    vector<pair<int,int>> ans;
-    int st=start[0];
-    int ed;
-    i++;
-    while(i<n && j<n){
-        if(start[i]>end[j]){
-            //finalise the current interval and begin the new one
-            ed=end[j];
-            ans.push_back({st,ed});
-            st=start[i];
-            i++;
-            j++;
-        }
-        else if(start[i]<end[j]){
-            //just move i
-            i++;
-        }
-        else {
-            //just move j
-            i++;
-            j++;
-        }
+    while(i<n && j<m){
+        if(arr1[i]>arr2[j]) ans.push_back(arr2[j++]);
+        else ans.push_back(arr1[i++]);
     }
+
+    while(i<n) ans.push_back(arr1[i++]);
+    while(j<m) ans.push_back(arr2[j++]);
     return ans;
 }
+float med(vector<int> &arr1,vector<int> &arr2){
+    int n=arr1.size();
+    int m=arr2.size();
+    vector<int> ans=mergeTwoSortedArrays(arr1,arr2);
+    int s=ans.size();
+    if(s%2!=0) return ans[s/2];
+    int a=ans[s/2];
+    int b=ans[(s/2)-1];
+    return (a+b)/2.0;
+
+}
+
 int main(){
-    vector<pair<int,int>> arr={{1,2},{2,3}};
-    arr=merge(arr);
-    for(auto it:arr){
-        cout<<it.first<<","<<it.second<<"\n";
-    }
     return 0;
 }
 
