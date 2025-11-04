@@ -17,31 +17,44 @@ int fx(vector<int> &arr){
 //Median of two sorted arrays
 //Brute Force
 //Merge two sorted arrays
-vector<int> mergeTwoSortedArrays(vector<int> &arr1,vector<int> &arr2){
-    int n=arr1.size();
-    int m=arr2.size();
-    vector<int> ans;
+double med(vector<int> &a,vector<int> &b){
+    int n=a.size();
+    int m=b.size();
+    int s=n+m;
+    int cnt1=(s/2)-1;
+    int cnt2=(s/2);
     int i=0;
     int j=0;
+    int cnt=0;
+    int el1;
+    int el2;
     while(i<n && j<m){
-        if(arr1[i]>arr2[j]) ans.push_back(arr2[j++]);
-        else ans.push_back(arr1[i++]);
+        if(cnt==cnt1){
+            el1=min(a[i],b[j]);
+        }
+        if(cnt==cnt2){
+            el2=min(a[i],b[j]);
+        }
+        if(a[i]>b[j]){
+            j++;
+        }
+        else i++;
+        cnt++;
     }
-
-    while(i<n) ans.push_back(arr1[i++]);
-    while(j<m) ans.push_back(arr2[j++]);
-    return ans;
-}
-float med(vector<int> &arr1,vector<int> &arr2){
-    int n=arr1.size();
-    int m=arr2.size();
-    vector<int> ans=mergeTwoSortedArrays(arr1,arr2);
-    int s=ans.size();
-    if(s%2!=0) return ans[s/2];
-    int a=ans[s/2];
-    int b=ans[(s/2)-1];
-    return (a+b)/2.0;
-
+    while(i<n){
+        if(cnt>s/2) break;
+        if(cnt==cnt1) el1=a[i];
+        if(cnt==cnt2) el2=a[i];
+        i++;
+        cnt++;
+    }
+    while(j<m){
+        if(cnt>s/2) break;
+        if(cnt==cnt1) el1=b[j];
+        if(cnt==cnt2) el2=b[j];
+        j++;
+        cnt++;
+    }
 }
 
 int main(){
