@@ -55,6 +55,10 @@ double med(vector<int> &a,vector<int> &b){
         j++;
         cnt++;
     }
+
+    int ans;
+    if(s%2==0) return (el1+el2)/2.0;
+    return el2;
 }
 
 int main(){
