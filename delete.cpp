@@ -2,16 +2,13 @@
 using namespace std;
 
 
-//Count Inversions
+//Minimise Max Distance betwen Gas Stations
+int minDis(vector<double> &arr,int k){
 
-//Median of two sorted arrays
-//Brute Force
-//Merge two sorted arrays
-
+}
 
 int main(){
     vector<int> arr={3,2,1};
-    cout<<cntInversion(arr)<<"\n";
     return 0;
 }
 
