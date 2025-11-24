@@ -370,10 +370,7 @@ int ninjaTraining(vector<vector<int>> schedule){
 //Time Complexity will be O(12n)
 
 
-//Understand tabulation and space optimization in ninja training first
-//House Robber 2 /left
-
-
+//Unique Paths in a Grid
 //Total ways to clear a grid || Total paths in a grid
 //Also we can only move in either right or down direction
 //The way we are solving(opposite , from n-1,m-1 to 0,0 we can only move up or left)
@@ -504,14 +501,16 @@ int uniquePathsII_memoization(vector<vector<int>> &mat){
 
 //Tabulation
 int uniquePathsII_tabulation(vector<vector<int>> &mat){
-    if(mat[0][0]==-1) return 0;
     int n=mat.size();
     int m=mat[0].size();
-    if(mat[n-1][m-1]==-1) return 0;
+    if(mat[0][0]==-1 || mat[n-1][m-1]==-1) return 0;
     vector<vector<int>> dp(n,vector<int> (m,0));
     dp[0][0]=1;
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
+
+            //If this nested loops runs for i=0 and j=0, then the value we stored inside dp[0][0] will get replaced by 0, therefore we must avoid that
+            if(i==0 && j==0) continue;
             if(mat[i][j]==-1) dp[i][j]=0;
             else{
                 int up=0;
@@ -529,13 +528,14 @@ int uniquePathsII_tabulation(vector<vector<int>> &mat){
 int uniquePathsII_spaceOptimization(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
-    if(mat[0][0]==-1) return 0;
-    if(mat[n-1][m-1]==-1) return 0;
+    if(mat[0][0]==-1 || mat[n-1][m-1]==-1) return 0;
     vector<int> prev(m,0);
     prev[0]=1;
+    for(int j=0;j<m;j++) prev[j]=(mat[0][j]==0? prev[j-1]:0);
     for(int i=0;i<n;i++){
         vector<int> curr(m,0);
         for(int j=0;j<m;j++){
+            if(i==0 && j==0)
             if(mat[i][j]==-1) curr[j]=0;
             else{
                 int up=0;
@@ -610,7 +610,7 @@ int uniquePathsMinSum_memoization(vector<vector<int>> &mat){
 }
 
 //Tabulation
-int uniquePathsMinSu_tabulation(vector<vector<int>> &mat){
+int uniquePathsMinSum_tabulation(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
     vector<vector<int>> dp(n,vector<int> (m,-1));
