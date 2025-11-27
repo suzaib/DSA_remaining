@@ -222,6 +222,9 @@ int nMeetings(vector<int> start,vector<int> end){
 }
 
 
+//Non Overlapping Intervals
+
+
 //Q.10) Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
     int n=arr.size();
@@ -333,11 +336,153 @@ bool validParenthesisII_tabulation(string &str){
 }
 
 
+//Question 12
+//Min Candy Problem
+//The question is extremely simple, just do two iterations, one by only focussing on left neighbours, and one only focussing on right neighbours
+int minCandy_naive(vector<int> &arr){
+    int n=arr.size();
+    vector<int> left(n,1);
+    vector<int> right(n,1);
+    for(int i=1;i<n;i++) if(arr[i]>arr[i-1]) left[i]=left[i-1]+1;
+    for(int i=n-2;i>=0;i--) if(arr[i]>arr[i+1]) right[i]=right[i+1]+1;
+    
+    vector<int> ans(n,0);
+    for(int i=0;i<n;i++) ans[i]=max(left[i],right[i]);
+    int totCandies=accumulate(ans.begin(),ans.end(),0);    
+    return totCandies;
+}
+//Time Complexity will be O(4n)
+//Space Complexity will be O(3n)
 
+//Brute Method
+//We can do the things in the second loop itself
+int minCandy_brute(vector<int> &arr){
+    int n=arr.size();
+    vector<int> left(n,1);
+    vector<int> right(n,1);
+    for(int i=1;i<n;i++) if(arr[i]>arr[i-1]) left[i]=left[i-1]+1;
+    int totCandies=max(1,left[n-1]);
+    for(int i=n-2;i>=0;i--){
+        if(arr[i]>arr[i+1]) right[i]=right[i+1]+1;
+        totCandies+=max(left[i],right[i]);
+    }
+
+    return totCandies;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+//Better Method
+int minCandy_better(vector<int> &arr){
+    int n=arr.size();
+    vector<int> left(n,1);
+    for(int i=1;i<n;i++) if(arr[i]>arr[i-1]) left[i]=left[i-1]+1;
+    int totCandies=max(1,left[n-1]);
+    int right=1;
+    for(int i=n-2;i>=0;i--){
+        if(arr[i]>arr[i+1]) right++;
+        else right=1;
+        totCandies+=max(left[i],right);
+    }
+    return totCandies;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(n)
+
+//Optimal Method
+//We use the slope method
+int minCandy(vector<int> &arr){
+    int n=arr.size();
+    int totCandies=1;
+    int i=1;
+    while(i<n){
+
+        //Flat Surface
+        if(arr[i]==arr[i-1]){
+            totCandies++;
+            i++;
+            continue;
+        } 
+
+        int peak=1;
+        //Increasing Slope
+        while(i<n && arr[i]>arr[i-1]){
+            peak++;
+            totCandies+=peak;
+            i++;
+        }
+
+        int down=1;
+        //Decreasing Slope
+        while(i<n && arr[i]<arr[i-1]){
+            totCandies+=down;
+            down++;
+            i++;
+        }
+
+        if(down>peak) totCandies+=(down-peak);
+    }
+    return totCandies;
+}
+//Only one iteration so n time
+//No space taken
+//Time Complexity will be O(n)
+
+
+
+//Question 13
+//Fractional Knapsack Problem
+//Try to take the bag which has the most value per one unit weight
+//For this we need to sort the array, using a custom comparator
+bool cmp_fk(const pair<int,int> &p,const pair<int,int> &q){
+    double n=(double)(p.first)/(p.second);
+    double m=(double)(q.first)/(q.second);
+    return n>m;
+}
+
+double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
+    int n=arr.size();
+    if(n==0 || maxWt<=0) return 0.0;
+    sort(arr.begin(),arr.end(),cmp_fk);
+    int currWt=0;
+    double totVal=0.0;
+    for(int i=0;i<n;i++){
+        int val=arr[i].first;
+        int wt=arr[i].second;
+
+        //If the weight is zero, we take the entire item without changing currWt
+        if(wt==0){
+            totVal+=val;
+            continue;
+        }
+
+        //Can't Pick
+        if(currWt>=maxWt) break;
+
+        //Picking entirely
+        else if(currWt+wt<=maxWt){
+            totVal+=val;
+            currWt+=wt;
+        }
+
+        //Picking up fraction
+        else{
+            double frac=(double)(val)/(wt);
+            totVal+=frac*(maxWt-currWt);
+            break;
+        }
+    }
+    return totVal;
+}
+//Time is taken due to sorting and the one loop
+//We also distort the array, so that much space is used
+//Time Complexity will be O(n+nlogn)
+//Space Complexity will be O(n)
 
 //Q.8) Lecture 8(First revise n jobs and n meetings)
 //Q.9) Lecture 9
 //Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
+//Q.11 Valid parenthesis, complete the tabulation etc
 
 int main(){
     vector<int> arr={1,4,3,6,2,7};

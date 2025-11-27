@@ -3035,9 +3035,9 @@ int minCostToCutStick(vector<int> &arr,int len){
     arr.insert(arr.begin(),0);
 
     vector<vector<int>> dp(n+2,vector<int> (n+2,0));
-    for(int i=n-1;i>=1;i--){
-        for(int j=1;j<n;j++){
-            if(i>j) continue;
+    for(int i=n;i>=1;i--){
+        //The second loop will start from j=i since if i>j, we already return 0
+        for(int j=i;j<=n;j++){
             int mini=1e9;
             for(int idx=i;idx<=j;idx++){
                 int cost=arr[j+1]-arr[i-1]+dp[i][idx-1]+dp[idx+1][j];
@@ -3048,7 +3048,12 @@ int minCostToCutStick(vector<int> &arr,int len){
     }
     return dp[1][n];
 }
-//Time Complexity will be 
+//Time taken will be three loops, n3
+//Space will be due to dp array
+//Time  Complexity will be O(n3)
+//Space Complexity will be O(n2)
+
+
 //DP 30
 //DP 44 
 
