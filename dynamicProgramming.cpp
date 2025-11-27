@@ -2950,7 +2950,8 @@ int minOperationsInMCM_memoization(vector<int> &arr){
 //Space Complexity will be O(n2)+O(n)
 
 //Tabulation
-int minOperationsInMCM_tabulation(vector<int> &arr){
+//The tabulation in this case is the most optimised version, and we can't optimise it any further
+int minOperationsInMCM(vector<int> &arr){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (n,0));
     for(int i=n-1;i>=1;i--){
@@ -2968,6 +2969,86 @@ int minOperationsInMCM_tabulation(vector<int> &arr){
 //Time Complexity will be O(n3)
 //Space Complexity will be O(n2)
 
+
+//Minimum Cost to cut the stick
+//Cost to cut the stick will be equal to the length of the stick
+int minCostToCutStickHelper_brute(int i,int j,vector<int> &arr){
+    if(i>j) return 0;
+    int mini=1e9;
+    for(int idx=i;idx<=j;idx++){
+        int cost=arr[j+1]-arr[i-1]+minCostToCutStickHelper_brute(i,idx-1,arr)+minCostToCutStickHelper_brute(idx+1,j,arr);
+        mini=min(mini,cost);
+    }
+    return mini;
+}
+
+int minCostToCutStick_brute(vector<int> &arr,int len){
+    int n=arr.size();
+
+    //It is necessary to sort the array first
+    sort(arr.begin(),arr.end());
+
+    //We also need to insert 0 at back and len at front
+    arr.push_back(len);
+    arr.insert(arr.begin(),0);
+
+    return minCostToCutStickHelper_brute(1,n,arr);
+}
+//This code takes exponential time, finding exact time is quite tough
+//Time Complexity will be exponential
+
+//Memoization
+int minCostToCutStickHelper_memoization(int i,int j,vector<int> &arr,vector<vector<int>> &dp){
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(i>j) return dp[i][j]=0;
+    int mini=1e9;
+    for(int idx=i;idx<=j;idx++){
+        int cost=arr[j+1]-arr[i-1]+minCostToCutStickHelper_memoization(i,idx-1,arr,dp)+minCostToCutStickHelper_memoization(idx+1,j,arr,dp);
+        mini=min(mini,cost);
+    }
+    return dp[i][j]=mini;
+}
+int minCostToCutStick_memoization(vector<int> &arr,int len){
+    int n=arr.size();
+    
+    //It is necessary to sort the array first
+    sort(arr.begin(),arr.end());
+
+    //We also need to insert 0 at the front and n at the back
+    arr.insert(arr.begin(),0);
+    arr.push_back(len);
+    vector<vector<int>> dp(n+2,vector<int> (n+2,-1));
+    return minCostToCutStickHelper_memoization(1,n,arr,dp);
+}
+//Time is taken to fill all the (n+1)*(n+1) and n for the loop 
+//Space is occupied by the dp array of size n2, and an extra recursion stack
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n2+recursion stack space)
+
+//Tabulation
+//This is the most optimal code for this problem
+int minCostToCutStick(vector<int> &arr,int len){
+    int n=arr.size();
+    sort(arr.begin(),arr.end());
+
+    arr.push_back(len);
+    arr.insert(arr.begin(),0);
+
+    vector<vector<int>> dp(n+2,vector<int> (n+2,0));
+    for(int i=n-1;i>=1;i--){
+        for(int j=1;j<n;j++){
+            if(i>j) continue;
+            int mini=1e9;
+            for(int idx=i;idx<=j;idx++){
+                int cost=arr[j+1]-arr[i-1]+dp[i][idx-1]+dp[idx+1][j];
+                mini=min(mini,cost);
+            }
+            dp[i][j]=mini;
+        }
+    }
+    return dp[1][n];
+}
+//Time Complexity will be 
 //DP 30
 //DP 44 
 
