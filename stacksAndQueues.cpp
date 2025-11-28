@@ -835,6 +835,24 @@ vector<int> findPGE(vector<int> &arr){
 
 
 
+//Count Number of NGEs to the right
+//We will be given an array [3,4,2,7] and an indices array [0,2]
+//You have to tell the count of how many element are to the right of index 0 and 5 which are greater
+//For eg, at index 0 is 3 and nge to right of it are 2, similarly 1 for index 2
+//Return [2,1]
+vector<int> countNGE_brute(vector<int> &arr,vector<int> &indices){
+    int n=arr.size();
+    int m=indices.size();
+    vector<int> ans;
+    for(int i=0;i<m;i++){
+        int cnt=0;
+        for(int j=i+1;j<n;j++){
+            if(arr[j]>arr[i]) cnt++;
+        }
+        ans.push_back(cnt);
+    }
+    return ans;
+}
 
 //Trapping Rainwater : Formula --> min(leftMaxElement,rightMaxElement)-height of building, this give the water logged on that building
 //Naive Approach
