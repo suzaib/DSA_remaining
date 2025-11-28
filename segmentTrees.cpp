@@ -1,8 +1,8 @@
 #include<bits/stdc++.h> 
 using namespace std;
 
-/*Range Query Data Structure
-We will be studying segment trees in general
+/*
+Segment Trees
 
 Use Case: consider and array [0,2,1,2,5], and we have to find max in range [1,4] (these are indices), the max value between index 1 and 4 is 5, similar minimum value is 1
 We can also be asked to this step for n times, say n queuries, having different indices
