@@ -148,7 +148,7 @@ class Job{
 bool comparator(Job a,Job b){
     return a.profit>b.profit;
 }
-vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
+vector<int> jobSequencing_brute(vector<int> &deadline,vector<int> &profit){
     int n=deadline.size();
     vector<Job> jobs(n);
     //Pairing each deadline with its corresponding profit
@@ -160,7 +160,7 @@ vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
     sort(jobs.begin(),jobs.end(),comparator);
 
     //Find max deadline to create time slots
-    int maxDeadline=maxInArr(deadline);
+    int maxDeadline=*(max_element(deadline.begin(),deadline.end()));
 
     //Creating time slots array
     vector<bool> slot(maxDeadline+1,false);
@@ -169,6 +169,8 @@ vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
     int jobCount=0;
     int totalProfit=0;
     for(int i=0;i<n;i++){
+
+        //In case day 0 is not to be considered, run the loop only till 1
         for(int j=jobs[i].deadline;j>0;j--){
             if(!slot[j]){
                 slot[j]=true;
@@ -185,6 +187,20 @@ vector<int> jobSequencing(vector<int> deadline,vector<int> profit){
     ans.push_back(totalProfit);  
     return ans;  
 }
+//To create the vector<Job> array, n time
+//To sort the jobs array, n time
+//To find the maxDeadline, n time
+//The nested loop runs for n*maxDeadline(in worst case)
+//Let the max deadline be m
+//Space is occupoied by jobs array(2n), and slot array(n)
+//Time Complexity will be O(3n+mn)
+//Space Complexity will be O(3n)
+
+//Optimal Approach
+//This employs the disjoint set from graphs, so better watch that
+int jobSequencing(vector<int> &deadline,vector<int> &profit){
+    int n=deadline.size();
+}
 
 
 
@@ -196,25 +212,19 @@ class Meeting{
 };
 
 bool compare(Meeting a, Meeting b){
-    if(a.endTime<b.endTime) return true;
-    else if(a.endTime>b.endTime) return false;
-    else {
-        return a.startTime<b.startTime;
-    }
+    return a.endTime<b.endTime;
 }
 int nMeetings(vector<int> start,vector<int> end){
     int n=start.size();
     vector<Meeting> meetings(n);
-    for(int i=0;i<n;i++){
-        meetings[i]={start[i],end[i]};
-    }
-
+    for(int i=0;i<n;i++) meetings[i]={start[i],end[i]};
+    
     sort(meetings.begin(),meetings.end(),compare);
     int meetCount=0;
     int timePassed=0;
     for(int i=0;i<n;i++){
         if(meetings[i].startTime>timePassed){
-            timePassed+=meetings[i].endTime;
+            timePassed=meetings[i].endTime;
             meetCount++;
         }
     }
@@ -479,11 +489,14 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 //Time Complexity will be O(n+nlogn)
 //Space Complexity will be O(n)
 
-//Q.8) Lecture 8(First revise n jobs and n meetings)
+
+
+//Q.8) Lecture 8
 //Q.9) Lecture 9
 //Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
 //Q.11 Valid parenthesis, complete the tabulation etc
 
+//For n jobs, the optimal solution is by using the disjoint sets to optimise the second loop which finds max deadline
 int main(){
     vector<int> arr={1,4,3,6,2,7};
     cout<<jumpGameII(arr);
