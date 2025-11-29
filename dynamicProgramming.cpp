@@ -3150,20 +3150,3 @@ int main(){
     for(auto it:ans) cout<<it<<",";
     return 0;
 }
-int burstBalloons(vector<int> &arr){
-    int n=arr.size();
-    arr.push_back(1);
-    arr.insert(arr.begin(),1);
-    vector<vector<int>> dp(n+1,vector<int> (n+1,0));
-    for(int i=n;i>=1;i--){
-        for(int j=i;j<=n;j++){
-            int maxi=-1;
-            for(int k=i;k<=j;k++){
-                int coins=arr[i-1]*arr[k]*arr[j+1]+dp[i][k-1]+dp[k+1][j];
-                maxi=max(maxi,coins);
-            }
-            dp[i][j]=maxi;
-        }
-    }
-    return dp[1][n];
-}
