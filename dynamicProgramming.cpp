@@ -3054,6 +3054,88 @@ int minCostToCutStick(vector<int> &arr,int len){
 //Space Complexity will be O(n2)
 
 
+//Burst Balloons
+//Given an array of balloons [3,1,5,8] and every balloon has a number written on it. Now suppose we burst 5, we will get the number of coins to its left*coins to it right*coin on it
+//That is we will get a total of 1*5*8 coins on bursting 5. We need to maximise the number of coins. After bursting 5, the array will look like [3,1,8]
+//We can burst the balloon in any order, suppose we burst 3 at first, then coins=1*3*1(since no one on left, therefore assume 1),then 1 then 5 then 8
+//We can also follow the order of bursting 1 first, 3, 5, 8. This will give us the maximum coins
+//We will solve the problem for the minimum coins 
+//Recursion
+int burstBalloonsHelper_brute(int i, int j,vector<int> &arr){
+
+    //Remember, even if i==j, we still solve it, since the neighbours may contribute
+    //Therefore the base condition will be when i crosses j
+    if(i>j) return 0;
+    int maxi=-1;
+    //Which will be the last balloon to be bursted
+    for(int k=i;k<=j;k++){
+        int coins=arr[i-1]*arr[k]*arr[j+1]+burstBalloonsHelper_brute(i,k-1,arr)+burstBalloonsHelper_brute(k+1,j,arr);
+        maxi=max(maxi,coins);
+    }
+    return maxi;
+}
+int burstBalloons_brute(vector<int> &arr){
+    int n=arr.size();
+    arr.push_back(1);
+    arr.insert(arr.begin(),1);
+    return burstBalloonsHelper_brute(1,n,arr);
+}
+//Time taken will be exponential perhaps n!*n
+//A recursion stack space of n will also be occupied
+//Time Complexity will be O(n!*n)
+//Space Complexity will be O(n)
+
+//Memoization
+int burstBalloonsHelper_memoization(int i,int j,vector<int> &arr,vector<vector<int>> &dp){
+    if(i>j) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    int maxi=-1;
+    for(int k=i;k<=j;k++){
+        int coins=arr[i-1]*arr[k]*arr[j+1]+burstBalloonsHelper_memoization(i,k-1,arr,dp)+burstBalloonsHelper_memoization(k+1,j,arr,dp);
+        maxi=max(maxi,coins);
+    }
+    return dp[i][j]=maxi;
+}
+
+int burstBalloons_memoization(vector<int> &arr){
+    int n=arr.size();
+    arr.push_back(1);
+    arr.insert(arr.begin(),1);
+    vector<vector<int>> dp(n+1,vector<int> (n+1,-1));
+    return burstBalloonsHelper_memoization(1,n,arr,dp);
+}
+//Time taken will be to fill all dp states which are n2 and the inner loop which takes n
+//Space Will be taken by recursion stack(n) and dp array(n2)
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n2+n)
+
+//Tabulation
+//Again, tabulation is the most optimal code for this problem
+int burstBalloons(vector<int> &arr){
+    int n=arr.size();
+    arr.push_back(1);
+    arr.insert(arr.begin(),1);
+
+    //This time we need a dp of n+2, since in second loop we call k+1, and k can be n at max hence n+2 size is needed
+    vector<vector<int>> dp(n+2,vector<int> (n+2,0));
+    for(int i=n;i>=1;i--){
+        for(int j=i;j<=n;j++){
+            int maxi=-1;
+            for(int k=i;k<=j;k++){
+                int coins=arr[i-1]*arr[k]*arr[j+1]+dp[i][k-1]+dp[k+1][j];
+                maxi=max(maxi,coins);
+            }
+            dp[i][j]=maxi;
+        }
+    }
+    return dp[1][n];
+}
+//Three loops running so n3
+//Space is taken by the dp array
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n2)
+
+
 //DP 30
 //DP 44 
 
@@ -3067,4 +3149,21 @@ int main(){
     vector<int> ans=printLIS(arr);
     for(auto it:ans) cout<<it<<",";
     return 0;
+}
+int burstBalloons(vector<int> &arr){
+    int n=arr.size();
+    arr.push_back(1);
+    arr.insert(arr.begin(),1);
+    vector<vector<int>> dp(n+1,vector<int> (n+1,0));
+    for(int i=n;i>=1;i--){
+        for(int j=i;j<=n;j++){
+            int maxi=-1;
+            for(int k=i;k<=j;k++){
+                int coins=arr[i-1]*arr[k]*arr[j+1]+dp[i][k-1]+dp[k+1][j];
+                maxi=max(maxi,coins);
+            }
+            dp[i][j]=maxi;
+        }
+    }
+    return dp[1][n];
 }

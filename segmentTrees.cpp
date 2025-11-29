@@ -18,9 +18,15 @@ Now taking from these two the min value, we can fill the above node 0-1, which w
 Keep doing the same thing and your visual segment tree is formed
 
 Now comes the thing of drawing this tree in code, we will use a similar concept to heaps, just like heaps were also binary tree which were denoted through arrays, we do the same here
+The first node will be node 0 and will be stored at index 0 of the segment array
+The left child will be 2*idx+1 and the right child will be 2*idx+2
+For memory, just start numbering the nodes from 0, level wise, and skip the numbers if the nodes aren't there
+
+We also need to know how much longer array would we need for storing the complete segment tree
 There's a proof that shows to store the segment tree we will need an array of size O(4n), which will always have enough space
 The proof is quite long and hence we will not discuss it. n in the above is the size of the array
 
+First up is building the segment tree
 The basic recursion will look like:
 f(idx,low,high){
     if(low==high) return seg[idx]=arr[low]
@@ -29,8 +35,64 @@ f(idx,low,high){
     f(2*mid+2,mid+1,high)
     seg[idx]=min(seg[2*mid+1],seg[2*mid+2])
 }
+Time Complexity can be at max 4n since this segment array will be at max 4n nodes and we also know that each node will be traversed
+Time Complexity will be O(4n) in worst case, but most often we can say it will be around O(n)
+
+
 
 Now dealing with the queries
+Below we are talking about the overlap between the node index and range
+For eg a node indexed 0, and we are looking at a range of say index 2 to 4(careful, each node also has a range associated with it, we are not talking about the node's range, this is the range of the query, the question)
+1) Partial Overlap  : return (min(leftNode,rightNode))
+Consider the query is to find the range within 2-4 and the node has the range associated with it as 0-5, this is a partial overlap
+Since the node's range has some part overlapping, this is partial overlap. In this case return min(leftNode,rightNode)
+The query being 2-4 and the node's range being 1-2 is also partial overlap
+
+2) No Overlap : return INT_MAX (since we are looking for min value)
+If the query is 2-4 and we have a node whose range is 0-1, this is no overlap, in this case return INT_MAX
+
+3) Complete Overlap
+If the query is 2-4 and the node's range is 3-3, return seg[idx] in this case of complete overlap
+
+Let us tell by an example
+Consider the array [1,3,2,0,4,5] we always start from the 0th node which will have the range as 0-5 (6 elements in total)
+Consider the query to be 2-4, 0th node in that case is having partial overlap therefore it will return (min(leftNode,rightNode))
+The left node is 0-2 and the right node is 3-5 both of which again have partial overlap
+Now consider the 0-2 return min(leftNode,rightNode), its left node will be 0-1, this will return INT_MAX since no overlap(and hence it contributes nothing) 
+And the right node would be 2-2 which is a complete overlap
+Therefore the right node will return seg[idx]
+This will keep happening
+
+Now consider l and r be the query range and low and high denote the range associated with the node
+Then our three cases would be :
+No overlap       : if r<low || high<l
+Complete Overlap : low>=l && high<=r
+Partial Overlap  : no need for condition, will be handled by the else case
+
+Types of Queries
+1) One is the normal one where we say find the min in range [l,r]
+2) This asks us to update the val of a given idx, so we have to change the whole segment tree as well
+
+Point Update
+For the second type of query, something like the point update comes in
+Consider we have to change the value at index 2, start from 0-5, which way does the index lie? left side, 0-2, right side 2-2, here update the value
+After you have updated the value, again take the min(left,right) and keep doing that till you reach the index 0 node
+This was the point update
+The code will look similar to below one, where _idx is the index which needs to be replace with value val
+update(idx,low,high,_idx,val){
+    if(low==high){
+        //this is the moment where we have reached the _idx, so change value here 
+        seg[low]=val
+        return
+    }
+    mid=(low+high)/2
+    if(_idx<=mid){
+        //This case means we need to move left
+        update(2*mid+1,low,mid,_idx,val)
+    }
+    else update(2*mid+2,low,mid_idx,val)
+    //Now that we have traversed left and right, we must update the min values
+    seg[idx]=min(seg[2*mid+1],seg[2*mid+2])
 
 */
 
