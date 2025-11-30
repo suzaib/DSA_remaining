@@ -98,18 +98,24 @@ bool jumpGame(vector<int> arr){
 
 
 // Q.5) Jump Game II
-int jumpGameHelper(int idx,int jumps,int endIdx,vector<int> &arr){
+//Minimum Jumps needed to reach the last Idx or cross it
+//Return -1, in case the last index is unreachable
+//This is a question involving dynamic programming as we have to try all ways
+//Recursion
+int jumpGameHelper_brute(int idx,int jumps,int endIdx,vector<int> &arr){
     if(idx>=endIdx) return jumps;
+    if(arr[idx]==0) return 1e9;
     int minJumps=1e9;
     for(int i=1;i<=arr[idx];i++){
-        if(i+idx>endIdx) continue;
-        minJumps=min(minJumps,jumpGameHelper(i+idx,jumps+1,endIdx,arr));
+        int result=jumpGameHelper_brute(i+idx,jumps+1,endIdx,arr);
+        if(result!=1e9) minJumps=min(minJumps,result);
     }
     return minJumps;
 }
 int jumpGameII_brute(vector<int> &arr){
     int n=arr.size();
-    return jumpGameHelper(0,0,n-1,arr);
+    int ans=jumpGameHelper_brute(0,0,n-1,arr);
+    return (ans==1e9? -1:ans);
 }
 //The worst case we assume that at each index we can jump n times, we have n choices to jump at n elements each
 //Therefore the code will run for about N^N times
@@ -117,18 +123,58 @@ int jumpGameII_brute(vector<int> &arr){
 //Time Complexity will be O(n^n)
 //Space Complexity will be O(n)
 
+//Memoization
+int jumpGameIIHelper_memoization(int idx,int endIdx,vector<int> &dp,vector<int> &arr){
+    if(idx>=endIdx) return 0;
+    if(arr[idx]==0) return 1e9;
+    if(dp[idx]!=-1) return dp[idx];
+    int minJumps=1e9;
+    for(int i=1;i<=arr[idx];i++){
+        int result=jumpGameIIHelper_memoization(idx+i,endIdx,dp,arr);
+        if(result!=1e9) minJumps=min(minJumps,1+result);
+    }
+    return dp[idx]=minJumps;
+}
+int jumpGameII_memoization(vector<int> &arr){
+    int n=arr.size();
+    vector<int> dp(n,-1);
+    int ans=jumpGameIIHelper_memoization(0,n-1,dp,arr);
+    return (ans==1e9? -1:ans);
+}
+//The loop can run for a max of arr[idx] value which can be say m, also the code runs to count all states of dp which is n
+//A dp of n size is used along with a recursion stack space of n
+//Time Complexity will be O(mn)
+//Space Complexity will be O(2n)
+
+//Tabulation
+int jumpGameII_tabulation(vector<int> &arr){
+    int n=arr.size();
+    if(n<=1) return 0;
+    if(arr[0]==0) return -1;
+    vector<int> dp(n,1e9);
+    dp[0]=0;
+    for(int i=0;i<n;i++){
+        if(dp[i]==1e9) continue; //Since this step is unreachable
+        for(int j=1;j<=arr[i] && j+i<n;j++) dp[i+j]=min(dp[i+j],dp[i]+1);
+    }
+    return (dp[n-1]==1e9? -1:dp[n-1]);
+}
+//Time Complexity will be O(nm)
+//Space Complexity will be O(n)
+
 //Optimal Method
+//The tabulation method is all the optimisation dp techniques can provide. The most optimal approach requires the greedy algorithm
 int jumpGameII(vector<int> &arr){
     int n=arr.size();
     int r=0;
     int l=0;
     int jumps=0;
     while(r<n-1 && r>=l){
-        int temp=r+1;
-        for(int i=l;i<=r;i++){
-            r=max(r,i+arr[i]);
-        }
-        l=temp;
+        int farthest=0;
+        for(int i=l;i<=r;i++) farthest=max(farthest,arr[i]+i);
+        if(farthest==r) return -1;
+        l=r+1;
+        r=farthest;
         jumps++;
     }
     return jumps;
@@ -493,7 +539,6 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 
 //Q.8) Lecture 8
 //Q.9) Lecture 9
-//Q.5) Jump Game Part 2(Do only the dp solution, no need to watch the lecture, as nothing is there, use chatgpt for solution if you can't find it on your own)
 //Q.11 Valid parenthesis, complete the tabulation etc
 
 //For n jobs, the optimal solution is by using the disjoint sets to optimise the second loop which finds max deadline
