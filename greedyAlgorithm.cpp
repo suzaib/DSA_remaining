@@ -278,8 +278,11 @@ int nMeetings(vector<int> start,vector<int> end){
 }
 
 
+//Question 8
 //Non Overlapping Intervals
-
+//Consider [(1,2),(2,3),(3,4),(1,3)]
+//We need to remove intervals so that there is no overlap, for eg in this we can remove (1,2) and (2,3), then the remaining intervals would be (1,3) and (3,4)
+//There would be no overlap between the remaining intervals. Also 
 
 //Q.10) Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
