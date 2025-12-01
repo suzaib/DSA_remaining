@@ -282,7 +282,38 @@ int nMeetings(vector<int> start,vector<int> end){
 //Non Overlapping Intervals
 //Consider [(1,2),(2,3),(3,4),(1,3)]
 //We need to remove intervals so that there is no overlap, for eg in this we can remove (1,2) and (2,3), then the remaining intervals would be (1,3) and (3,4)
-//There would be no overlap between the remaining intervals. Also 
+//There would be no overlap between the remaining intervals. Also unlike many other interval questions, here (1,3) and (3,4) is not considered an overlap
+//We can also remove (1,3) then we will be left with (1,2), (2,3) and (3,4), still there's no overlap
+//Clearly the second time we only needed to remove 1 interval
+//The question asks us the minimum removals
+//The minimum removals means we must hold the max number of intervals we can
+//Now this question is exactly similar to N meetings, where we were told to hold the max number of meetings in one room
+//Do the dry run yourself and find out
+//Just remember that unlike the n meetings where if start time was equal to end time of previous meeting then the meeting was not allowed
+//Here however that would be allowed
+//First let us make a comparator that will sort by endTime
+bool cmp_minIntervals(const pair<int,int> &a,const pair<int,int> &b){
+    return a.second<b.second;
+}
+int minIntervals(vector<pair<int,int>> &intervals){
+    int n=intervals.size();
+    if(n<=1) return 0;
+    sort(intervals.begin(),intervals.end(),cmp_minIntervals);
+    int cnt=1;
+    int timePassed=intervals[0].second;
+    for(int i=1;i<n;i++){
+        int startTime=intervals[i].first;
+        int endTime=intervals[i].second;
+        if(startTime>=timePassed){
+            cnt++;
+            timePassed=endTime;
+        }
+    }
+    return n-cnt;
+}
+//Time taken will be due to sorting which will be 2nlog(2n) and the loop which will run for 2n times(2n elements)
+//Space taken will be due to changing the intervals array, but let us just ignore that
+//Time Complexity will be O(2nlog2n + 2n)
 
 //Q.10) Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
@@ -540,7 +571,6 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 
 
 
-//Q.8) Lecture 8
 //Q.9) Lecture 9
 //Q.11 Valid parenthesis, complete the tabulation etc
 
