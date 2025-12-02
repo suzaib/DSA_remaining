@@ -3186,14 +3186,14 @@ int boolExpHelper_memoization(int i,int j,bool isTrue,vector<vector<vector<int>>
     int ways=0;
     if(i==j){
         if(isTrue) return dp[i][j][isTrue]=(s[i]=='T');
-        else dp[i][j][isTrue]=(s[i]=='F');
+        else return dp[i][j][isTrue]=(s[i]=='F');
     }
-    for(int k=i;k<=j;k=k+2){
+    for(int k=i+1;k<=j-1;k=k+2){
         int lt=boolExpHelper_memoization(i,k-1,1,dp,s);
         int lf=boolExpHelper_memoization(i,k-1,0,dp,s);
         int rt=boolExpHelper_memoization(k+1,j,1,dp,s);
         int rf=boolExpHelper_memoization(k+1,j,0,dp,s);
-        char c=s[i];
+        char c=s[k];
         if(c=='&'){
             if(isTrue) ways+=(lt*rt);
             else ways+=(lt*rf+lf*rt+lf*rf);
@@ -3214,6 +3214,59 @@ int boolExp_memoization(string s){
     vector<vector<vector<int>>> dp(n,vector<vector<int>> (n,vector<int> (2,-1)));
     return boolExpHelper_memoization(0,n-1,1,dp,s);
 }
+//The code will run to eventually fill out all the dp states and an inner loop of i->j will also contribute
+//The space taken will be due to the dp array and recursion stack space
+//Time Complexity will be O(2n3)
+//Space Complexity will be O(2n2+n)
+
+//Tabulation
+//This is the most optimal solution 
+int boolExp(string &s){
+    int n=s.size();
+    if(n==0) return 0;
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (n,vector<int> (2,0)));
+
+    //Let us write the base case when i==j
+    for(int i=0;i<n;i++){
+        dp[i][i][0]=s[i]=='F';
+        dp[i][i][1]=s[i]=='T';
+    }
+    for(int i=n-1;i>=0;i++){
+        for(int j=i+1;j<n;j++){
+            for(int isTrue=0;isTrue<=1;isTrue++){
+                int ways=0;
+                for(int k=i+1;k<=j-1;k=k+2){
+                    int lt=dp[i][k-1][1];
+                    int lf=dp[i][k-1][0];
+                    int rt=dp[k+1][j][1];
+                    int rf=dp[k+1][j][0];
+                    char c=s[k];
+                    if(c=='&'){
+                        if(isTrue) ways+=(lt*rt);
+                        else ways+=(lt*rf+lf*rt+lf*rf);
+                    }
+                    else if(c=='|'){
+                        if(isTrue) ways+=(lt*rt+lt*rf+lf*rt);
+                        else ways+=(lf*rf);
+                    }
+                    else{
+                        if(isTrue) ways+=(lt*rf+lf*rt);
+                        else ways+=(lf*rf+lt*rt);
+                    }
+                }
+                dp[i][j][isTrue]=ways;
+            }
+        }
+    }
+    return dp[0][n-1][1];
+}
+//There are 4 loops n*n*2*n
+//The dp array occupies a space of 2n2
+//Time Complexity will be O(2n3)
+//Space Complexity will be O(2n2)
+
+
+
 //DP 30
 //DP 44 
 
