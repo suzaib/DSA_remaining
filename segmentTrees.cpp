@@ -94,6 +94,14 @@ update(idx,low,high,_idx,val){
     //Now that we have traversed left and right, we must update the min values
     seg[idx]=min(seg[2*mid+1],seg[2*mid+2])
 
+
+
+We will now discuss the time complexity for queries
+In case of complete or no overlap, we simply return, therefore time taken O(1)
+So we need to study the time taken in case of partial overlap only
+
+First let's consider small range, in that case most will return
+
 */
 
 int main(){

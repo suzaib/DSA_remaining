@@ -3136,6 +3136,83 @@ int burstBalloons(vector<int> &arr){
 //Space Complexity will be O(n2)
 
 
+//Boolean Expression Evaluation
+//Number of ways the exression can be evaluated to true
+//The title of this problem on gfg is boolean parenthesization, search and learn more about it if you want
+//The problem approach is exactly similar to Matrix Chain Multiplication
+int boolExpHelper_brute(int i,int j,bool isTrue,string &s){
+    
+    //Just an optional defensive case
+    if(i>j) return 0;
+
+    if(i==j){
+        if(isTrue) return s[i]=='T';
+        else return s[i]=='F';
+    }
+    int ways=0;
+    for(int k=i+1;k<=j-1;k=k+2){
+        int lt=boolExpHelper_brute(i,k-1,1,s);
+        int lf=boolExpHelper_brute(i,k-1,0,s);
+        int rt=boolExpHelper_brute(k+1,j,1,s);
+        int rf=boolExpHelper_brute(k+1,j,0,s);
+        char c=s[k];
+        if(c=='&'){
+            if(isTrue) ways+=(lt*rt);
+            else ways+=(lt*rf+lf*rt+lf*rf);
+        }
+        else if(c=='|'){
+            if(isTrue) ways+=(lt*rf+lf*rt+lt*rt);
+            else ways+=(lf*rf);
+        }
+        else{
+            if(isTrue) ways+=(lt*rf+lf*rt);
+            else ways+=(lt*rt+lf*rf);
+        }
+    }
+    return ways;
+}
+int boolExp_brute(string &s){
+    int n=s.size();
+    return boolExpHelper_brute(0,n-1,1,s);
+}
+//The code runs the same as the matrix multiplication one, therefore time taken will be exponential
+//Recursion stack space will be used perhaps somewhere around n
+
+//Memoization
+//We will need a 3d dp owing to the isTrue variable
+int boolExpHelper_memoization(int i,int j,bool isTrue,vector<vector<vector<int>>> &dp,string &s){
+    if(i>j) return 0;
+    int ways=0;
+    if(i==j){
+        if(isTrue) return dp[i][j][isTrue]=(s[i]=='T');
+        else dp[i][j][isTrue]=(s[i]=='F');
+    }
+    for(int k=i;k<=j;k=k+2){
+        int lt=boolExpHelper_memoization(i,k-1,1,dp,s);
+        int lf=boolExpHelper_memoization(i,k-1,0,dp,s);
+        int rt=boolExpHelper_memoization(k+1,j,1,dp,s);
+        int rf=boolExpHelper_memoization(k+1,j,0,dp,s);
+        char c=s[i];
+        if(c=='&'){
+            if(isTrue) ways+=(lt*rt);
+            else ways+=(lt*rf+lf*rt+lf*rf);
+        }
+        else if(c=='|'){
+            if(isTrue) ways+=(lt*rt+lf*rt+lt*rf);
+            else ways+=(lf*rf);
+        }
+        else{
+            if(isTrue) ways+=(lt*rf+lf*rt);
+            else ways+=(lf*rf+lt*rt);
+        }
+    }
+    return dp[i][j][isTrue]=ways;
+}
+int boolExp_memoization(string s){
+    int n=s.size();
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (n,vector<int> (2,-1)));
+    return boolExpHelper_memoization(0,n-1,1,dp,s);
+}
 //DP 30
 //DP 44 
 
