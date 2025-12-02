@@ -3182,6 +3182,7 @@ int boolExp_brute(string &s){
 //We will need a 3d dp owing to the isTrue variable
 int boolExpHelper_memoization(int i,int j,bool isTrue,vector<vector<vector<int>>> &dp,string &s){
     if(i>j) return 0;
+    if(dp[i][j][isTrue]!=-1) return dp[i][j][isTrue];
     int ways=0;
     if(i==j){
         if(isTrue) return dp[i][j][isTrue]=(s[i]=='T');
