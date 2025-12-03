@@ -1402,6 +1402,8 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
+
+//Done till 24, every lecture
 //Lecture 25
 //Lecture 26
 //Lecture 28
