@@ -3267,6 +3267,177 @@ int boolExp(string &s){
 
 
 
+//Palindrome Partitioning II
+//See question for more detail
+//First we are going to create a function that checks whether a string is a palindrome or not
+bool isPalindrome(string &s){
+    int n=s.size();
+    int i=0;
+    int j=n-1;
+    while(i<j){
+        if(s[i++]!=s[j--]) return false;
+    }
+    return true;
+}
+//Time Complexity will be O(n/2)
+
+//Now we start our solution
+int partitionHelper_brute(int i,int n,string &s){
+    if(i==s.size()) return 0;
+    string temp="";
+    int minCost=INT_MAX;
+
+    for(int j=i;j<n;j++){
+        temp+=s[j];
+        if(isPalindrome(temp)){
+            int cost=1+partitionHelper_brute(j+1,n,s);
+            minCost=min(minCost,cost);
+        }
+    }
+    return minCost;
+}
+int palindromePartitionII_brute(string &s){
+    int n=s.size();
+    int ans=partitionHelper_brute(0,n,s);
+    return (ans-1);
+}
+//Time taken to run this code will be exponential
+//The code will also use a recursion stack space of n size
+//Time Complexity will be exponential
+//Space Compleixty will be O(n)
+
+//Memoization
+int partitionHelper_memoization(int i,int n,vector<int> &dp,string &s){
+    if(i==n) return 0;
+    if(dp[i]!=-1) return dp[i];
+    string temp="";
+    int minCost=INT_MAX;
+
+    for(int j=i;j<n;j++){
+        temp+=s[j];
+        if(isPalindrome(temp)){
+            int cost=1+partitionHelper_memoization(j+1,n,dp,s);
+            minCost=min(minCost,cost);
+        }
+    }
+    return dp[i]=minCost;
+}
+int palindromePartitionII_memoization(string &s){
+    int n=s.size();
+    vector<int> dp(n,-1);
+    int ans=partitionHelper_memoization(0,n,dp,s);
+    return (ans-1);
+}
+//The code will run to fill the dp array of size n along with the loop which runs n times in the worst case
+//The dp array takes space n along with the recursion stack space occupied of n
+//Time Complexity will be O(n2)
+//Space Complexity will be O(2n)
+
+//Tabulation
+//Tabulation code is the most optimal code in this case
+int palindromePartitionII(string &s){
+    int n=s.size();
+    vector<int> dp(n+1,0);
+    for(int i=n-1;i>=0;i--){
+        string temp="";
+        int minCost=INT_MAX;
+        for(int j=i;j<n;j++){
+            temp+=s[j];
+            if(isPalindrome(temp)){
+                int cost=1+dp[j+1];
+                minCost=min(minCost,cost);
+            }
+        }
+        dp[i]=minCost;
+    }
+    return dp[0]-1;
+}
+//The code runs two nested loop therefore time taken will be n2 in worst case
+//The code also occupies space due to the dp array of size n
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n)
+
+
+//Partition Array 
+//See question for more details
+//Brute Force Or Recursion method
+int partitionArrHelper_brute(int idx,int n,int k,vector<int> &arr){
+    if(idx==n) return 0;
+    int maxCost=INT_MIN;
+    int len=0;
+    int maxi=INT_MIN;
+    for(int i=idx;i<min(n,idx+k);i++){
+        len++;
+        maxi=max(maxi,arr[i]);
+        int cost=len*maxi+partitionArrHelper_brute(i+1,n,k,arr);
+        maxCost=max(maxCost,cost);
+    }
+    return maxCost;
+}
+int partitionArr_brute(vector<int> &arr,int k){
+    int n=arr.size();
+    return partitionArrHelper_brute(0,n,k,arr);
+}
+//The code will run exponentially
+//A recursion stack space of n will be used as well
+//Time Complexity will be exponential
+//Space Complexity will be O(n)
+
+//Memoization
+int partitionArrHelper_memoization(int idx,int n,int k,vector<int> &dp,vector<int> &arr){
+    if(idx==n) return 0;
+    if(dp[idx]!=-1) return dp[idx];
+    int maxCost=INT_MIN;
+    int len=0;
+    int maxi=INT_MIN;
+    for(int i=idx;i<min(n,k+idx);i++){
+        len++;
+        maxi=max(maxi,arr[i]);
+        int cost=len*maxi+partitionArrHelper_memoization(i+1,n,k,dp,arr);
+        maxCost=max(maxCost,cost);
+    }
+    return dp[idx]=maxCost;
+}
+int partitionArr_memoization(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(n,-1);
+    return partitionArrHelper_memoization(0,n,k,dp,arr);
+}
+//The code will run to fill the dp table along with the inner loop which runs k times
+//Space will be used due to the dp array and the recursion stack space
+//Time Complexity will be O(nk)
+//Space Complexity will be O(2n)
+
+//Tabulation
+//Tabulation is the most optimal method in this problem
+int partitionArr(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(n,0);
+    for(int i=n-1;i>=0;i--){
+        int len=0;
+        int maxi=INT_MIN;
+        int maxCost=INT_MIN;
+        for(int j=i;j<min(n,i+k);j++){
+            len++;
+            maxi=max(maxi,arr[j]);
+            int cost=len*maxi+dp[j+1];
+            maxCost=max(maxCost,cost);
+        }
+        dp[i]=maxCost;
+    }
+    return dp[0];
+}
+//The code will run for two nested loops
+//Space will be occupied due to the array but no recursion stack space this time
+//Time Complexity will be O(nk)
+//Space Complexity will be O(n)
+
+
+
+
+//DP on Rectangles
+
+
 //DP 30
 //DP 44 
 
