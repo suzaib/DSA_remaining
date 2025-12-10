@@ -3436,6 +3436,13 @@ int partitionArr(vector<int> &arr,int k){
 
 
 //DP on Rectangles
+//Maximum Rectangle Area with all 1s
+//For this problem it is needed that we understand the question "Largest rectangle in histogram" which is in the stacks and queue playlist
+//We are attaching the optimal solution for that problem 
+int largestRectInHist(vector<int> &arr){
+    int n=arr.size();
+    
+}
 
 
 //DP 30
