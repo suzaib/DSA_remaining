@@ -3441,8 +3441,33 @@ int partitionArr(vector<int> &arr,int k){
 //We are attaching the optimal solution for that problem 
 int largestRectInHist(vector<int> &arr){
     int n=arr.size();
-    
+    stack<pair<int,int>> st;
+    int maxArea=0;
+    for(int i=0;i<n;i++){
+        while(!st.empty() && st.top().first>=arr[i]){
+            int x=st.top().first;
+            st.pop();
+            int pse=(st.empty() ? -1:st.top().second);
+            int area=x*(i-pse-1);
+            maxArea=max(area,maxArea);
+        }
+        st.push({arr[i],i});
+    }
+    int nse=n;
+    while(!st.empty()){
+        int x=st.top().first;
+        st.pop();
+        int pse=(st.empty()? -1:st.top().second);
+        int area=x*(nse-pse-1);
+        maxArea=max(maxArea,area);
+    }
+    return maxArea; 
 }
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+//Now we use this formula to solve maximalRectangles problem
+//The question and hence the solution is also there, with the same name
 
 
 //DP 30

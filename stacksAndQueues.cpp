@@ -1275,17 +1275,14 @@ int largestRectangle(vector<int> &arr){
     int nse,pse;
     stack<pair<int,int>> st;
     for(int i=0;i<n;i++){
-        if(st.empty()) st.push({i,arr[i]});
-        else{
-            while(!st.empty() && arr[i]<st.top().second){
-                nse=i;
-                int x=st.top().second;
-                st.pop();
-                pse=(st.empty() ? -1 : st.top().first);
-                maxArea=max((nse-pse-1)*x,maxArea);
-            }
-            st.push({i,arr[i]});
+        while(!st.empty() && arr[i]<st.top().second){
+            nse=i;
+            int x=st.top().second;
+            st.pop();
+            pse=(st.empty() ? -1 : st.top().first);
+            maxArea=max((nse-pse-1)*x,maxArea);
         }
+        st.push({i,arr[i]});
     }
     nse=n;
     while(!st.empty()){
