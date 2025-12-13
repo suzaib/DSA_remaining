@@ -3468,6 +3468,23 @@ int largestRectInHist(vector<int> &arr){
 
 //Now we use this formula to solve maximalRectangles problem
 //The question and hence the solution is also there, with the same name
+int maxRectangle(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    if(n==0 || m==0) return 0;
+    vector<int> hist(m,0);
+    int maxArea=0;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==1) hist[j]++;
+            else hist[j]=0;
+        }
+        int area=largestRectInHist(hist);
+        maxArea=max(area,maxArea);
+    }
+    return maxArea;
+}
+//Time Complexity will be O()
 
 
 //DP 30
