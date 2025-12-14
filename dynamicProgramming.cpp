@@ -1669,6 +1669,11 @@ int minCoins(vector<int> &coins,int target){
 //Space Complexity will be O(k)
 
 
+//Target Sum
+//
+
+
+
 //DP On Strings
 
 //Longest Common Subsequence
@@ -1797,8 +1802,56 @@ int longestCommonSubseq(string &s1,string &s2){
 //Space Complexity will be O(N+M+2)
 
 
-
 //Printing The LCS
+//Let's first create a function to create the dp table
+//Similar to the previous question
+vector<vector<int>> lcsTable(string &s1,string &s2){
+    int n1=s1.size();
+    int n2=s2.size();
+    vector<vector<int>> dp(n1+1,vector<int> (n2+1));
+    for(int i=1;i<=n1;i++){
+        for(int j=1;j<=n2;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=(1+dp[i-1][j-1]);
+            else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    return dp;
+}
+//Time Complexity will be O(mn)
+//Space Complexity will be o(mn)
+
+set<string> backTrack(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+
+    //Base Case
+    if(i==0 || j==0) return {""};
+
+    //Character match, must be taken
+    if(s1[i-1]==s2[j-1]){
+        set<string> prev=backTrack(i-1,j-1,s1,s2,dp);
+        set<string> result;
+        for(auto &str:prev) result.insert(str+s1[i-1]);
+        return result;
+    }
+
+    set<string> result;
+    //Characters don't match --> branch
+    if(dp[i-1][j]==dp[i][j]){
+        auto top=backTrack(i-1,j,s1,s2,dp);
+        result.insert(top.begin(),top.end());
+    }
+
+    if(dp[i][j-1]==dp[i][j]){
+        auto left=backTrack(i,j-1,s1,s2,dp);
+        result.insert(left.begin(),left.end());
+    }
+
+    return result;
+}
+
+set<string> allLCS(string &s1,string &s2){
+    vector<vector<int>> dp=lcsTable(s1,s2);
+    return backTrack(s1.size(),s2.size(),s1,s2,dp);
+}
 string printingLCS(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
@@ -1831,6 +1884,12 @@ string printingLCS(string &s1,string &s2){
 //Space Complexity will be O(MN)
 
 
+//The above code only prints one LCS
+//Below we write code to print all the lcs
+//We are using set to store only unique lcs, if you want duplicates as well, use some other data structure, that's all
+set<string> allLCS(string &s1,string s2){
+
+}
 
 //Longest Common Substring 
 //Substrings are continuous, unlike subsequences
@@ -3484,17 +3543,21 @@ int maxRectangle(vector<vector<int>> &mat){
     }
     return maxArea;
 }
-//Time Complexity will be O()
+//The first loop runs n times and inside it two loop of n time
+//Space is used by the hist array and by the largestRect function 
+//Time Complexity will be O(3n2)
+//Space Complexity will be O(3n)
 
 
 //DP 30
 //DP 44 
-
 //Dp 21
+//Dp 56
+
 //See if you can further optimize stocks II problem
-//Just revise the LCS printing once more
 //In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
 //See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
+// for existence of subset sum, we need to also write code for the case when the array has 0 as well, watch the next video of dp18 striver
 int main(){
     vector<int> arr={5,4,11,1,16,8};
     vector<int> ans=printLIS(arr);
