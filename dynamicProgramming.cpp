@@ -1353,11 +1353,12 @@ int noOfSubsetsWithSumK_memoization(vector<int> &arr,int k){
 int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (k+1,0));
-    for(int i=0;i<n;i++) dp[i][0]=1;
-    if(arr[0]<=k) dp[0][arr[0]]=1;
-    if(arr[0]==0) dp[0][0]=2;
+    for(int i=0;i<=k;i++){
+        if(i==0 && arr[0]==0) dp[0][i]=2;
+        else if(i==0 || arr[0]==i) dp[0][i]=1;
+    }
     for(int i=1;i<n;i++){
-        for(int j=1;j<=k;j++){
+        for(int j=0;j<=k;j++){
             int pick=0;
             if(arr[i]<=j) pick=dp[i-1][j-arr[i]];
             int notPick=dp[i-1][j];
@@ -1370,15 +1371,20 @@ int noOfSubsetsWithSumK_tabulation(vector<int> &arr,int k){
 //Space Complexity will be O(NK)
 
 //Space Optimization
-int noOfSubsetsWithSumK_spaceOptimization(vector<int> &arr,int k){
+//This is the most optimal method in this case
+//The One array approach won't work since we have 0s in this case
+int noOfSubsetsWithSumK(vector<int> &arr,int k){
     int n=arr.size();
     vector<int> curr(k+1,0);
     vector<int> prev(k+1,0);
-    prev[0]=1;
-    if(arr[0]<=k) prev[arr[0]]=1;
     if(arr[0]==0) prev[0]=2;
+    else{
+        prev[0]=1;
+        if(arr[0]<=target) prev[arr[0]]=1;
+
+    }
     for(int i=1;i<n;i++){
-        for(int j=1;j<=k;j++){
+        for(int j=0;j<=k;j++){
             int pick=0;
             if(arr[i]<=j) pick=prev[j-arr[i]];
             int notPick=prev[j];
@@ -1390,27 +1396,6 @@ int noOfSubsetsWithSumK_spaceOptimization(vector<int> &arr,int k){
 }
 //Time Complexity will be O(NK)
 //Space Complexity will be O(2K)
-
-//Further Optimization
-int noOfSubsetsWithSumK(vector<int> &arr,int k){
-    int n=arr.size();
-    vector<int> dp(k+1,0);
-    dp[0]=1;
-    if(arr[0]<=k) dp[arr[0]]=1;
-    if(arr[0]==0) dp[0]=2;
-    for(int i=1;i<n;i++){
-        for(int j=k;j>=1;j--){
-            int pick=0;
-            if(arr[i]<=j) pick=dp[j-arr[i]];
-            int notPick=dp[j];
-            dp[j]=(pick+notPick);
-        }
-    }
-    return dp[k];
-}
-//Time Complexity will be O(NK)
-//Space Complexity will be O(K)
-
 
 
 //Partitions With Given Difference
