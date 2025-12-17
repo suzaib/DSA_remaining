@@ -1,38 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<int> kahn(int n,vector<vector<int>> &adj){
-    vector<int> inDeg(n,0);
-    for(int i=0;i<n;i++){
-        for(auto it:adj[i]) inDeg[it]++;
-    }
 
-    queue<int> q;
-    for(int i=0;i<n;i++){
-        if(inDeg[i]==0) q.push(i);
-    }
-    vector<int> ans;
-    while(!q.empty()){
-        int node=q.front();
-        q.pop();
-        ans.push_back(node);
-        for(auto it:adj[node]){
-            inDeg[it]--;
-            if(inDeg[it]==0) q.push(it);
+class Node{
+    public:
+        int key;
+        int val;
+        Node* prev;
+        Node* next;
+
+        Node(int key,int val){
+            this->key=key;
+            this->val=val;
+            this->prev=nullptr;
+            this->next=nullptr;
         }
-    }
-    return ans;
 }
+class LRU{
+    public:
+        unordered_map<int,int> mpp;
+        int capacity;
+        Node* head;
+        Node* tail;
 
-//Cycle detection using bfs
-//Write down the topo sort using kahn algorithm
-//In case the topo sort has elements less than the total vertices, a cycle exists
-bool cycleDetection(int n,vector<vector<int>> &adj){
-    vector<int> topo=kahn(n,adj);
-    int s=topo.size();
-    return (s<n);
+        LRU(int capacity){
+            this->capacity=capacity;
+            mpp.clear();
+            head=new Node(-1,-1);
+            tail=new Node(-1,-1);
+            head->next=tail;
+            tail->prev=head;
+        }
+
+        void delete(Node* node){
+            Node* prevNode=node->prev;
+            Node* nextNode=node->next;
+            prevNode->next=nextNode;
+            nextNode->prev=prevNode;
+        }
+
+        void insertAfterHead(Node* node){
+            Node* nextNode=head->next;
+            head->next=node;
+            node->prev=head;
+            node->next=nextNode;
+            nextNode->prev=node;
+        }
+
+        void put(int key,int val){
+            if(mpp.find(key)!=mpp.end()){
+                Node* node=mpp[key];
+                node->val=val;
+                deleteNode(node);
+                insertAfterHead(node);
+            }
+            else{
+                if(mpp.size()==capacity){
+                    Node* lastUsed=tail->prev;
+                    mpp.erase(lastUsed->key);
+                    deleteNode(lastUsed);
+                    delete lastUsed;
+                }
+                Node* newNode=new Node(key,val);
+                mpp[key]=newNode;
+                insertAfterHead(newNode);
+            }
+        }
+
+        int get(key){
+            if(mpp.find(key)==mpp.end()) return -1;
+            Node* node=mpp[key];
+            deleteNode(node);
+            insertAfterHead(node);
+            return node->val;
+        }
 }
 int main(){
     vector<int> arr={1,3,5};
+    vector<int> lows(1)
     
 }
 

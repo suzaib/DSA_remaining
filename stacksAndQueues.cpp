@@ -1798,9 +1798,7 @@ class LFUCache{
         }
 
 };
-//Lecture 18 Next
 
-//Revise Largest histogram once
 //Just write down sliding window maximum code once(optimal one, general one)
 
 
