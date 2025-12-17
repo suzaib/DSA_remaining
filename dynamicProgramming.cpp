@@ -1655,7 +1655,14 @@ int minCoins(vector<int> &coins,int target){
 
 
 //Target Sum
-//
+//Read the question by video, the intuition is a bit difficult to get but the question is very easy
+//We would need to use the partitions with given diff question to solve this
+//Therefore we are simply using that question's solution, that's all
+int targetSum(vector<int> &arr,int target){
+    return partitionsWithGivenDiff(arr,target);
+}
+//Time Complexity will be O(NK + N)
+//Space Complexity will be O(K)
 
 
 
