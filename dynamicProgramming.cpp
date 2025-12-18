@@ -1665,6 +1665,55 @@ int targetSum(vector<int> &arr,int target){
 //Space Complexity will be O(K)
 
 
+//Coin Change II
+//Number of ways we can make the target, we can use a coin any number of times
+//Therefore in such cases, even when we pick the element, we should not move the index
+//Brute Force
+int coinChangeIIHelper_brute(int idx,int target,vector<int> &arr){
+    if(target==0) return 1;
+    if(idx==0) return (target%arr[idx]==0);
+    int pick=0;
+    if(target>=arr[idx]) pick=coinChangeIIHelper_brute(idx,target-arr[idx],arr);
+    int notPick=coinChangeIIHelper_brute(idx-1,target,arr);
+    return (pick+notPick);
+}
+int coinChangeII_brute(vector<int> &arr,int k){
+    int n=arr.size();
+    return coinChangeIIHelper_brute(n-1,k,arr);
+}
+//Each element has two choices, either to get picked or not picked
+//On top of that a single element can be picked multiple times
+//Estimating time complexitty in such cases is quite complex
+//A recursion stack space of n is used as well
+//Time Complexity will be Exponential
+//Space Complexity will be O(n)
+
+//Memoization
+int coinChangeIIHelper_memoization(int idx,int target,vector<vector<int>> &dp,vector<int> &arr){
+    if(dp[idx][target]!=-1) return dp[idx][target];
+    if(target==0) return dp[idx][target]=1;
+    if(idx==0) return dp[idx][target]=(target%arr[idx]==0);
+    int pick=0;
+    if(target>=arr[idx]) pick=coinChangeIIHelper_memoization(idx,target-arr[idx],dp,arr);
+    int notPick=coinChangeIIHelper_memoization(idx-1,target,dp,arr);
+    return dp[idx][target]=(pick+notPick);
+}
+int coinChangeII_memoization(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (k+1,-1));
+    return coinChangeIIHelper_memoization(n-1,k,dp,arr);
+}
+//The code runs to fill all dp states, which are n*k in total
+//The dp table is used, which takes a space of n*k, also an extra recursion stack space is needed
+//Time Complexity will be O(nk)
+//Space Complexity will be O(nk+n)
+
+//Tabulation 
+int coinChangeII_tabulation(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<vector<int>> dp(n,vector<int> (k+1,0));
+    
+}
 
 //DP On Strings
 
@@ -3543,7 +3592,7 @@ int maxRectangle(vector<vector<int>> &mat){
 
 //DP 30
 //DP 44 
-//Dp 21
+//Dp 22
 //Dp 56
 
 //See if you can further optimize stocks II problem
