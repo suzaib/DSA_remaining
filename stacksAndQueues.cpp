@@ -1420,7 +1420,7 @@ class StockSpan{
 //The window will be of 3 length
 //Brute Force
 //Just compute the maximum in each window by running a loop
-vector<int> slidingWindowMax_basic_brute(vector<int> &arr){
+vector<int> slidingWindowMax_brute(vector<int> &arr){
     int n=arr.size();
     vector<int> ans;
     if(n==0) return ans;
@@ -1447,9 +1447,9 @@ vector<int> slidingWindowMax_basic_brute(vector<int> &arr){
 //No space is used to solve the answer
 //Time Complexity will be O(3n)
 
-//Optimal Method 
+//Optimal Method
 //In the upcoming questions, we will just assume that n>=k
-vector<int> slidingWindowMax_basic(vector<int> &arr){
+vector<int> slidingWindowMax(vector<int> &arr){
     int n=arr.size();
     deque<int> dq;
     vector<int> ans;
@@ -1469,7 +1469,7 @@ vector<int> slidingWindowMax_basic(vector<int> &arr){
 //Sliding Window Maximum
 //Generalised Version
 //K sized window
-vector<int> slidingWindowMax_brute(vector<int> &arr,int k){
+vector<int> slidingWindowMaxII_brute(vector<int> &arr,int k){
     int n=arr.size();
     //We will assume that n>=k
 
@@ -1483,11 +1483,13 @@ vector<int> slidingWindowMax_brute(vector<int> &arr,int k){
         i++;
         j++;
     }
+
+    return ans;
 }
 //Time Complexity will be O(nk)
 
 //Optimal Method
-vector<int> slidingWindowMax(vector<int> &arr, int k){
+vector<int> slidingWindowMaxII(vector<int> &arr, int k){
     int n=arr.size();
     vector<int> ans;
     deque<int> dq;
@@ -1734,6 +1736,12 @@ class List{
             delNext->prev=delPrev;
             size--; 
         }
+
+        //A destructor is needed to clean the nodes and list 
+        ~List(){
+            delete head;
+            delete tail;
+        }
 };
 class LFUCache{
     public:
@@ -1751,16 +1759,21 @@ class LFUCache{
         }
 
         void updateFreqListMap(NodeLFU* node){
-            freqListMap[node->freq]->removeNode(node);
-            if(node->freq==minFreq && freqListMap[node->freq]->size==0) minFreq++;
+            int oldFreq=node->freq;
+            List* oldList=freqListMap[oldFreq];
+            oldList->removeNode(node);
 
-            List* nextHigherFreqList;
-            if(freqListMap.find(node->freq+1)!=freqListMap.end()) nextHigherFreqList=freqListMap[node->freq+1];
-            else nextHigherFreqList=new List();
-            node->freq+=1;
-            nextHigherFreqList->addFront(node);
-            freqListMap[node->freq]=nextHigherFreqList;
-            keyNode[node->key]=node;
+            //Cleaning if the list becomes empty
+            if(oldList->size==0){
+                delete oldList;
+                freqListMap.erase(oldFreq);
+                if(minFreq==oldFreq) minFreq++;
+            }
+
+            node->freq++;
+
+            if(freqListMap.find(node->freq)==freqListMap.end()) freqListMap[node->freq]=new List();
+            freqListMap[node->freq]->addFront(node);
         }
 
         int get(int key){
@@ -1772,6 +1785,7 @@ class LFUCache{
             }
             return -1;
         }
+        //Time Complexity will be O(1)
 
         void put(int key,int val){
             if(maxSize==0) return;
@@ -1783,26 +1797,40 @@ class LFUCache{
             else{
                 if(currSize==maxSize){
                     List* list=freqListMap[minFreq];
-                    keyNode.erase(list->tail->prev->key);
-                    freqListMap[minFreq]->removeNode(list->tail->prev);
+                    NodeLFU* nodeToDel=list->tail->prev;
+                    keyNode.erase(nodeToDel->key);
+                    list->removeNode(nodeToDel);
+                    delete nodeToDel;
                     currSize--;
+
+                    //Delete empty frequency List
+                    if(list->size==0){
+                        delete list;
+                        freqListMap.erase(minFreq);
+                    }
                 }
                 currSize++;
 
                 //New value has to be added which is not here previously
                 minFreq=1;
-                List* listFreq=new List();
+                List* listFreq;
                 if(freqListMap.find(minFreq)!=freqListMap.end()) listFreq=freqListMap[minFreq];
+                else listFreq=new List();
                 NodeLFU* node=new NodeLFU(key,val);
                 listFreq->addFront(node);
                 keyNode[key]=node;
                 freqListMap[minFreq]=listFreq;
             }
         }
+        //Time Complexity is O(1)
 
+        //We also create a destructor so that when the object is deleted, the destructor will delete all the nodes and free up the memory
+        ~LFUCache(){
+            for(auto &it:keyNode) delete it.second;
+            for(auto &it:freqListMap) delete it.second;
+        }
 };
 
-//Just write down sliding window maximum code once(optimal one, general one)
 
 
 
