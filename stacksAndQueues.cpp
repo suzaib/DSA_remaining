@@ -1593,6 +1593,9 @@ int celebrityProblem(vector<vector<int>> &mat){
 //Implement LRU Cache
 //LRU means least recently used
 //We keep track of recently used cache
+//We need a data structure that stores the order in which the element were inserted and also allows us to access any element
+//Maps allow us to access any element, but they do not maintain the order
+//To maintain the order we will use a doubly linked list
 //We will need Doubly Linked List for this, so first we will create that
 class NodeLRU{
     public:

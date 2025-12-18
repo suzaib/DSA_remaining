@@ -1,36 +1,116 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int helper(int idx,int target,vector<int> &arr,vector<vector<int>> &dp){
-    if(dp[idx][target]!=-1) return dp[idx][target];
-    if(idx==0){
-        if(target==0 && arr[idx]==0) return dp[idx][target]=2;
-        if(arr[idx]==target || target==0) return dp[idx][target]=1;
-        return dp[idx][target]=0;
-    }
-    int pick=0;
-    if(target>=arr[idx]) pick=helper(idx-1,target-arr[idx],arr,dp);
-    int notPick=helper(idx-1,target,arr,dp);
-    return dp[idx][target]=(pick+notPick);
-}
-int numberOfSubsets(vector<int> &arr,int target){
-    int n=arr.size();
-    vector<int> curr(target+1,0);
-    vector<int> prev(target+1,0);
-    if(arr[0]==0) prev[0]=2;
-    else{
-        prev[0]=1
-        if(arr[0]<=target)
-    }
-    for(int i=1;i<n;i++){
-        for(int j=0;j<=target;j++){
-            int pick=0;
-            if(j>=arr[i]) pick=dp[i-1][j-arr[i]];
-            int notPick=dp[i-1][j];
-            dp[i][j]=(pick+notPick);
+class Node{
+    public:
+        int key;
+        int val;
+        int freq;
+        Node* next;
+        Node* prev;
+
+        Node(int key,int val){
+            this->key=key;
+            this->val=val;
+            this->freq=1;
+            this->next=nullptr;
+            this->prev=nullptr;
         }
-    }
-    return dp[n-1][0];
+};
+
+class List{
+    public:
+        int size;
+        Node* head;
+        Node* tail;
+        List(){
+            head=new Node(0,0);
+            tail=new Node(0,0);
+            head->next=tail;
+            tail->prev=head;
+            size=0;
+        }
+
+        void addFront(Node* node){
+            Node* temp=head->next;
+            head->next=node;
+            temp->prev=node;
+            node->prev=head;
+            node->next=temp;
+            size++;
+        }
+
+        void removeNode(Node* delNode){
+            Node* prevNode=delNode->prev;
+            Node* nextNode=delNode->next;
+            prevNode->next=nextNode;
+            nextNode->prev=prevNode;
+            size--;
+        }
+}
+
+class LFUCache{
+    public:
+        map<int,Node*> mpp;
+        map<int,List*> freqMap;
+        int maxSize;
+        int minFreq;
+        int currSize;
+
+        LFUCache(int capacity){
+            maxSize=capacity;
+            minFreq=0;
+            currSize=0;
+        }
+
+        void updateFreqListMap(Node* node){
+            freqMap[node->freq]->removeNode(node);
+            if(node->freq==minFreq && freqListMap[node->freq]->size==0) minFreq++;
+
+            List* nextHigherFreqList;
+            if(freqMap.find(node->freq+1)!=freqMap.end()) nextHigherFreqList=freqMap[node->freq+1];
+            else nextHigherFreqList=new List();
+            node->freq+=1;
+            nextHigherFreqList->addFront(node);
+            freqMap[node->freq]=nextHigherFreqList;
+            mpp[node->key]=node;
+
+        }
+
+        int get(int key){
+            if(mpp.find(key)!=mpp.end()){
+                Node* node=mpp[key];
+                int val=node->val;
+                updateFreqMap(node);
+                return val;
+            }
+            return -1;
+        }
+
+        void put(int key,int val){
+            if(maxSize==0) return;
+            if(mpp.find(key)!=mpp.end()){
+                Node* node=mpp[key];
+                node->val=val;
+                updateFreqMap(node);
+            }
+            else{
+                if(currSize==maxSize){
+                    List* list=freqMap[minFreq];
+                    mpp.erase(list->tail->prev->key);
+                    freqMap[minFreq]->removeNode(list->tail->prev);
+                    currSize--;
+                }
+                currSize++;
+
+                minFreq=1;
+                List* listFreq=new list();
+                if(freqMap.find(minFreq)!=freqMap.end()) listFreq=freqMap[minFreq];
+                listFreq->addFront(node);
+                mpp[key]=node;
+                freqMap[minFreq]=listFreq;
+            }
+        }
 }
 int main(){
     vector<int> arr={1,3,5};
