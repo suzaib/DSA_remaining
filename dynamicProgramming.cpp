@@ -1712,8 +1712,69 @@ int coinChangeII_memoization(vector<int> &arr,int k){
 int coinChangeII_tabulation(vector<int> &arr,int k){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (k+1,0));
-    
+    for(int i=0;i<n;i++) dp[i][0]=1;
+    for(int i=0;i<=k;i++) dp[0][i]=(i%arr[0]==0);
+    for(int i=1;i<n;i++){
+        for(int j=1;j<=k;j++){
+            int pick=0;
+            if(j>=arr[i]) pick=dp[i][j-arr[i]];
+            int notPick=dp[i-1][j];
+            dp[i][j]=(pick+notPick);
+        }
+    }
+    return dp[n-1][k];
 }
+//Two loops at the start running n and k times
+//Then two nested loop running for a total of nk times
+//Space is occupied due to dp table taking up nk space
+//Time Complexity will be O(nk+n+k)
+//Space Complexity will be O(nk)
+
+//Space Optimisation
+int coinChangeII_spaceOptimization(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> curr(k+1,0);
+    vector<int> prev(k+1,0);
+    for(int i=0;i<=k;i++) prev[i]=(i%arr[0]==0);
+    for(int i=1;i<n;i++){
+        for(int j=0;j<=k;j++){
+            int pick=0;
+            if(j>=arr[i]) pick=curr[j-arr[i]];
+            int notPick=prev[j];
+            curr[j]=(pick+notPick);
+        }
+        prev=curr;
+    }
+    return prev[k];
+}
+//One loop at the top running for k times
+//Two nested loops which run for a total of nk times
+//Two array occupy space of 2k
+//Time Complexity will be O(nk+k)
+//Space Complexity will be O(2k)
+
+//Further Optimization to single array
+int coinChangeII(vector<int> &arr,int k){
+    int n=arr.size();
+    vector<int> dp(k+1,0);
+    for(int i=0;i<=k;i++) dp[i]=(i%arr[0]==0);
+    for(int i=1;i<n;i++){
+        for(int j=0;j<=k;j++){
+            int pick=0;
+            if(j>=arr[i]) pick=dp[j-arr[i]];
+            int notPick=dp[j];
+            dp[j]=(pick+notPick);
+        }
+    }
+    return dp[k];
+}
+//One loop at start which takes k time
+//One nested loop which takes a total of nk time
+//Space is occupied due to the dp array of k size
+//Time Complexity will be O(nk+k)
+//Space Complexity will be O(k)
+
+
 
 //DP On Strings
 
