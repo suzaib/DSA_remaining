@@ -994,6 +994,54 @@ vector<int> courseScheduleII(int n,vector<pair<int,int>> schedule){
 //Space Complexity will be O(2V)
 
 
+//Find Eventual Safe States 
+//This time we will use bfs, and topological sort
+//The intuition is this
+//First reverse all the links of the directed graph
+//After doing this the terminal node will have indegree 0(observe)
+//Now apply the kahn's algorithm, pushing nodes with indeg 0 into queue, and when the queue is empty, those will be your safe states
+//Sort the answer array since the nodes we get at the end may be randomly arranged
+//First we create a function which reverses the links of a directed graph
+vector<vector<int>> reverseLinks(vector<vector<int>> &adj){
+    int n=adj.size();
+    vector<vector<int>> revAdj(n);
+    for(int i=0;i<n;i++){
+        for(auto it:adj[i]) revAdj[it].push_back(i);
+    }
+    return revAdj;
+}
+vector<int> eventualSafeStates(int n,vector<vector<int>> &adj){
+    adj=reverseLinks(adj);
+
+    //An indeg array stores the indeg
+    vector<int> inDeg(n,0);
+
+    //Now we loop through to set the indeg for various nodes
+    for(int i=0;i<n;i++){
+        for(auto it:adj[i]) inDeg[it]++;
+    }
+
+    queue<int> q;
+
+    //Another loop to find out the nodes having indeg 0
+    //We will push those nodes into the queue
+    for(int i=0;<n;i++){
+        if(inDeg[i]==0) q.push(i);
+    }
+
+    vector<int> ans;
+    while(!q.empty()){
+        int node=q.front();
+        q.pop();
+        ans.push_back(node);
+        for(auto it:adj[node]){
+            inDeg[it]--;
+            if(inDeg[it]==0) q.push(it);
+        }
+    }
+    sort(ans.begin(),and.end());
+    return ans;
+}
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
 //In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
