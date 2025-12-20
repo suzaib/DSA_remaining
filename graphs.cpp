@@ -37,6 +37,18 @@
 //So we make a matrix mat[6][6] and we fill mat[2][1]=1 and mat[1][2]=1 (for(2,1)) and so on for each , rest we fill as 0 , the 1 filled at a particular place tells us that there's a edge between those two indices
 //But for this we end up using NxM space which is quite much 
 
+/*Some important Notes regarding time complexity
+for(int i=0;i<n;i++){
+    for(auto it:adj[i]){
+        ....
+        }
+    }
+
+This code takes time V+E for directed graph
+And V+2E for undirected graph in worst case
+
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 vector<vector<int>> storeGraph_adjMatrix(int n,int m){
@@ -1010,38 +1022,55 @@ vector<vector<int>> reverseLinks(vector<vector<int>> &adj){
     }
     return revAdj;
 }
+//The nested loop runs for V+E times
+//V is vertex which is same as n , nodes
 vector<int> eventualSafeStates(int n,vector<vector<int>> &adj){
-    adj=reverseLinks(adj);
+    vector<vector<int>> revAdj=reverseLinks(adj);
 
-    //An indeg array stores the indeg
+    //An indeg array stores the indeg(for reversed graph)
     vector<int> inDeg(n,0);
+    //This also uses a time of O(N)
 
     //Now we loop through to set the indeg for various nodes
+    //This block of code could be written in the reversing Links code so it will beneficial
+    //But we have written it here since we wanted to conserve revLinks function only to reverse links
+    //Otherwise it is better that we set indeg when we are traversing to reverse the links
     for(int i=0;i<n;i++){
-        for(auto it:adj[i]) inDeg[it]++;
+        for(auto it:revAdj[i]) inDeg[it]++;
     }
-
+    //This runs for O(V+E)
     queue<int> q;
 
     //Another loop to find out the nodes having indeg 0
     //We will push those nodes into the queue
-    for(int i=0;<n;i++){
+    for(int i=0;i<n;i++){
         if(inDeg[i]==0) q.push(i);
     }
+    //This runs for O(N)
 
     vector<int> ans;
     while(!q.empty()){
         int node=q.front();
         q.pop();
         ans.push_back(node);
-        for(auto it:adj[node]){
+        for(auto it:revAdj[node]){
             inDeg[it]--;
             if(inDeg[it]==0) q.push(it);
         }
     }
-    sort(ans.begin(),and.end());
+    //This kahn algorithm runs for O(V+E)
+
+    sort(ans.begin(),ans.end());
+    //The sort function runs for about O(NlogN)
     return ans;
 }
+//The helper function takes time V+E
+//This function takes time of V+(V+E)+V+(V+E)+(VLogV)
+//Space is used for revAdj (V+E) and ans(V) and inDeg(V) and queue(V)
+//Time Complexity will be O(4V+2E+VlogV)
+//Space Complexity will be O(4V+E)
+
+
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
 //In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
@@ -1451,9 +1480,9 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
 
-//Done till 24, every lecture
-//Lecture 25
+//Done till 25, every lecture
 //Lecture 26
+
 //Lecture 28
 //Lecture 30 Word Ladder 2
 //Lecture 21

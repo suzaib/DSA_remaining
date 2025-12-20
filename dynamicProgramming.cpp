@@ -1905,6 +1905,40 @@ int longestCommonSubseq(string &s1,string &s2){
 
 
 //Printing The LCS
+//First part is to only print one lcs
+string printingLCS(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=(1+dp[i-1][j-1]);
+            else dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+        }
+    }
+
+    int len=dp[n][m];
+    string s(len,' ');
+
+    int i=n;
+    int j=m;
+    while(i>0 && j>0){
+        if(s1[i-1]==s2[j-1]){
+            s[len-1]=s1[i-1];
+            i--;
+            j--;
+            len--;
+        }
+        else if(dp[i][j-1]>dp[i-1][j]) j--;
+        else i--;
+    }
+    return s;
+}
+//Time Complexity will be O(MN + M+N)
+//Space Complexity will be O(MN)
+
+
+//Printing all lcs
 //Let's first create a function to create the dp table
 //Similar to the previous question
 vector<vector<int>> lcsTable(string &s1,string &s2){
@@ -1954,36 +1988,8 @@ set<string> allLCS(string &s1,string &s2){
     vector<vector<int>> dp=lcsTable(s1,s2);
     return backTrack(s1.size(),s2.size(),s1,s2,dp);
 }
-string printingLCS(string &s1,string &s2){
-    int n=s1.size();
-    int m=s2.size();
-    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
-    for(int i=1;i<=n;i++){
-        for(int j=1;j<=m;j++){
-            if(s1[i-1]==s2[j-1]) dp[i][j]=(1+dp[i-1][j-1]);
-            else dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
-        }
-    }
 
-    int len=dp[n][m];
-    string s(len,' ');
 
-    int i=n;
-    int j=m;
-    while(i>0 && j>0){
-        if(s1[i-1]==s2[j-1]){
-            s[len-1]=s1[i-1];
-            i--;
-            j--;
-            len--;
-        }
-        else if(dp[i][j-1]>dp[i-1][j]) j--;
-        else i--;
-    }
-    return s;
-}
-//Time Complexity will be O(MN + M+N)
-//Space Complexity will be O(MN)
 
 
 //The above code only prints one LCS
@@ -1998,7 +2004,7 @@ set<string> allLCS(string &s1,string s2){
 int lcssHelper_brute(int i,int j,string &s1,string &s2){
     if(i<0 || j<0) return 0;
     if(s1[i]==s2[j]) return 1+lcssHelper_brute(i-1,j-1,s1,s2);
-    else return 0;
+    return 0;
 }
 int longestCommonSubstr_brute(string &s1,string &s2){
     int n=s1.size();
@@ -3650,7 +3656,7 @@ int maxRectangle(vector<vector<int>> &mat){
 //Time Complexity will be O(3n2)
 //Space Complexity will be O(3n)
 
-
+//DP23 and there on
 //DP 30
 //DP 44 
 //Dp 23
