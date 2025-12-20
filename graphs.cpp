@@ -1191,9 +1191,9 @@ vector<int> dijkstrasAlgorithm_brute(int n,vector<vector<pair<int,int>>> &adj,in
     return dist;
 }
 //The outer loop will run for V times(or may be 2V or 3V times) and the inner loop will run at most E times
-//The Space is used by queue only, which can store all elements at worst case
+//The Space is used by queue only, which can store all edges in worst case
 //Time Complexity will be O(VE)
-//Space Complexity will be O(V)
+//Space Complexity will be O(E)
 
 //In brute force we travel by all paths, however we can reduce that time, if we take the smaller path first, this is the idea behind dijkstra's algorithm
 //Dijktra's Algorithm using priority queue
@@ -1485,8 +1485,7 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 
 //Lecture 28
 //Lecture 30 Word Ladder 2
-//Lecture 21
-//Dijkstra's Algorithm Lecture 34
+//Lecture 35 
 //Revise TC and SC for dijkstra's algorithm I and II
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
