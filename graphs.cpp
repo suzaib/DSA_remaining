@@ -1402,7 +1402,7 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
     for(int k=0;k<n;k++){
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-                if(i==j || (cost[i][k]==1e9 || cost[k][j]==1e9)) continue;
+                if(cost[i][k]==1e9 || cost[k][j]==1e9) continue;
                 cost[i][j]=min(cost[i][j],cost[i][k]+cost[k][j]);
             }
         }
@@ -1444,8 +1444,7 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 //Helps us to find the MST's weight and the MST itself
 //We will require two things, first is a priority queue(min heap, storing : wt, node, parent), and the other is a visited array
 
-//We will first write the function to give mst weight
-int primsAlgorithm(int n,vector<vector<int>> &adj){}
+//We have also calculated edgeWt in this function, in case we want to return edgeWt, we can just change the function and its return type
 vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
     vector<pair<int,int>> mst;
     vector<int> vis(n,0);
@@ -1455,25 +1454,31 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
     int sum=0;
     pq.push({0,0,-1});
     //We push the starting node with -1 as parent
-    while(!pq.empty()){
+    while(!pq.empty() && mst.size()<n-1){
         auto t=pq.top();
         int wt=t[0];
         int node=t[1];
         int parent=t[2];
-        if(parent!=-1) mst.push_back({node,parent});
+        pq.pop();
+        if(vis[node]) continue;
         sum+=wt;
         vis[node]=true;
-        pq.pop();
+        if(parent!=-1) mst.push_back({node,parent});
         for(auto it:adj[node]){
             int adjNode=it.first;
             int adjWt=it.second;
             if(vis[adjNode]) continue;
             pq.push({adjWt,adjNode,node});
-
-
         }
     }
 }
+//The pq can hold all the edges at max which is E, so the push and pop operations take logE time
+//This makes a total of ElogE
+//Since for a connected graph, E<=V2
+//Therefore the time taken will be ElogV
+//Visited array stores V element, so does mst array(2V), priority queue can hold at max E
+//Time Complexity will be O(ElogV)
+//Space Complexity will be O(3V+E)
 
 
 //Optimal Method for detect cycle in directed graph
@@ -1486,7 +1491,8 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 //Lecture 28
 //Lecture 30 Word Ladder 2
 //Lecture 35 
-//Revise TC and SC for dijkstra's algorithm I and II
+//Lecture 43
+//Revise TC and SC for dijkstra's algorithm  II
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
     cout<<countDistIslands(matrix);
