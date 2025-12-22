@@ -17,7 +17,7 @@ Form a index node which denotes range from 0-5 index, keep splitting it like the
 Now taking from these two the min value, we can fill the above node 0-1, which will get value 1(min of child nodes)
 Keep doing the same thing and your visual segment tree is formed
 
-Now comes the thing of drawing this tree in code, we will use a similar concept to heaps, just like heaps were also binary tree which were denoted through arrays, we do the same here
+Now let's draw this tree in code, we will use a similar concept to heaps, just like heaps were also binary tree which were denoted through arrays, we do the same here
 The first node will be node 0 and will be stored at index 0 of the segment array
 The left child will be 2*idx+1 and the right child will be 2*idx+2
 For memory, just start numbering the nodes from 0, level wise, and skip the numbers if the nodes aren't there
@@ -100,9 +100,98 @@ We will now discuss the time complexity for queries
 In case of complete or no overlap, we simply return, therefore time taken O(1)
 So we need to study the time taken in case of partial overlap only
 
-First let's consider small range, in that case most will return
+First let's consider small range, in that case most time we will get no overlap due to small range of query, and mostly we will have to travel to deepest point for only some time
+Therefore in case of small query range, time taken will be logn (time taken to reach the depth of tree)
 
+Incase of very large query range, most of the cases will be of complete overlap so we return mostly, again we can say that at max logn will be the time taken
+Incase of medium overlap we can also say that at max the depth of the tree will be covered since partial overlaps won't be that much
+Therefore Time Complexity will be O(logn), this can be 2logn or 3logn etc
+
+
+
+Solving a problem
+Consider two array arr1 and arr2 and we have to find min in l1,r1 and l2,r2 (1 refers to arr1 and 2 refers to arr2), and then give the overall minimum value
+Or we have to update the value of a particular index
+The first type of query is denoted by 1 and given as 1 (l1,r1),(l2,r2)
+The second type of query is denoted by 2 and given as 2 arrNo , ind, val (arrNo denoted in which arr we have to do the change)
+The obvious solution to the problem is to create two segment array for each tree and solve the problem individually for each tree and then find the minimum of both the answers (for query 1)
+For query type 2, we can update the segment arr of that particular tree, that's all
+
+A better way is to create a class template and create two objects, object1 and object2
 */
+
+#include<bits/stdc++.h>
+using namespace std;
+
+//Build function for segment trees
+void build(int idx,int low,int high,vector<int> &arr,vector<int> &seg){
+    if(low==high){
+        seg[idx]==arr[low];
+        return;
+    }
+    int mid=(low+high)>>1;
+    build(2*idx+1,low,mid,arr,seg);
+    build(2*idx+2,mid+1,high,arr,seg);
+    seg[idx]=min(seg[2*mid+1],seg[2*mid+2]);
+}
+
+//The query function
+int query(int idx,int low,int high,int l,int r,vector<int> &seg){
+
+    //No Overlap
+    if(l>high || r<low) return INT_MAX;
+
+    //Complete Overlap
+    if(l<=low && r>=high) return seg[idx];
+
+    //Partial Overlap
+    int mid=(low+high)>>1;
+    int left=query(2*idx+1,low,mid,l,r,seg);
+    int right=query(2*idx+2,mid+1,l,r,seg);
+    return min(left,right);
+}
+
+//The update code
+void update(int idx,int low,int high,int _idx,int val,vector<int> &seg){
+    if(low==high){
+        seg[_idx]=val;
+        return;
+    }
+    int mid=(low+high)>>1;
+    if(i<=mid) update(2*idx+1,low,high,_idx,val,seg);
+    else update(2*idx+2,low,high,_idx,val,seg);
+    seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
+}
+
+//The solve function 
+void solve(){
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+    vector<int> seg(4*n);
+    build(0,0,n-1,arr,seg);
+    int q;
+    cin>>q;
+    while(q--){
+        int type;
+        cin>>type;
+        if(type==1){
+            int l,r;
+            cin>>l>>r;
+            cout<<queury(0,0,n-1,l,r,seg)<<"\n";
+        }
+        else{
+            int i,val;
+            cin>>i>>val;
+            update(0,0,n-1,i,val,seg);
+            arr[i]=val;
+        }
+    }
+}
+
+
+///Start at 1:25:00
 
 int main(){
     //Your function

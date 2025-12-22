@@ -1775,7 +1775,57 @@ int coinChangeII(vector<int> &arr,int k){
 //Space Complexity will be O(k)
 
 
+//Unbounded Knapsack
+//Similar to 0/1 Knapsack but this time we have an unlimited supply of items
+int unboundedKnapsackHelper_brute(int idx,int maxWt,vector<int> &wt,vector<int> &val){
+    if(maxWt==0) return 0;
+    if(idx==0){
+        int k=maxWt/wt[idx];
+        return val[idx]*k;
+    }
+    int take=0;
+    if(maxWt>=wt[idx]) take=val[idx]+unboundedKnapsackHelper_brute(idx,maxWt-wt[idx],wt,val);
+    int notTake=unboundedKnapsackHelper_brute(idx-1,maxWt,wt,val);
+    return max(take,notTake);
+}
+int unboundedKnapsack_brute(int maxWt,vector<int> &wt,vector<int> &val){
+    int n=wt.size();
+    return unboundedKnapsackHelper_brute(n-1,maxWt,wt,val);
+}
+//The code will run for exponential time
+//A recursion stack space will be used for the problem which will be equal to W(max wt)(consider an item has wt 1, in that case the depth of recursion stack will be equal to maxWt)
+//Time Complexity will be exponential
+//Space Complexity will be O(W)
 
+//Memoization
+int unboundedKnapsackHelper_memoization(int idx,int maxWt,vector<int> &wt,vector<int> &val,vector<vector<int>> &dp){
+    if(dp[idx][maxWt]!=-1) return dp[idx][maxWt];
+    if(maxWt==0) return 0;
+    if(idx==0){
+        int k=maxWt/wt[idx];
+        return dp[idx][maxWt]=val[idx]*k;
+    }
+    int take=0;
+    if(maxWt>=wt[idx]) take=val[idx]+unboundedKnapsackHelper_memoization(idx,maxWt-wt[idx],wt,val,dp);
+    int notTake=unboundedKnapsackHelper_memoization(idx-1,maxWt,wt,val,dp);
+    return dp[idx][maxWt]=max(take,notTake);
+}
+int unboundedKnapsack_memoization(int maxWt,vector<int> &wt,vector<int> &val){
+    int n=wt.size();
+    vector<vector<int>> dp(n,vector<int> (maxWt+1,-1));
+    return unboundedKnapsackHelper_memoization(n-1,maxWt,wt,val,dp);
+}
+//The code runs to fill all the dp states which are n*w in total
+//The code takes space for dp table and the recursion stack space of W is also used
+//Time Complexity will be O(nw)
+//Space Complexity will be O(nw+w)
+
+//Tabulation
+int unboundedKnapsack_tabulation(int maxWt,vector<int> &wt,vector<int> &val){
+    int n=wt.size();
+    vector<vector<int>> dp(n,vector<int> (maxWt+1,0));
+    
+}
 //DP On Strings
 
 //Longest Common Subsequence
@@ -2493,52 +2543,52 @@ int buySellStocksIV(vector<int> &arr,int k){
 //Space Complexity will be O(2k)
 
 
-//DP On Stocks IV
+//DP On Stocks V
 //Buying and Selling with cooldown
 //We can't buy immediately after selling, unlimited transactions
-int stocksIVHelper_brute(int idx,int canBuy,vector<int> &arr){
+int stocksVHelper_brute(int idx,int canBuy,vector<int> &arr){
     if(idx>=arr.size()) return 0;
     int profit;
     if(canBuy){
-        int buy=-arr[idx]+stocksIVHelper_brute(idx+1,0,arr);
-        int notBuy=stocksIVHelper_brute(idx+1,1,arr);
+        int buy=-arr[idx]+stocksVHelper_brute(idx+1,0,arr);
+        int notBuy=stocksVHelper_brute(idx+1,1,arr);
         profit=max(buy,notBuy);
     }
     else{
-        int sell=arr[idx]+stocksIVHelper_brute(idx+2,1,arr);
-        int notSell=stocksIVHelper_brute(idx+1,0,arr);
+        int sell=arr[idx]+stocksVHelper_brute(idx+2,1,arr);
+        int notSell=stocksVHelper_brute(idx+1,0,arr);
         profit=max(sell,notSell);
     }
     return profit;
 }
-int buySellStocksIV_brute(vector<int> &arr){
-    return stocksIVHelper_brute(0,1,arr);
+int buySellStocksV_brute(vector<int> &arr){
+    return stocksVHelper_brute(0,1,arr);
 }
 //At each index two calls are made ; buy/skip, sell/skip, therefore total of 2^n calls
 //Time Complexity will be O(pow(2,n)) (exponential)
 //Space Complexity will be O(n) (just recursion stack space)
 
 //Memoization
-int stocksIVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,vector<int> &arr){
+int stocksVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,vector<int> &arr){
     if(idx>=arr.size()) return 0;
     if(dp[idx][canBuy]!=-1) return dp[idx][canBuy];
     int profit;
     if(canBuy){
-        int buy=-arr[idx]+stocksIVHelper_memoization(idx+1,0,dp,arr);
-        int notBuy=stocksIVHelper_memoization(idx+1,1,dp,arr);
+        int buy=-arr[idx]+stocksVHelper_memoization(idx+1,0,dp,arr);
+        int notBuy=stocksVHelper_memoization(idx+1,1,dp,arr);
         profit=max(buy,notBuy);
     }
     else{
-        int sell=arr[idx]+stocksIVHelper_memoization(idx+2,1,dp,arr);
-        int notSell=stocksIVHelper_memoization(idx+1,0,dp,arr);
+        int sell=arr[idx]+stocksVHelper_memoization(idx+2,1,dp,arr);
+        int notSell=stocksVHelper_memoization(idx+1,0,dp,arr);
         profit=max(sell,notSell);
     }
     return dp[idx][canBuy]=profit;
 }
-int buySellStocksIV_memoization(vector<int> &arr){
+int buySellStocksV_memoization(vector<int> &arr){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (1,-1));
-    return stocksIVHelper_memoization(0,1,dp,arr);
+    return stocksVHelper_memoization(0,1,dp,arr);
 }
 //There are only n*2 different indices that needs to be computed due to memoization
 //A DP array of 2n is used and recursion stack space of n is also used
@@ -2546,7 +2596,7 @@ int buySellStocksIV_memoization(vector<int> &arr){
 //Space Complexity will be O(2n+n) 
 
 //Tabulation
-int buySellStocksIV_tabulation(vector<int> &arr){
+int buySellStocksV_tabulation(vector<int> &arr){
     int n=arr.size();
     vector<vector<int>> dp(n+2,vector<int> (2,0));
     for(int i=n-1;i>=0;i--){
@@ -2571,7 +2621,7 @@ int buySellStocksIV_tabulation(vector<int> &arr){
 //Space Complexity will be O(2n+4)
 
 //Space Optimization
-int buySellStocksIV(vector<int> &arr){
+int buySellStocksV(vector<int> &arr){
     int n=arr.size();
     vector<int> front2(2,0);
     vector<int> front1(2,0);
@@ -2590,25 +2640,25 @@ int buySellStocksIV(vector<int> &arr){
 
 
 
-//DP on Stocks V
+//DP on Stocks VI
 //A transaction fee is applied for each transaction
-int stocksVHelper_brute(int idx,int canBuy,vector<int> &arr,int fee){
+int stocksVIHelper_brute(int idx,int canBuy,vector<int> &arr,int fee){
     if(idx==arr.size()) return 0;
     int profit;
     if(canBuy){
-        int buy=-arr[idx]+stocksVHelper_brute(idx+1,0,arr,fee);
-        int notBuy=stocksVHelper_brute(idx+1,1,arr,fee);
+        int buy=-arr[idx]+stocksVIHelper_brute(idx+1,0,arr,fee);
+        int notBuy=stocksVIHelper_brute(idx+1,1,arr,fee);
         profit=max(buy,notBuy);
     }
     else{
-        int sell=arr[idx]-fee+stocksVHelper_brute(idx+1,1,arr,fee);
-        int notSell=stocksVHelper_brute(idx+1,0,arr,fee);
+        int sell=arr[idx]-fee+stocksVIHelper_brute(idx+1,1,arr,fee);
+        int notSell=stocksVIHelper_brute(idx+1,0,arr,fee);
         profit=max(sell,notSell);
     }
     return profit;
 }
-int buySellStocksV_brute(vector<int> &arr,int fee){
-    return stocksVHelper_brute(0,1,arr,fee);
+int buySellStocksVI_brute(vector<int> &arr,int fee){
+    return stocksVIHelper_brute(0,1,arr,fee);
 }
 //At each step we have two options, can buy or can't buy, and there are a total of n such steps
 //Recursion stack space is used which is equal to n
@@ -2616,32 +2666,32 @@ int buySellStocksV_brute(vector<int> &arr,int fee){
 //Space Complexity will be O(n) 
 
 //Memoization
-int stocksVHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,int fee, vector<int> &arr){
+int stocksVIHelper_memoization(int idx,int canBuy,vector<vector<int>> &dp,int fee, vector<int> &arr){
     if(idx==arr.size()) return 0;
     if(dp[idx][canBuy]!=-1) return dp[idx][canBuy];
     int profit;
     if(canBuy){
-        int buy=-arr[idx]+stocksVHelper_memoization(idx+1,0,dp,fee,arr);
-        int notBuy=stocksVHelper_memoization(idx+1,1,dp,fee,arr);
+        int buy=-arr[idx]+stocksVIHelper_memoization(idx+1,0,dp,fee,arr);
+        int notBuy=stocksVIHelper_memoization(idx+1,1,dp,fee,arr);
         profit=max(buy,notBuy);
     }
     else{
-        int sell=arr[idx]-fee+stocksVHelper_memoization(idx+1,1,dp,fee,arr);
-        int notSell=stocksVHelper_memoization(idx+1,0,dp,fee,arr);
+        int sell=arr[idx]-fee+stocksVIHelper_memoization(idx+1,1,dp,fee,arr);
+        int notSell=stocksVIHelper_memoization(idx+1,0,dp,fee,arr);
         profit=max(sell,notSell);
     }
     return dp[idx][canBuy]=profit;
 }
-int buySellStocksV_memoization(vector<int> &arr,int fee){
+int buySellStocksVI_memoization(vector<int> &arr,int fee){
     int n=arr.size();
     vector<vector<int>> dp(n,vector<int> (2,-1));
-    return stocksVHelper_memoization(0,1,dp,fee,arr);
+    return stocksVIHelper_memoization(0,1,dp,fee,arr);
 }
 //Time Complexity will be O(2N)
 //Space Complexity will be O(N+2N)
 
 //Tabulation
-int buySellStocksV_tabulation(vector<int> &arr,int fee){
+int buySellStocksVI_tabulation(vector<int> &arr,int fee){
     int n=arr.size();
     vector<vector<int>> dp(n+1,vector<int> (2,0));
     for(int idx=n-1;idx>=0;idx--){
@@ -2666,7 +2716,7 @@ int buySellStocksV_tabulation(vector<int> &arr,int fee){
 //Space Complexity will be O(2n)
 
 //Space Optimization
-int buySellStocks_spaceOptimized(vector<int> &arr,int fee){
+int buySellStocksVI_spaceOptimized(vector<int> &arr,int fee){
     int n=arr.size();
     vector<int> curr(2,0);
     vector<int> above(2,0);
