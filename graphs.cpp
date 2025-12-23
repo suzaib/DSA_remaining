@@ -1498,7 +1498,7 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 
 //Lecture 28
 //Lecture 30 Word Ladder 2
-//Lecture 35 
+//Lecture 36
 //Lecture 43
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
