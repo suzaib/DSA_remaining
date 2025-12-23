@@ -1824,9 +1824,78 @@ int unboundedKnapsack_memoization(int maxWt,vector<int> &wt,vector<int> &val){
 int unboundedKnapsack_tabulation(int maxWt,vector<int> &wt,vector<int> &val){
     int n=wt.size();
     vector<vector<int>> dp(n,vector<int> (maxWt+1,0));
-    
+    for(int i=0;i<=maxWt;i++){
+        int k=i/wt[0];
+        dp[0][i]=val[0]*k;
+    }
+
+    for(int i=1;i<n;i++){
+        for(int j=0;j<=maxWt;j++){
+            int take=0;
+            if(j>=wt[i]) take=val[i]+dp[i][j-wt[i]];
+            int notTake=dp[i-1][j];
+            dp[i][j]=max(take,notTake);
+        }
+    }
+    return dp[n-1][maxWt];
 }
+//The code runs for two nested loops which take nw in total
+//There is also another loop at the top which runs for w time
+//Space is occupied by the dp array of nw size
+//Time Complexity will be O(nw+w)
+//Space Complexity will be O(nw)
 //DP On Strings
+
+//Space Optimisation
+int unboundedKnapsack_spaceOptimisation(int maxWt,vector<int> &wt,vector<int> &val){
+    int n=wt.size();
+    vector<int> prev(maxWt+1,0);
+    for(int i=0;i<=maxWt;i++){
+        int k=(i/wt[0]);
+        prev[i]=val[0]*k;
+    }
+
+    for(int i=1;i<n;i++){
+        vector<int> curr(maxWt+1,0);
+        for(int j=0;j<=maxWt;j++){
+            int take=0;
+            if(j>=wt[i]) take=val[i]+curr[j-wt[i]];
+            int notTake=prev[j];
+            curr[j]=max(take,notTake);
+        }
+        prev=curr;
+    }
+    return prev[maxWt];
+}
+//The code runs for a nested loop which takes a time nw and another loop at the start which takes a time of w
+//Space is occupied by two arrays of w size
+//Time Complexity will be O(nw+w)
+//Space Complexity will be O(2w)
+
+//Further Optimisation
+//In such cases we can also optimise the loop itself
+int unboundedKnapsack(int maxWt,vector<int> &wt,vector<int> &val){
+    int n=wt.size();
+    vector<int> dp(maxWt+1,0);
+    for(int i=0;i<=maxWt;i++){
+        int k=(i/wt[0]);
+        dp[i]=val[0]*k;
+    }
+
+    for(int i=1;i<n;i++){
+        for(int j=wt[i];j<=maxWt;j++){
+            dp[j]=max(dp[j],val+dp[j-wt[i]]);
+        }
+    }
+    return dp[maxWt];
+}
+//The code runs two loop, one takes w time and the other is a nested loop taking a time of nw
+//A dp array is used which takes w size
+//Time Complexity will be O(nw+w)
+//Space Complexity will be O(w)
+
+
+
 
 //Longest Common Subsequence
 //Two Strings given and you have to find the longest common subsequence between them
