@@ -1506,6 +1506,13 @@ Hence the whole of disjoint set data structure works in 4*alpha
 There are two kinds of parent, think of a binary tree, when we say parent, we mean the node just above, but there is also a thing called ultimate parent
 Ultimate parent means like the root, the person sitting at the top most level
 
+Since we often need to find the ultimate parent, therefore we use path compression
+Path compression is done using backtracking, a sample code is given as 
+findParent(u){
+    if(u==parent[u]) return u
+    findParent(parent[u])
+}
+
 */
 //Watch the video for further explanation
 
