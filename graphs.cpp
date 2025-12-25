@@ -1573,6 +1573,10 @@ class DisjointSet{
     //Time Complexity will be O(4*alpha)
 }
 
+
+//Kruskal's Algorithm
+//This algorithm is used to find the minimum spanning tree of a graph
+//This time we have a graph having edge weights
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
