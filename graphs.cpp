@@ -1481,13 +1481,31 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 //Space Complexity will be O(3V+E)
 
 
-//Disjoint Set
-//Consider a graph with two components(disconnected from each other), as 1->2->3 and 5->6
-//If someone asks us to check if 1 and 2 are connected the only option we have is to traverse from 1 and see if we reach 5 or not
-//However this takes too much time O(V+E)
-//Disjoint Set concepts allows us to do so in constant time
-//Disjoint Sets are used for dynamic graphs which keeps on changing with time
-//Disjoint Sets gives two functionalities, one is to find the parent the other is to find the union(can be done in two methods, rank or size)
+/*
+Disjoint Set
+Consider a graph with two components(disconnected from each other), as 1->2->3 and 5->6
+If someone asks us to check if 1 and 2 are connected the only option we have is to traverse from 1 and see if we reach 5 or not
+However this takes too much time O(V+E)
+Disjoint Set concepts allows us to do so in constant time
+Disjoint Sets are used for dynamic graphs which keeps on changing with time
+Disjoint Sets gives two functionalities, one is to find the parent the other is to find the union(can be done in two methods, rank or size)
+The union operation can be implemented in two ways, either by using the rank method or by using the size method
+
+Base Code for Union Operation
+Union(u,v){
+    //Step 1). Find ultimate parent of u(say pu) and ultimate parent of v(say pv)
+    //Step 2). Find rank of pu and pv
+    //Step 3). Connect smaller rank to larger rank always (Incase they are equal, you can connect in any order)
+}
+
+The findParent() function as well as the union functiont takes time equal to 4*alpha, which is mathematically proven and has a very long proof. 
+The value of alpha is extremely small and so the time is almost constant
+
+There are two kinds of parent, think of a binary tree, when we say parent, we mean the node just above, but there is also a thing called ultimate parent
+Ultimate parent means like the root, the person sitting at the top most level
+*/
+//Watch the video for further explanation
+
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
