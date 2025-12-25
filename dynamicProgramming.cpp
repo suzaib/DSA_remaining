@@ -1895,6 +1895,94 @@ int unboundedKnapsack(int maxWt,vector<int> &wt,vector<int> &val){
 //Space Complexity will be O(w)
 
 
+//Rod Cutting Problem
+int rodCuttingHelper_brute(int pieceLength,int reqLength,vector<int> &cost){
+    if(pieceLength==0) return 0;
+    if(pieceLength==1) return reqLength*cost[0];
+    int notTake=0+rodCuttingHelper_brute(pieceLength-1,reqLength,cost);
+    int take=INT_MIN;
+    if(pieceLength<=reqLength) take=cost[pieceLength-1]+rodCuttingHelper_brute(pieceLength,reqLength-pieceLength,cost);
+    return max(take,notTake);
+}
+int rodCutting_brute(int n,vector<int> &cost){
+    return rodCuttingHelper_brute(n,n,cost);
+}
+//The code will run exponentially
+//Space will be used by recursion stack which will be of size n
+//Time Complexity will be exponential
+//Space Complexity will be O(n)
+
+//Memoization
+int rodCuttingHelper_memoization(int pieceLength,int reqLength,vector<int> &cost,vector<vector<int>> &dp){
+    if(dp[pieceLength][reqLength]!=-1) return dp[pieceLength][reqLength];
+    if(pieceLength==0) return dp[pieceLength][reqLength]=0;
+    if(pieceLength==1) return dp[pieceLength][reqLength]=reqLength*cost[0];
+    int notTake=0+rodCuttingHelper_memoization(pieceLength-1,reqLength,cost,dp);
+    int take=INT_MIN;
+    if(pieceLength<=reqLength) take=cost[pieceLength-1]+rodCuttingHelper_memoization(pieceLength,reqLength-pieceLength,cost,dp);
+    return dp[pieceLength][reqLength]=max(take,notTake);
+}
+int rodCutting_memoization(int n,vector<int> &cost){
+    vector<vector<int>> dp(n+1,vector<int> (n+1,-1));
+    return rodCuttingHelper_memoization(n,n,cost,dp);
+}
+//The code runs to fill all dp states which are n*n
+//Space is occupied due to the dp array and the recursion stack
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n2+n)
+
+//Tabulation
+int rodCutting_tabulation(int n,vector<int> &cost){
+    vector<vector<int>> dp(n+1,vector<int> (n+1,0));
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            int notTake=dp[i-1][j];
+            int take=(j>=i? cost[i-1]+dp[i][j-i]:0);
+            dp[i][j]=max(take,notTake);
+        }
+    }
+    return dp[n][n];
+}
+//The code runs for two nested loops
+//Space is used by the dp table
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n2)
+
+//Space Optimisation
+int rodCutting_spaceOptimised(int n,vector<int> &cost){
+    vector<int> curr(n+1,0);
+    vector<int> prev(n+1,0);
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=n;j++){
+            int notTake=prev[j];
+            int take=0;
+            if(j>=i) take=cost[i-1]+curr[j-i];
+            curr[j]=max(take,notTake);
+        }
+        prev=curr;
+    }
+    return prev[n];
+}
+//The code runs for the nested loop
+//Space is used by two arrays of n size
+//Time Complexity will be O(n2)
+//Space Complexity will be O(2n)
+
+//Further Optimization
+int rodCutting(int n,vector<int> &cost){
+    vector<int> dp(n+1,0);
+    for(int i=1;i<=n;i++){
+        for(int j=i;j<=n;j++) dp[j]=max(dp[j],cost[i-1]+dp[j-i]);
+    }
+    return dp[n];
+}
+//The code runs for the nested loop
+//Space is used by a single dp array of size n
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n)
+
+
+
 
 
 //Longest Common Subsequence
