@@ -1503,6 +1503,7 @@ The value of alpha is extremely small and so the time is almost constant
 
 There are two kinds of parent, think of a binary tree, when we say parent, we mean the node just above, but there is also a thing called ultimate parent
 Ultimate parent means like the root, the person sitting at the top most level
+
 */
 //Watch the video for further explanation
 
