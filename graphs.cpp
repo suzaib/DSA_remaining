@@ -1500,6 +1500,7 @@ Union(u,v){
 
 The findParent() function as well as the union functiont takes time equal to 4*alpha, which is mathematically proven and has a very long proof. 
 The value of alpha is extremely small and so the time is almost constant
+Hence the whole of disjoint set data structure works in 4*alpha
 
 There are two kinds of parent, think of a binary tree, when we say parent, we mean the node just above, but there is also a thing called ultimate parent
 Ultimate parent means like the root, the person sitting at the top most level
