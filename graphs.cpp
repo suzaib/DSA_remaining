@@ -1521,10 +1521,12 @@ class DisjointSet{
     private:
         vector<int> rank;
         vector<int> parent; 
+        vector<int> count;
     
     public:
     DisjointSet(int n){
         rank.resize(n+1,0);//We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
+        count.resize(n+1,1);
         parent.resize(n+1);
         iota(parent.begin(),parent.end(),0);
     }
@@ -1544,6 +1546,28 @@ class DisjointSet{
         //Now we reattach them on the basis of their rank
         if(rank[pu]<rank[pv]) parent[pu]=pv;
         else if(rank[pu]>rank[pv]) parent[pv]=pu;
+        else{
+            parent[pv]=pu;
+            rank[pu]++;
+        }
+    }
+
+    void unionBySize(int u,int v){
+        int pu=findUltimatePar(u);
+        int pv=findUltimatePar(v);
+
+        //If they have same ultimate parent, no need to do anything, simply return
+        if(pu==pv) return;
+
+        //Now we attach the component having a smaller size(count) to the one having larger size(count)
+        if(count[pu]<count[pv]){
+            parent[pu]=pv;
+            count[pv]+=count[pu];
+        }
+        else{
+            parent[pv]=pu;
+            count[pu]+=count[pv];
+        }
     }
 }
 
