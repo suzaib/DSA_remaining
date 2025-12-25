@@ -1551,6 +1551,7 @@ class DisjointSet{
             rank[pu]++;
         }
     }
+    //Time Complexity will be O(4*alpha)
 
     void unionBySize(int u,int v){
         int pu=findUltimatePar(u);
@@ -1569,6 +1570,7 @@ class DisjointSet{
             count[pu]+=count[pv];
         }
     }
+    //Time Complexity will be O(4*alpha)
 }
 
 //Optimal Method for detect cycle in directed graph
