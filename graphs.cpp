@@ -1471,6 +1471,7 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
             pq.push({adjWt,adjNode,node});
         }
     }
+    return mst;
 }
 //The pq can hold all the edges at max which is E, so the push and pop operations take logE time
 //This makes a total of ElogE
@@ -1576,9 +1577,39 @@ class DisjointSet{
 
 //Kruskal's Algorithm
 //This algorithm is used to find the minimum spanning tree of a graph
-//This time we have a graph having edge weights
+//The algorithm is extremely easy, watch the video once
+vector<pair<int,int>> kruskalsAlgorithm(int n,vector<vector<vector<int>>> &adj){
+    vector<pair<int,pair<int,int>>> edges;
+    for(int i=0;i<n;i++){
+        for(auto it:adj[i]){
+            int adjNode=it[0];
+            int wt=it[1];
+            int node=i;
+            if(i<adjNode) edges.push_back({wt,{node,adjNode}});
+        }
+    }
+    sort(edges.begin(),edges.end());
+
+    //Now we create a disjoing set with v vertices
+    DisjointSet ds(n);
+    vector<pair<int,int>> mst;
+    int mstWt=0;
+    for(auto it:edges){
+        int wt=it.first;
+        int u=it.second.first;
+        int v=it.second.second;
+
+        if(ds.findUltimatePar(u)!=ds.findUltimatePar(v)){
+            ds.unionByRank(u,v);
+            mst.push_back({u,v});
+            mstWt+=wt;
+        }
+    }
+    return mst;
+}
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
+
 
 //Done till 25, every lecture
 //Lecture 26
