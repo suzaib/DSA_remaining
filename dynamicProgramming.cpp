@@ -3863,7 +3863,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //Time Complexity will be O(3n2)
 //Space Complexity will be O(3n)
 
-//DP23 and there on
 //DP 30
 //DP 44 
 //Dp 23
