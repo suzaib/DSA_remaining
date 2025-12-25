@@ -1483,6 +1483,7 @@ vector<pair<int,int>> primsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
 
 /*
 Disjoint Set
+This is not a graph, this is a separate data structure
 Consider a graph with two components(disconnected from each other), as 1->2->3 and 5->6
 If someone asks us to check if 1 and 2 are connected the only option we have is to traverse from 1 and see if we reach 5 or not
 However this takes too much time O(V+E)
