@@ -1542,8 +1542,8 @@ class DisjointSet{
         if(pu==pv) return;
 
         //Now we reattach them on the basis of their rank
-        if(rand[pu]<rank[pv]) parent[pu]=pv;
-        else 
+        if(rank[pu]<rank[pv]) parent[pu]=pv;
+        else if(rank[pu]>rank[pv]) parent[pv]=pu;
     }
 }
 
