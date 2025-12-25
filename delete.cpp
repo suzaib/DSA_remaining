@@ -1,12 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int helper(int pieceLength,int currLength,vector<int> &cost){
-    int take=INT_MIN;
-    if(pieceLength<=currLength) take=cost[pieceLength-1]+helper(pieceLength,currLength-pieceLength,cost);
+int helper(int idx,int prevIdx,int n,vector<int> &arr){
+    
 }
-int rodCuttingHelper(int n,vector<int> &cost){
-    return helper(n,n,cost);
+int lis(vector<int> &arr){
+    int n=arr.size();
+    return helper(0,-1,n,arr);
 }
 int main(){
     vector<int> arr={1,3,5};
