@@ -1517,6 +1517,35 @@ findParent(u){
 We will form a class so that our code can be used for multiple times
 */
 
+class DisjointSet{
+    private:
+        vector<int> rank;
+        vector<int> parent; 
+    
+    public:
+    DisjointSet(int n){
+        rank.resize(n+1,0);//We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
+        parent.resize(n+1);
+        iota(parent.begin(),parent.end(),0);
+    }
+
+    findUltimatePar(int node){
+        if(node==parent[node]) return node;
+        return parent[node]=findUltimatePar(parent[node]);//The path compression technique
+    }
+
+    void unionByRank(int u,int v){
+        int pu=findUltimatePar(u);
+        int pv=findUltimatePar(v);
+
+        //If they belong to the same component, that is their ultimate parents are the same, no need to do anything, simply return
+        if(pu==pv) return;
+
+        //Now we reattach them on the basis of their rank
+        if(rand[pu]<rank[pv]) parent[pu]=pv;
+        else 
+    }
+}
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
