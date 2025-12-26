@@ -1501,9 +1501,9 @@ Union(u,v){
     //Step 3). Connect smaller rank to larger rank always (Incase they are equal, you can connect in any order)
 }
 
-The findParent() function as well as the union functiont takes time equal to 4*alpha, which is mathematically proven and has a very long proof. 
-The value of alpha is extremely small and so the time is almost constant
-Hence the whole of disjoint set data structure works in 4*alpha
+The findParent() function as well as the union functiont takes time equal to 4*a(a is alpha), which is mathematically proven and has a very long proof. 
+The value of a is extremely small and so the time is almost constant
+Hence the whole of disjoint set data structure works in 4*a
 
 There are two kinds of parent, think of a binary tree, when we say parent, we mean the node just above, but there is also a thing called ultimate parent
 Ultimate parent means like the root, the person sitting at the top most level
@@ -1519,81 +1519,81 @@ We will form a class so that our code can be used for multiple times
 */
 
 class DisjointSet{
-    private:
+    public:
         vector<int> rank;
         vector<int> parent; 
         vector<int> count;
-    
-    public:
-    DisjointSet(int n){
-        rank.resize(n+1,0);//We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
-        count.resize(n+1,1);
-        parent.resize(n+1);
-        iota(parent.begin(),parent.end(),0);
-    }
-
-    findUltimatePar(int node){
-        if(node==parent[node]) return node;
-        return parent[node]=findUltimatePar(parent[node]);//The path compression technique
-    }
-
-    void unionByRank(int u,int v){
-        int pu=findUltimatePar(u);
-        int pv=findUltimatePar(v);
-
-        //If they belong to the same component, that is their ultimate parents are the same, no need to do anything, simply return
-        if(pu==pv) return;
-
-        //Now we reattach them on the basis of their rank
-        if(rank[pu]<rank[pv]) parent[pu]=pv;
-        else if(rank[pu]>rank[pv]) parent[pv]=pu;
-        else{
-            parent[pv]=pu;
-            rank[pu]++;
+        DisjointSet(int n){
+            rank.resize(n+1,0);//We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
+            count.resize(n+1,1);
+            parent.resize(n+1);
+            iota(parent.begin(),parent.end(),0);
         }
-    }
-    //Time Complexity will be O(4*alpha)
 
-    void unionBySize(int u,int v){
-        int pu=findUltimatePar(u);
-        int pv=findUltimatePar(v);
-
-        //If they have same ultimate parent, no need to do anything, simply return
-        if(pu==pv) return;
-
-        //Now we attach the component having a smaller size(count) to the one having larger size(count)
-        if(count[pu]<count[pv]){
-            parent[pu]=pv;
-            count[pv]+=count[pu];
+        findUltimatePar(int node){
+            if(node==parent[node]) return node;
+            return parent[node]=findUltimatePar(parent[node]);//The path compression technique
         }
-        else{
-            parent[pv]=pu;
-            count[pu]+=count[pv];
+
+        void unionByRank(int u,int v){
+            int pu=findUltimatePar(u);
+            int pv=findUltimatePar(v);
+
+            //If they belong to the same component, that is their ultimate parents are the same, no need to do anything, simply return
+            if(pu==pv) return;
+
+            //Now we reattach them on the basis of their rank
+            if(rank[pu]<rank[pv]) parent[pu]=pv;
+            else if(rank[pu]>rank[pv]) parent[pv]=pu;
+            else{
+                parent[pv]=pu;
+                rank[pu]++;
+            }
         }
-    }
-    //Time Complexity will be O(4*alpha)
+        //Time Complexity will be O(4*a)
+
+        void unionBySize(int u,int v){
+            int pu=findUltimatePar(u);
+            int pv=findUltimatePar(v);
+
+            //If they have same ultimate parent, no need to do anything, simply return
+            if(pu==pv) return;
+
+            //Now we attach the component having a smaller size(count) to the one having larger size(count)
+            if(count[pu]<count[pv]){
+                parent[pu]=pv;
+                count[pv]+=count[pu];
+            }
+            else{
+                parent[pv]=pu;
+                count[pu]+=count[pv];
+            }
+        }
+        //Time Complexity will be O(4*a)
 }
 
 
 //Kruskal's Algorithm
 //This algorithm is used to find the minimum spanning tree of a graph
 //The algorithm is extremely easy, watch the video once
-vector<pair<int,int>> kruskalsAlgorithm(int n,vector<vector<vector<int>>> &adj){
+vector<pair<int,int>> kruskalsAlgorithm(int n,vector<vector<pair<int,int>>> &adj){
     vector<pair<int,pair<int,int>>> edges;
     for(int i=0;i<n;i++){
         for(auto it:adj[i]){
-            int adjNode=it[0];
-            int wt=it[1];
+            int adjNode=it.first;
+            int wt=it.second;
             int node=i;
-            if(i<adjNode) edges.push_back({wt,{node,adjNode}});
+            if(i<adjNode) edges.push_back({wt,{node,adjNode}});//This line is to avoid duplicate insertions in undirected graphs
         }
     }
     sort(edges.begin(),edges.end());
-
+    //Uses mlogm time
     //Now we create a disjoing set with v vertices
     DisjointSet ds(n);
     vector<pair<int,int>> mst;
     int mstWt=0;
+
+    //This takes m*4*a time
     for(auto it:edges){
         int wt=it.first;
         int u=it.second.first;
@@ -1607,6 +1607,67 @@ vector<pair<int,int>> kruskalsAlgorithm(int n,vector<vector<vector<int>>> &adj){
     }
     return mst;
 }
+
+
+//Number of provinces
+//Count the number of unique ultimate parents or a better way to count the number of nodes which are same as their utimate parents
+//We will use a adjacency matrix this time
+//The graph is undirected
+int numberOfProvincesII(int n,vector<vector<int>> &adj){
+    DisjointSet ds(n);
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if(adj[i][j]==1){
+                int pu=ds.findUltimatePar(i);
+                int pv=ds.findUltimatePar(j);
+                if(pu==pv) continue;
+                ds.unionByRank(pu,pv);
+            }
+        }
+    }
+    //This loop runs for n*n*4*a
+
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        if(ds.parent[i]==i) cnt++; //We could also use ds.findUltimatePar(i)==i, but this is more optimal
+    }
+    //This loop runs for n
+
+    return cnt;
+}
+//Time Complexity will be O(n2)
+
+
+//Number of operations to make network connected
+//This is simple, first find out how many extra edges we have
+//Then find out the number of connected components
+int numberOfOperations(int n,vector<vector<int>> &edges){
+    DisjointSet ds(n);
+
+    //First we need to count how many extra edges do we have
+    int extraEdges=0;
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        if(ds.findUltimatePar(u)==ds.findUltimatePar(v)) extraEdges++;
+        else ds.unionByRank(u,v);
+    }
+    //This code will run about E*4*a
+
+    //Now we need to do something very similar like the previous problem of finding the number of provinces
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        if(ds.parent[i]==i) cnt++;
+    }
+    //This will run for n times
+
+    //To connect n components we would need n-1 edges, lets check if we have this many, otherwise return -1
+    if(extraEdges<cnt-1) return -1;
+    
+    //Incase they are enough, just return cnt-1
+    return cnt-1;
+}
+
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
