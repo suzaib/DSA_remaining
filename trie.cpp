@@ -1,4 +1,12 @@
 /*
+Since we may need to create many classes for different types of Trie, according to different questions, we will be naming everyone Trie only
+This is to save time and avoid using names like Trie2, Trie3
+Pick the class Which suits your problem, and use it
+We are doing it only to reduce our headache and it is harmless since we won't run this file 
+
+Now back to topic
+
+
 Trie is one of the toughest questions that can be asked in an interview
 There are three types of queries
 1) Insert the given word say "apple" into the list or whatever
@@ -85,4 +93,73 @@ class Trie{
             return true;
         }
         //Time Complexity will be O(n)
+};
+
+
+//The previous Trie can't keep track of multiple elements insertions
+//Therefore this time we will create one that can
+//We will use a flag variable to denote the count of words
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool endsWith=0;
+        bool prefixCnt=0;
+        void put(char ch, Node* node) links[ch-'a']=node;
+        bool containsChar(char ch) return links[ch-'a']!=NULL;
+
+}
+
+class Trie{
+    private:
+        Node* root;
+    public:
+        Trie(){
+            root=new Node();
+        }
+
+        void insert(string word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) node->put(word[i],new Node());
+                node=node->get(word[i]);
+                node->prefixCnt++;
+            }
+            node->endsWith++;
+        }
+
+        //Count the number of words ending with the given prefix
+        int countPrefix(string prefix){
+            int n=prefix.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(prefix[i])) return 0;
+                node=node->getChar(prefix[i]);
+            }
+            return node->prefixCnt;
+        }
+
+        //Count the number of Words
+        int countWords(string word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return 0;
+                node=node->get(word[i]);
+            }
+            return node->endsWith;
+        }
+
+        //Erase a particular word from the trie
+        void erase(string word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return;
+                node=node->get(word[i]);
+                node->prefixCnt--;
+            }
+            node->endsWith--;
+        }
+
 }
