@@ -1081,9 +1081,9 @@ string alienDictionary(vector<string> &dict,int n){
         string s1=dict[i-1];
         string s2=dict[i];
 
+        int len=min(s1.size(),s2.size());
         //Check for incomplete dictionary
         if(s1.size()>s2.size() && s1.substr(0,len)==s2) return "";
-        int len=min(s1.size(),s2.size());
         for(int j=0;j<len;j++){
             if(s1[j]!=s2[j]){
                 adj[s1[j]-'a'].push_back(s2[j]-'a');
