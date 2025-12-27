@@ -196,7 +196,7 @@ class SGTree{
                 }
             }
         }
-}
+};
 //We will write a function for the type of question when we have two arrays
 void solve2(){
     int n1;
