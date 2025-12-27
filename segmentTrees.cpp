@@ -279,19 +279,24 @@ int solve3(){
     int n,m;
     cin>>n>>m;
     int el=1<<n;
+    bool flag=(n%2!=0);
     vector<int> arr(el);
     for(int i=0;i<el;i++) cin>>arr[i];
     SGTree sg(el);
-    sg.build(0,0,el-1,arr,n%2!=0);
+    sg.build(0,0,el-1,arr,flag);
 
     while(m--){
         int i,val;
         cin>>i>>val;
-        sg.update(0,0,el-1,i,val,n%2!=0);
-        cout<<sg->seg[0]<<"\n";
+
+        //In codeforces problem, the indexing used is 1 based, so we decrease value of i by one
+        i--;
+
+        sg.update(0,0,el-1,i,val,flag);
+        cout<<sg.seg[0]<<"\n";
     }
 }
-///Start at 1:40:00
+///Start at 2:00:00
 
 int main(){
     //Your function
