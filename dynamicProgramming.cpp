@@ -2359,6 +2359,26 @@ int minOperationsToConvert(string &s1,string &s2){
 //Space Complexity will be O(2n)
 
 
+//Shortest Common Supersequence
+//First Print length of the supersequence
+int lenOfShortestCommonSupersequence(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    int lcs=longestCommonSubseq(s1,s2);
+    return (n+m-lcs);
+}
+//Time Complexity will be O(n2+n)
+//Space Complexity will be O(2n)
+
+
+//Shortest Common Supersequence
+//Print the Supersequence
+int shortestCommonSupersequence(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+}
+
+
 
 
 //DP on Stocks
@@ -3882,7 +3902,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //Space Complexity will be O(3n)
 
 //Remaining problems
-//DP 30 --> 27
 //Dp 31 : 28
 //Dp 32 : 29
 //Dp 33 : 30
