@@ -133,7 +133,7 @@ class SGTree{
         //Build function for segment trees
         void build(int idx,int low,int high,vector<int> &arr){
             if(low==high){
-                seg[idx]==arr[low];
+                seg[idx]=arr[low];
                 return;
             }
             int mid=(low+high)>>1;
