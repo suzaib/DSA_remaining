@@ -139,7 +139,7 @@ class SGTree{
             int mid=(low+high)>>1;
             build(2*idx+1,low,mid,arr);
             build(2*idx+2,mid+1,high,arr);
-            seg[idx]=min(seg[2*mid+1],seg[2*mid+2]);
+            seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
         }
 
         //The query function
@@ -154,19 +154,19 @@ class SGTree{
             //Partial Overlap
             int mid=(low+high)>>1;
             int left=query(2*idx+1,low,mid,l,r);
-            int right=query(2*idx+2,mid+1,l,r);
+            int right=query(2*idx+2,mid+1,high,l,r);
             return min(left,right);
         }
 
         //The update code
         void update(int idx,int low,int high,int _idx,int val){
             if(low==high){
-                seg[_idx]=val;
+                seg[idx]=val;
                 return;
             }
             int mid=(low+high)>>1;
-            if(i<=mid) update(2*idx+1,low,high,_idx,val);
-            else update(2*idx+2,low,high,_idx,val);
+            if(_idx<=mid) update(2*idx+1,low,mid,_idx,val);
+            else update(2*idx+2,mid+1,high,_idx,val);
             seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
         }
 
@@ -176,7 +176,6 @@ class SGTree{
             cin>>n;
             vector<int> arr(n);
             for(int i=0;i<n;i++) cin>>arr[i];
-            vector<int> seg(4*n);
             build(0,0,n-1,arr);
             int q;
             cin>>q;
@@ -186,7 +185,7 @@ class SGTree{
                 if(type==1){
                     int l,r;
                     cin>>l>>r;
-                    cout<<queury(0,0,n-1,l,r)<<"\n";
+                    cout<<query(0,0,n-1,l,r)<<"\n";
                 }
                 else{
                     int i,val;
@@ -240,6 +239,40 @@ void solve2(){
     }
 }
 
+
+//Xenia and Bit operations
+//Drawing the tree structure is very important
+class SGTree{
+    public:
+        vector<int> seg;
+        SGTree(int n){
+            seg.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,vector<int> &arr, bool flag){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr,!flag);
+            build(2*idx+2,mid+1,high,arr,!flag);
+            if(flag) seg[idx]=seg[2*idx+1]|seg[2*idx+2];
+            else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,int pos,int val,bool flag){
+            if(low==high){
+                seg[idx]=val;
+                return;
+            }
+            int mid=(low+high)>>1;
+            if(pos<=mid) update(2*idx+1,low,mid,pos,val,!flag);
+            else update(2*idx+2,mid+1,high,pos,val,!flag);
+            if(flag) seg[idx]=seg[2*idx+1]|seg[2*idx+2];
+            else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
+        }
+}
 ///Start at 1:40:00
 
 int main(){
