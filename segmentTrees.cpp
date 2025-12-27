@@ -283,6 +283,13 @@ int solve3(){
     for(int i=0;i<el;i++) cin>>arr[i];
     SGTree sg(el);
     sg.build(0,0,el-1,arr,n%2!=0);
+
+    while(m--){
+        int i,val;
+        cin>>i>>val;
+        sg.update(0,0,el-1,i,val,n%2!=0);
+        cout<<sg->seg[0]<<"\n";
+    }
 }
 ///Start at 1:40:00
 
