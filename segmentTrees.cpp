@@ -273,6 +273,17 @@ class SGTree{
             else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
         }
 };
+
+//The upper class is to be used here
+int solve3(){
+    int n,m;
+    cin>>n>>m;
+    int el=1<<n;
+    vector<int> arr(el);
+    for(int i=0;i<el;i++) cin>>arr[i];
+    SGTree sg(el);
+    sg.build(0,0,el-1,arr,n%2!=0);
+}
 ///Start at 1:40:00
 
 int main(){
