@@ -272,7 +272,7 @@ class SGTree{
             if(flag) seg[idx]=seg[2*idx+1]|seg[2*idx+2];
             else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
         }
-}
+};
 ///Start at 1:40:00
 
 int main(){
