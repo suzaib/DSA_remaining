@@ -1985,6 +1985,7 @@ int rodCutting(int n,vector<int> &cost){
 
 
 
+//DP on Subsequences
 //Longest Common Subsequence
 //Two Strings given and you have to find the longest common subsequence between them
 //Return the length of such a subsequence
@@ -2343,6 +2344,23 @@ int minInsertionsToMakePalindrome(string &s){
 }
 //Time Complexity will be O(n2+n)
 //Space Complexity will be O(2n)
+
+
+//Minimum Insertions or deletions to make string s1 equal to string s2
+//Consider s1=abcd and s2=apqde
+//In this ad is a common subsequence, and hence we need to replace bc by pq and add e
+int minOperationsToConvert(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    int lcs=longestCommonSubseq(s1,s2);
+    return ((n-lcs)+(m-lcs));
+}
+//Time Complexity will be O(n2+n)
+//Space Complexity will be O(2n)
+
+
+
+
 //DP on Stocks
 
 
