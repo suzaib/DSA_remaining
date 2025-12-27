@@ -1071,6 +1071,35 @@ vector<int> eventualSafeStates(int n,vector<vector<int>> &adj){
 //Space Complexity will be O(4V+E)
 
 
+//Alien Dictionary
+//There can be many order of words, we can return any
+//The problem is meaningless if there is a cyclic dependency
+//Consider the words : abc, bca, cab
+string alienDictionary(vector<string> &dict,int n){
+    vector<vector<int>> adj(n);
+    for(int i=1;i<dict.size();i++){
+        string s1=dict[i-1];
+        string s2=dict[i];
+
+        //Check for incomplete dictionary
+        if(s1.size()>s2.size() && s1.substr(0,len)==s2) return "";
+        int len=min(s1.size(),s2.size());
+        for(int j=0;j<len;j++){
+            if(s1[j]!=s2[j]){
+                adj[s1[j]-'a'].push_back(s2[j]-'a');
+                break;
+            }
+        }
+    }
+
+    vector<int> topo=topoSort(n,adj);
+    string ans="";
+    for(int i=0;i<topo.size();i++){
+        ans+=(char(topo[i]+'a'));
+    }
+    return ans;
+}
+
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
 //In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
