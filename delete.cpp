@@ -1,31 +1,57 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-int whereToInsert(vector<int> &ans,int el){
-    int n=ans.size();
-    int high=n-1;
-    int low=0;
-    while(low<=high){
-        int mid=(low+high)>>1;
-        if(ans[mid]>el) high=mid-1;
-        else if(ans[mid]<el) low=mid+1;
-        else return mid;
-    }
-    return low;
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool flag=false;
+        bool ContainsChar(char ch) return links[ch-'a']!=NULL;
+        void put(char ch,Node* node) links[ch-'a']=node;
+        Node* get(char ch) return links[ch-'a'];
+        bool setEnd() flag=false;
+        bool isEnd() return flag;
 }
-int lis(vector<int> &arr){
-    int n=arr.size();
-    int cnt=1;
-    vector<int> ans={arr[0]};
-    for(int i=1;i<n;i++){
-        if(arr[i]==ans.back()) continue;
-        else if(arr[i]>ans.back()) ans.push_back(arr[i]);
-        else{
-            int idx=whereToInsert(ans,arr[i]);
-            ans[idx]=arr[i];
+
+class Trie{
+    private:
+        Node* root;
+
+    public:
+        //Initialize your data structure here
+        Trie(){
+            root=new Node();
         }
-    }
-    return ans.size();
+
+        //Insert a word into trie
+        void insert(string word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) node->put(word[i],new Node());
+                //Moves to reference node
+                node=node->get(word[i]);
+            }
+            node->setEnd();
+        }
+        
+        bool search(string word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return false;
+                node=node->get(word[i]);
+            }
+            return isEnd();
+        }
+
+        bool startsWith(string prefix){
+            int n=prefix.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return false;
+                node=node->get(word[i]);
+            }
+            return true;
+        }
 }
 int main(){
     vector<int> arr={1,3,5};

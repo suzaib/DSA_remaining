@@ -27,13 +27,14 @@ Further explanation is better understood visually so please watch video (Lecture
 using namespace std;
 
 class Node{
-    Node* links[26]={nullptr};
-    bool flag=false;
-    bool containsChar(char ch) return links[ch-'a']!=NULL;
-    void put(char ch,Node* node) links[ch-'a']=node;
-    Node* get(char ch) return links[ch-'a'];
-    bool setEnd() flag=false;
-    bool isEnd() return flag;
+    public:
+        Node* links[26]={nullptr};
+        bool flag=false;
+        bool containsChar(char ch) return links[ch-'a']!=NULL;
+        void put(char ch,Node* node) links[ch-'a']=node;
+        Node* get(char ch) return links[ch-'a'];
+        bool setEnd() flag=false;
+        bool isEnd() return flag;
 }
 class Trie{
     private:
@@ -53,7 +54,7 @@ class Trie{
                 }
 
                 //Moves to the reference trie
-                node->get(word[i]);
+                node=node->get(word[i]);
             }
 
             node->setEnd();
