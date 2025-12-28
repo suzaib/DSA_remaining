@@ -1342,7 +1342,7 @@ vector<int> dijkstrasAlgorithmII(int n,vector<vector<pair<int,int>>> &adj,int sr
 //Shortest Path in Weighted Graph
 //Use Dijkstra with slight modification, since in this also we have to find the shortest path, but we have to give the path and not the distance as we did in dijkstra
 //One thing to note here is that we this time have a 1 indexed graph 
-vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src,int target){
+vector<int> shortestPathIII(int n,vector<vector<int>> &edges,int src,int target){
     if(src==target) return {src};
     vector<vector<pair<int,int>>> adj(n+1);
     for(auto it:edges){
@@ -1390,6 +1390,39 @@ vector<int> shortestPathII(int n,vector<vector<int>> &edges,int src,int target){
 //Time Complexity will be O(ElogV+V)
 //Space Complexity will be O(V)
 
+
+//Shortest Path in a Binary Maze
+//We can't move through a cell having 0
+//Movement is only allowed in four directions, up, down, left and right
+int binaryMaze(vector<vector<int>> &mat,pair<int,int> &src,pair<int,int> target){
+    int n=mat.size();
+    int m=mat[0].size();
+    int i=src.first;
+    int j=src.second;
+    vector<vector<int>> dist(n,vector<int> (m,1e9));
+
+    //Many people store distance as well, but since we have a distance array, we don't need to
+    queue<pair<int,int>> q;
+    q.push({i,j});
+    dist[i][j]=0;
+    vector<int> dx={0,1,0,-1};
+    vector<int> dy={-1,0,1,0};
+    while(!q.empty()){
+        int x=q.front().first;
+        int y=q.front().second;
+        q.pop();
+        if(x==target.first && y==target.second) return dist[x][y];
+        for(int k=0;k<4;k++){
+            int ni=x+dx[k];
+            int nj=y+dy[k];
+            if(ni>=0 && ni<n && nj>=0 && nj<m && dist[ni][nj]>dist[x][y]+1 && mat[ni][nj]==1){
+                dist[ni][nj]=dist[x][y]+1;
+                q.push({ni,nj});
+            }
+        }
+    }
+    return -1;
+}
 
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
@@ -1607,7 +1640,7 @@ class DisjointSet{
             iota(parent.begin(),parent.end(),0);
         }
 
-        findUltimatePar(int node){
+        int findUltimatePar(int node){
             if(node==parent[node]) return node;
             return parent[node]=findUltimatePar(parent[node]);//The path compression technique
         }
@@ -1745,16 +1778,38 @@ int numberOfOperations(int n,vector<vector<int>> &edges){
     return cnt-1;
 }
 
+
+//Accounts Merge
+vector<vector<string>> mergeAccounts(vector<vector<string>> &details){
+    int n=details.size();
+    DisjointSet ds(n);
+    vector<int> parent(n);
+    iota(parent.begin(),parent.end(),0);
+    unordered_map<string,int> mp;
+    for(int i=0;i<n;i++){
+        for(int j=1;j<details[i].size();j++){
+            int word=details[i][j];
+            if(mp.find(word)==mp.end()) mp[word]=i;
+            else ds.unionByRank(i,mp[word]);
+        }
+    }
+
+    vector<vector<string>> ans;
+    for(auto &p:mp){
+        string mail=p.first;
+        int owner=p.second;
+        if(ds.parent[owner]!=owner)
+    }
+}
+
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
 
-//Done till 25, every lecture
-//Lecture 26
+//Done till 29, every lecture
 
-//Lecture 28
 //Lecture 30 Word Ladder 2
-//Lecture 36
+//Lecture 37
 //Lecture 43
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
