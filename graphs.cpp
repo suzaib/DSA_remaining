@@ -1106,8 +1106,7 @@ string alienDictionary(vector<string> &dict,int n){
 void dfs_sp(int node,vector<bool> &vis,stack<int> &st,vector<vector<pair<int,int>>> &adj){
     vis[node]=true;
     for(auto it:adj[node]){
-        if(vis[it.first]) continue;
-        dfs_sp(it.first,vis,st,adj);
+        if(!vis[it.first]) dfs_sp(it.first,vis,st,adj);
     }
     st.push(node);
 }
@@ -1130,8 +1129,15 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
 
     dist[src]=0;
     while(!st.empty()){
-        
+        int node=st.top();
+        st.pop();
+        for(auto it:adj[node]){
+            int adjNode=it.first;
+            int newDist=it.second+dist[node];
+            if(newDist<dist[adjNode]) dist[adjNode]=newDist;
+        }
     }
+    return dist;
 }
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
