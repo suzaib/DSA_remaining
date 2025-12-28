@@ -1103,6 +1103,14 @@ string alienDictionary(vector<string> &dict,int n){
 
 //Shortest Path I
 //Given a source node, find the shortest path to every other node
+void dfs_sp(int node,vector<bool> &vis,stack<int> &st,vector<vector<pair<int,int>>> &adj){
+    vis[node]=true;
+    for(auto it:adj[node]){
+        if(vis[it.first]) continue;
+        dfs_sp(it.first,vis,st,adj);
+    }
+    st.push(node);
+}
 vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
     vector<int> dist(n,1e9);
     stack<int> st;
@@ -1117,7 +1125,12 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
     vector<bool> vis(n,0);
     for(int i=0;i<n;i++){
         if(vis[i]) continue;
-        dfs(i)
+        dfs_sp(i,vis,st,adj);
+    }
+
+    dist[src]=0;
+    while(!st.empty()){
+        
     }
 }
 //Shortest Path
