@@ -1132,6 +1132,7 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
     while(!st.empty()){
         int node=st.top();
         st.pop();
+        if(dist[node]==1e9) continue;
         for(auto it:adj[node]){
             int adjNode=it.first;
             int newDist=it.second+dist[node];
@@ -1142,6 +1143,10 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
 
     return dist;
 }
+//Time Complexity will be O(n+m)
+//Space Complexity will be O(n+m)
+
+
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
 //In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
