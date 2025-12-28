@@ -2373,12 +2373,14 @@ int lenOfShortestCommonSupersequence(string &s1,string &s2){
 
 //Shortest Common Supersequence
 //Print the Supersequence
-int shortestCommonSupersequence(string &s1,string &s2){
+string shortestCommonSupersequence(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
 
     //First we form the dp table
     vector<vector<int>> dp=lcsTable(s1,s2);
+    //Time Complexity will be O(n*m)
+
     int i=n;
     int j=m;
     string s="";
@@ -2411,6 +2413,11 @@ int shortestCommonSupersequence(string &s1,string &s2){
     reverse(s.begin(),s.end());
     return s;
 }
+//The lcs table construction takes mn time, the while loops takes n+m time and the reverse method takes n+m time
+//Space is used by the dp table which is of mn size
+//Time Complexity will be O(mn+2m+2n)
+//Space Complexity will be O(mn)
+
 
 
 
