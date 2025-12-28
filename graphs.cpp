@@ -1210,6 +1210,7 @@ void findNextWord(string word,int dist,unordered_set<string> &st,queue<pair<stri
     for(int i=0;i<n;i++){
         for(char c='a';c<='z';c++){
             char orgChar=word[i];
+            if(orgChar==c) continue;
             word[i]=c;
             if(st.find(word)!=st.end()){
                 q.push({word,dist+1});
