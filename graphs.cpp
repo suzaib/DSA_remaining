@@ -1128,6 +1128,7 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
     }
 
     dist[src]=0;
+
     while(!st.empty()){
         int node=st.top();
         st.pop();
@@ -1137,6 +1138,8 @@ vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
             if(newDist<dist[adjNode]) dist[adjNode]=newDist;
         }
     }
+    //This in total will run for n+m times(n is the number of nodes and m is the number of edges)
+
     return dist;
 }
 //Shortest Path
