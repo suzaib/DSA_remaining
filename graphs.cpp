@@ -1783,24 +1783,44 @@ int numberOfOperations(int n,vector<vector<int>> &edges){
 vector<vector<string>> mergeAccounts(vector<vector<string>> &details){
     int n=details.size();
     DisjointSet ds(n);
-    vector<int> parent(n);
-    iota(parent.begin(),parent.end(),0);
     unordered_map<string,int> mp;
     for(int i=0;i<n;i++){
         for(int j=1;j<details[i].size();j++){
-            int word=details[i][j];
-            if(mp.find(word)==mp.end()) mp[word]=i;
-            else ds.unionByRank(i,mp[word]);
+            string mail=details[i][j];
+            if(mp.find(mail)==mp.end()) mp[mail]=i;
+            else ds.unionByRank(i,mp[mail]);
         }
     }
 
-    vector<vector<string>> ans;
+    vector<vector<string>> merged(n);
     for(auto &p:mp){
         string mail=p.first;
-        int owner=p.second;
-        if(ds.parent[owner]!=owner)
+        int par=ds.findUltimatePar(p.second);
+        merged[par].push_back(mail);
     }
+
+    vector<vector<string>> ans;
+    for(int i=0;i<n;i++){
+        if(merged[i].size()==0) continue;
+        sort(merged[i].begin(),merged[i].end());
+        vector<string> temp;
+        temp.push_back(details[i][0]);
+        for(auto it:merged[i]) temp.push_back(it);
+        ans.push_back(temp);
+    }
+    return ans;
 }
+//Let n be the total number of people/accounts and m be the total number of mails
+//Union takes : M*4*a
+//Sorting takes : MlogM
+//Space Used : M
+//Time Complexity will be O(MlogM)
+//Space Complexity will be O(M)
+
+
+//Number of Islands II
+//This is an online query type problem, where we will be given queries and we need to tell the answer after receiving each query
+
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
