@@ -2390,11 +2390,11 @@ string shortestCommonSupersequence(string &s1,string &s2){
             i--;
             j--;
         }
-        else if(dp[i-1][j]>dp[i][j-1]){
+        else if(dp[i-1][j]>dp[i][j-1]){ //Upward Movement
             s+=s1[i-1];
             i--;
         }
-        else{
+        else{ //Leftward Movement
             s+=s2[j-1];
             j--;
         }

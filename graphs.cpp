@@ -1100,11 +1100,31 @@ string alienDictionary(vector<string> &dict,int n){
     return ans;
 }
 
+
+//Shortest Path I
+//Given a source node, find the shortest path to every other node
+vector<int> shortestPathI(int n,int src,vector<vector<int>> &edges){
+    vector<int> dist(n,1e9);
+    stack<int> st;
+    vector<vector<pair<int,int>>> adj(n);
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        int wt=it[2];
+        adj[u].push_back({v,wt});
+    }
+
+    vector<bool> vis(n,0);
+    for(int i=0;i<n;i++){
+        if(vis[i]) continue;
+        dfs(i)
+    }
+}
 //Shortest Path
 //Given an undirected graph with unit edge weights, and a source, find the smallest distance to all the nodes from that source
 //In this question, we assume that the graph won't have disconnected components, since reaching them would be impossible
 //In case we come across a question that has disconnected components, just mark them with INT_MAX
-vector<int> shortestPath_brute(int n,int src,vector<vector<int>> &adj){
+vector<int> shortestPathII_brute(int n,int src,vector<vector<int>> &adj){
     vector<int> vis(n,0);
 
     queue<pair<int,int>> q;
@@ -1127,7 +1147,7 @@ vector<int> shortestPath_brute(int n,int src,vector<vector<int>> &adj){
 
 //Optimal : Using the vis array to mark the distances as well
 //Also let us solve it when instead of giving us the adjacency list, they have given us the edges
-vector<int> shortestPath(int n,int m,int src,vector<vector<int>> &edges){
+vector<int> shortestPathII(int n,int m,int src,vector<vector<int>> &edges){
     vector<vector<int>> adj(n);
     for(auto it:edges){
         adj[it[0]].push_back(it[1]);
