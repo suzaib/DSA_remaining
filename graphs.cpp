@@ -1245,8 +1245,8 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 
 //Word Ladder II
 //We need to also return the chain of words of transformation
-void ladderIIHelper(string &lastWord,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp){
-    int n=lastWord.size();
+void ladderIIHelper(string &word,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp,unordered_set<string> &elToDel){
+    int n=word.size();
     for(int i=0;i<n;i++){
         for(char c='a';c<='z';c++){
             char orgChar=word[i];
@@ -1256,29 +1256,38 @@ void ladderIIHelper(string &lastWord,unordered_set<string> &st,queue<vector<stri
                 temp.push_back(word);
                 q.push(temp);
                 temp.pop_back();
+                elToDel.insert(word);
             }
             word[i]=orgChar;
         }
     }
 }
 vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vector<string> &wordList){
-    int n=wordList.size();
-
+    
     //We would need to check if a particular word exists in the wordList, therefore to search efficiently we can use unordered_set
     unordered_set<string> st(wordList.begin(),wordList.end());
     st.erase(startWord);
     queue<vector<string>> q;
     q.push({startWord});
+    vector<vector<string>> ans;
+    bool carryOn=true;
     while(!st.empty()){
         int s=q.size();
+        if(!carryOn) return ans;
+        unordered_set<string> elToDel;
         for(int i=0;i<s;i++){
-            vector<string> temp=q.top();
+            vector<string> temp=q.front();
             q.pop();
             string lastWord=temp.back();
-            ladderIIHelper(lastWord,st,q,temp);
+            if(lastWord==endWord){
+                ans.push_back(temp);
+                carryOn=false;
+                continue;
+            }
+            ladderIIHelper(lastWord,st,q,temp,elToDel);
         }
+        for(auto it:elToDel) st.erase(it);
     }
-
 }
 
 
