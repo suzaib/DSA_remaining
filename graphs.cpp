@@ -1248,8 +1248,8 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 void ladderIIHelper(string &word,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp,unordered_set<string> &elToDel){
     int n=word.size();
     for(int i=0;i<n;i++){
+        char orgChar=word[i];
         for(char c='a';c<='z';c++){
-            char orgChar=word[i];
             if(c==orgChar) continue;
             word[i]=c;
             if(st.find(word)!=st.end()){
@@ -1263,17 +1263,20 @@ void ladderIIHelper(string &word,unordered_set<string> &st,queue<vector<string>>
     }
 }
 vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vector<string> &wordList){
-    
+
     //We would need to check if a particular word exists in the wordList, therefore to search efficiently we can use unordered_set
     unordered_set<string> st(wordList.begin(),wordList.end());
+    if(!st.count(endWord)) return {};
+
     st.erase(startWord);
+
     queue<vector<string>> q;
     q.push({startWord});
+
     vector<vector<string>> ans;
-    bool carryOn=true;
-    while(!st.empty()){
+    bool found=false;
+    while(!q.empty() && !found){
         int s=q.size();
-        if(!carryOn) return ans;
         unordered_set<string> elToDel;
         for(int i=0;i<s;i++){
             vector<string> temp=q.front();
@@ -1281,13 +1284,14 @@ vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vect
             string lastWord=temp.back();
             if(lastWord==endWord){
                 ans.push_back(temp);
-                carryOn=false;
+                found=true;
                 continue;
             }
             ladderIIHelper(lastWord,st,q,temp,elToDel);
         }
         for(auto it:elToDel) st.erase(it);
     }
+    return ans;
 }
 
 
