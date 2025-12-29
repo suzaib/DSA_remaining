@@ -2469,8 +2469,9 @@ int distinctSubseq_tabulation(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
     vector<vector<int>> dp(n+1,vector<int> (m+1,0));
-    for(int i=1;i<n;i++){
-        for(int j=1;j<m;j++){
+    for(int i=0;i<=n;i++) dp[i][0]=1;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
             if(s1[i-1]==s2[j-1]){
                 int take=dp[i-1][j-1];
                 int notTake=dp[i-1][j];
@@ -2481,6 +2482,55 @@ int distinctSubseq_tabulation(string &s1,string &s2){
     }
     return dp[n][m];
 }
+//There is a loop at start which takes n time and a nested loop which takes mn time
+//Space is occupied by the dp table which takes space of mn size
+//Time Complexity will be O(mn+n)
+//Space Complexity will be O(mn)
+
+//Further Optimization
+int distinctSubseq_spaceOptimised(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> curr(m+1,0);
+    vector<int> prev(m+1,0);
+    prev[0]=curr[0]=1;
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]){
+                int take=prev[j-1];
+                int notTake=prev[j];
+                curr[j]=(take+notTake);
+            }
+            else curr[j]=prev[j];
+        }
+        prev=curr;
+    }
+    return prev[m];
+}
+//There is a nested loop which takes mn time in total
+//Space is used by two 1d arrays of m size
+//Time Complexity will be O(mn)
+//Space Complexity will be O(m+n)
+
+//Further Optimization
+int distinctSubseq(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> dp(m+1,0);
+    dp[0]=1;
+    for(int i=1;i<=n;i++){
+        for(int j=m;j>=1;j--){
+            if(s1[i-1]==s2[j-1]) dp[j]+=dp[j-1];
+        }
+    }
+    return dp[m];
+}
+//There is a nested loop which takes mn time
+//Space is used by dp array of m size
+//Time Complexity will be O(mn)
+//Space Complexity will be O(m)
+
+
 
 //DP on Stocks
 
