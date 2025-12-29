@@ -3322,6 +3322,35 @@ int longestBitonicSubseq(vector<int> &arr){
 //Space Complexity will be O(2n)
 
 
+//Longest Bitonic Subsequence II
+//This is another version in which you have to report only bitonic sequence and not monotonic
+int longestBitonicSequenceII(int n, vector<int> &nums) {
+    // code here
+    int s=nums.size();
+    vector<int> dp1(s,1);
+    vector<int> dp2(s,1);
+    
+    //Forward Iteration
+    for(int i=0;i<n;i++){
+        for(int j=0;j<i;j++){
+            if(nums[i]>nums[j] && dp1[i]<1+dp1[j]) dp1[i]=1+dp1[j];
+        }
+    }
+    int maxi=0;
+    
+    for(int i=n-1;i>=0;i--){
+        for(int j=n-1;j>i;j--){
+            if(nums[i]>nums[j] && 1+dp2[j]>dp2[i]) dp2[i]=1+dp2[j];
+        }
+        if(dp1[i]!=1 & dp2[i]!=1) maxi=max(maxi,dp1[i]+dp2[i]);
+    }
+    if(maxi==0) return maxi;
+    return maxi-1;
+}
+//Time Complexity will be O(2n2)
+//Space Complexity will be O(2n)
+
+
 //Number of LIS
 //In this along with a dp array, we use a count array as well
 int numberOfLIS(vector<int> &arr){
