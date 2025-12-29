@@ -205,3 +205,105 @@ class Trie{
         //Time Complexity will be O(n)
 
 };
+
+
+//Longest Word With all Prefixes
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool flag=false;
+
+        bool containsChar(char ch){
+            return links[ch-'a']!=nullptr;
+        }
+
+        void put(char ch,Node* node){
+            links[ch-'a']=node; 
+        }
+
+        Node* get(char ch){
+            return links[ch-'a'];
+        }
+
+        void setEnd(){
+            flag=true;
+        }
+
+        bool isEnd(){
+            return flag;
+        }
+};
+
+class Trie{
+    private:
+        Node* root;
+
+    public:
+        Trie(){
+            root=new Node();
+        }
+
+        void insert(string &word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) node->put(word[i],new Node());
+                node=node->get(word[i]);
+            }
+            node->setEnd();
+        }
+
+        bool search(string &word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return false;
+                node=node->get(word[i]);
+            }
+            return node->isEnd();
+        }
+
+        bool startsWith(const string &prefix){
+            Node* node=root;
+            int n=prefix.size();
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(prefix[i])) return false;
+                node=node->get(prefix[i]);
+            }
+            return true;
+        }
+
+        bool allPrefixExists(string &word){
+            bool f1=true;
+            Node* node=root;
+            int n=word.size();
+            for(int i=0;i<n;i++){
+                if(node->containsChar(word[i])){
+                    node=node->get(word[i]);
+                    if(!node->isEnd()) return false;
+                }
+                else return false;
+            }
+            return true;
+        }
+};
+
+string longestCompleteStr(vector<string> &arr){
+    Trie t;
+
+    int n=arr.size();
+    for(int i=0;i<n;i++) t.insert(arr[i]);
+    
+    //Taking just maxLen won't work, since we need lexicographically smaller
+    string longest="";
+
+    for(auto &it:arr){
+        if(t.allPrefixExists(it)){
+            if(it.size()>longest.size()) longest=it;
+            else if(it.size()==longest.size() && it<longest) longest=it;
+        }
+    }
+
+    if(longest=="") return "NONE";
+    return longest;
+}
