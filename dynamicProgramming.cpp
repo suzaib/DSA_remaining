@@ -2419,8 +2419,68 @@ string shortestCommonSupersequence(string &s1,string &s2){
 //Space Complexity will be O(mn)
 
 
+//Number of Distinct Subsequences
+int distinctSubseqHelper_brute(int i,int j,string &s1,string &s2){
+    if(j<0) return 1;
+    if(i<0) return 0;
+    if(s1[i]==s2[j]){
+        int take=distinctSubseqHelper_brute(i-1,j-1,s1,s2);
+        int notTake=distinctSubseqHelper_brute(i-1,j,s1,s2);
+        return (take+notTake);
+    }
+    return distinctSubseqHelper_brute(i-1,j,s1,s2);
+}
+int distinctSubseq_brute(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    return distinctSubseqHelper_brute(n-1,m-1,s1,s2);
+}
+//The code will run exponentially
+//Recursion stack space will be used as well which will be about n+m
+//Time Complexity will be exponential
+//Space Complexity will be O(n+m)
 
+//Memoization
+int distinctSubseqHelper_memoization(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+    if(j<0) return 1;
+    if(i<0) return 0;
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(s1[i]==s2[j]){
+        int take=distinctSubseqHelper_memoization(i-1,j-1,s1,s2,dp);
+        int notTake=distinctSubseqHelper_memoization(i-1,j,s1,s2,dp);
+        return dp[i][j]=(take+notTake);
+    }
+    return dp[i][j]=distinctSubseqHelper_memoization(i-1,j,s1,s2,dp);
+}
+int distinctSubseq_memoization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    return distinctSubseqHelper_memoization(n-1,m-1,s1,s2,dp);
+}
+//The code runs to completely fill the dp table of mn size
+//The space is used by the dp table of mn size along with a recursion stack space of m+n
+//Time Complexity will be O(mn)
+//Space Complexity will be o(mn+m+n)
 
+//Tabulation
+//Shifting Index Method
+int distinctSubseq_tabulation(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    for(int i=1;i<n;i++){
+        for(int j=1;j<m;j++){
+            if(s1[i-1]==s2[j-1]){
+                int take=dp[i-1][j-1];
+                int notTake=dp[i-1][j];
+                dp[i][j]=(take+notTake);
+            }
+            else dp[i][j]=dp[i-1][j];
+        }
+    }
+    return dp[n][m];
+}
 
 //DP on Stocks
 
@@ -3987,6 +4047,8 @@ int maxRectangle(vector<vector<int>> &mat){
 //In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
 //See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
 // for existence of subset sum, we need to also write code for the case when the array has 0 as well, watch the next video of dp18 striver
+
+//Also write code for the problem in which we have to print all lcs
 int main(){
     vector<int> arr={5,4,11,1,16,8};
     vector<int> ans=printLIS(arr);
