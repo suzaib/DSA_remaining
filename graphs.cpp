@@ -1222,6 +1222,8 @@ void findNextWord(string word,int dist,unordered_set<string> &st,queue<pair<stri
 }
 int wordLadderI(string startWord, string endWord, vector<string> &wordList){
     int n=wordList.size();
+
+    //We would need to check if a particular word exists in the wordList, therefore to search efficiently we can use unordered_set
     unordered_set<string> st(wordList.begin(),wordList.end());
     st.erase(startWord);
     queue<pair<string,int>> q;
@@ -1239,6 +1241,45 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 //Set use space of n*l, and queue uses space of 2*n(in worst case where it holds all words) and temporary words are of size l(say)
 //Time Complexity will be O(26*n*l)
 //Space Complexity will be O(n*l+2*n+l)
+
+
+//Word Ladder II
+//We need to also return the chain of words of transformation
+void ladderIIHelper(string &lastWord,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp){
+    int n=lastWord.size();
+    for(int i=0;i<n;i++){
+        for(char c='a';c<='z';c++){
+            char orgChar=word[i];
+            if(c==orgChar) continue;
+            word[i]=c;
+            if(st.find(word)!=st.end()){
+                temp.push_back(word);
+                q.push(temp);
+                temp.pop_back();
+            }
+            word[i]=orgChar;
+        }
+    }
+}
+vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vector<string> &wordList){
+    int n=wordList.size();
+
+    //We would need to check if a particular word exists in the wordList, therefore to search efficiently we can use unordered_set
+    unordered_set<string> st(wordList.begin(),wordList.end());
+    st.erase(startWord);
+    queue<vector<string>> q;
+    q.push({startWord});
+    while(!st.empty()){
+        int s=q.size();
+        for(int i=0;i<s;i++){
+            vector<string> temp=q.top();
+            q.pop();
+            string lastWord=temp.back();
+            ladderIIHelper(lastWord,st,q,temp);
+        }
+    }
+
+}
 
 
 //Dijkstra's Algorithm
