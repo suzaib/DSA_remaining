@@ -3204,6 +3204,8 @@ bool compare(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
     if(n!=m+1) return false;
+
+    int skipped=0;
     //We assume that n=m+1
 
     int i=0;
@@ -3213,7 +3215,11 @@ bool compare(string &s1,string &s2){
             i++;
             j++;
         }
-        else i++;
+        else{
+            i++;
+            skipped++;
+            if(skipped>1) return false;
+        }
         if(i==s1.size() && j==s2.size()) return true;
     }
     return false;

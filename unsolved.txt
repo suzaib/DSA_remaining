@@ -1,2 +1,6 @@
 Question: to print longest divisible subset in lexicographical order:
 https://www.geeksforgeeks.org/problems/largest-divisible-subset--170643/1
+
+
+Question : Longest String Chain(use hash map since the current code uses too much time)
+https://www.geeksforgeeks.org/problems/longest-string-chain/1
