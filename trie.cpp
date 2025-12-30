@@ -310,3 +310,11 @@ string longestCompleteStr(vector<string> &arr){
 
 
 
+//XOR Problems
+//These are generally solved using tries
+//Some steps should be remembered while solving them
+//Step 1: Insert all the numbers in trie(bit wise)
+//Step 2: Take the number x and find the max xor from array
+
+//Given an array arr and a number x, find the maximum xor of x^y where y can be any element from arr
+//T
