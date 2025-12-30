@@ -1245,7 +1245,10 @@ int wordLadderI(string startWord, string endWord, vector<string> &wordList){
 
 //Word Ladder II
 //We need to also return the chain of words of transformation
-void ladderIIHelper(string &word,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp,unordered_set<string> &elToDel){
+//This method discussed below is already quite optimised, and people won't bother asking a more optimised version
+//Therefore this much is more than enough in interviews
+//The only reason this is labelled as not the most optimal one, is because a cp based solution exists that is slightly better
+void ladderIIHelper_brute(string &word,unordered_set<string> &st,queue<vector<string>> &q,vector<string> &temp,unordered_set<string> &elToDel){
     int n=word.size();
     for(int i=0;i<n;i++){
         char orgChar=word[i];
@@ -1262,6 +1265,7 @@ void ladderIIHelper(string &word,unordered_set<string> &st,queue<vector<string>>
         }
     }
 }
+
 vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vector<string> &wordList){
 
     //We would need to check if a particular word exists in the wordList, therefore to search efficiently we can use unordered_set
@@ -1293,6 +1297,55 @@ vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vect
     }
     return ans;
 }
+//Predicting Time Complexity of this solution is quite difficult
+//Space is used by queue, set, and eltoDel set as well
+
+//Optimal Method
+//This is cp based and uses a very simple intuition
+//The logic is suppose you have two points A and B and you have to reach from A to B.(Draw a diagram alongwith explanation to understand clearly)
+//Assume at start you have many ways that spread out, say path p1,p2... pn
+//However over the course of journey, paths keep getting removed or left, since they weren't correct
+//Say only a few paths reach point B, let's say only p2 and p7
+//Now think for yourself if you had looked and started from point B, wouldn't it had been a lot easier to draw the paths
+//Since this time you knew which paths led you to point A for sure
+//It would have saved a lot of time
+//Therefore in this method we will use backtracking
+void ladderIIHelper(string &word,unordered_set<string> &st,queue<string> &q){
+    int n=word.size();
+    for(int i=0;i<n;i++){
+        char orgChar=word[i];
+        for(char c='a';c<='z';c++){
+            if(c==orgChar) continue;
+            word[i]=c;
+            if(st.find(word)!=st.end()){
+                q.push(word);
+                st.erase(word);
+            }
+            word[i]=orgChar;
+        }
+    }
+}
+vector<vector<string>> wordLadderII(string &startWord,string &endWord,vector<string> &wordList){
+    unordered_set<string> st{wordList.begin(),wordList.end()};
+    st.erase(startWord);
+    queue<string> q;
+    q.push(startWord);
+    multimap<int,string> mp;
+    mp[0]=startWord;
+
+    //First we need to create the map
+    q.push(startWord);
+    int level=0;
+    while(!q.empty()){
+        int s=q.size();
+        for(int i=0;i<s;i++){
+            int word=q.top();
+            q.pop();
+            ladderIIHelper(word,st,q);
+        }
+    }
+}
+
 
 
 //Dijkstra's Algorithm
