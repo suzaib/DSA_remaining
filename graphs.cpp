@@ -1310,41 +1310,66 @@ vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vect
 //Since this time you knew which paths led you to point A for sure
 //It would have saved a lot of time
 //Therefore in this method we will use backtracking
-void ladderIIHelper(string &word,unordered_set<string> &st,queue<string> &q){
+void backTrackingWord(string word,vector<string> &seq,string &startWord,vector<vector<string>> &ans,unordered_map<string,int> &mp){
     int n=word.size();
+    if(word==startWord){
+        reverse(seq.begin(),seq.end());
+        ans.push_back(seq);
+        reverse(seq.begin(),seq.end());
+        return;
+    }
+    int steps=mp[word];
     for(int i=0;i<n;i++){
         char orgChar=word[i];
         for(char c='a';c<='z';c++){
-            if(c==orgChar) continue;
+            if(orgChar==c) continue;
             word[i]=c;
-            if(st.find(word)!=st.end()){
-                q.push(word);
-                st.erase(word);
+            if(mp.find(word)!=mp.end() && (mp[word]+1)==steps){
+                seq.push_back(word);
+                backTrackingWord(word,seq,startWord,ans,mp);
+                seq.pop_back();
+            }
+        }
+        word[i]=orgChar;
+    }
+}
+vector<vector<string>> wordLadderII(string &startWord,string &endWord,vector<string> &wordList){
+    unordered_map<string,int> mp;
+    unordered_set<string> st(wordList.begin(),wordList.end());
+    queue<string> q;
+    q.push(startWord);
+    st.erase(startWord);
+    mp[startWord]=1;
+    int s=startWord.size();
+    while(!q.empty()){
+        string word=q.front();
+        q.pop();
+        int steps=mp[word];
+        if(word==endWord) break;
+        for(int i=0;i<s;i++){
+            char orgChar=word[i];
+            for(char c='a';c<='z';c++){
+                if(orgChar==c) continue;
+                word[i]=c;
+                if(st.find(word)!=st.end()){
+                    q.push(word);
+                    st.erase(word);
+                    mp[word]=steps+1;
+                }
             }
             word[i]=orgChar;
         }
     }
-}
-vector<vector<string>> wordLadderII(string &startWord,string &endWord,vector<string> &wordList){
-    unordered_set<string> st{wordList.begin(),wordList.end()};
-    st.erase(startWord);
-    queue<string> q;
-    q.push(startWord);
-    multimap<int,string> mp;
-    mp[0]=startWord;
 
-    //First we need to create the map
-    q.push(startWord);
-    int level=0;
-    while(!q.empty()){
-        int s=q.size();
-        for(int i=0;i<s;i++){
-            int word=q.top();
-            q.pop();
-            ladderIIHelper(word,st,q);
-        }
-    }
+    //Now we do backtracking
+    vector<vector<string>> ans;
+    if(mp.find(endWord)==mp.end()) return {};
+    vector<string> seq;
+    seq.push_back(endWord);
+    backTrackingWord(endWord,seq,startWord,ans,mp);
+    return ans;
 }
+//Time Complexity is again a bit too complex to be calculated in this case
 
 
 
