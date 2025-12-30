@@ -296,6 +296,27 @@ int solve3(){
         cout<<sg.seg[0]<<"\n";
     }
 }
+
+
+//Codeforces Problem 380C : Sereja and Brackets
+class SGTree{
+    public:
+        vector<int> seg;
+
+        SGTree(int n){
+            seg.resize(4*n+1) //One extra just to be safe
+        }
+
+        void build(int idx,int low, int high,string& s){
+            if(low==high){
+                seg[idx]=0;
+                return;
+            }
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,s);
+            build(2*idx+2,high)
+        }
+}
 ///Start at 2:00:00
 
 int main(){
