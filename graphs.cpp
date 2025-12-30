@@ -1364,8 +1364,7 @@ vector<vector<string>> wordLadderII(string &startWord,string &endWord,vector<str
     //Now we do backtracking
     vector<vector<string>> ans;
     if(mp.find(endWord)==mp.end()) return {};
-    vector<string> seq;
-    seq.push_back(endWord);
+    vector<string> seq={endWord};
     backTrackingWord(endWord,seq,startWord,ans,mp);
     return ans;
 }
