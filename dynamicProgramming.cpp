@@ -2666,6 +2666,29 @@ int editDistance(string &s1,string &s2){
 //Space Complexity will be O(m)
 
 
+//Wildcard Matching
+//? matches with any character : ==> abc?d matches with abced
+//* matches with any sequence  : ==> abc*de matches with abcdefde
+//? and * will only be in string 2
+//We only need to tell whether or not the strings are matching or not
+//Hence we only need to return true or false
+bool wildcardHelper_brute(int i,int j,string &s1,string &s2){
+    if(s1[i]==s2[j]) return wildcardHelper_brute(i-1,j-1,s1,s2);
+    if(s1[i]=='?') return wildCardHelper_brute(i-1,j-1,s1,s2);
+    if(s1[i]=='*'){
+        i--;
+        while(s1[i]!=s2[j]) j--;
+        return wildcardHelper_brute(i-1,j-1,s1,s2);
+    }
+    return false;
+}
+bool wildcardMatching_brute(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    return wildcardHelper_brute(n-1,m-1,s1,s2);
+}
+
+
 
 
 //DP on Stocks
