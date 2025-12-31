@@ -2620,7 +2620,7 @@ int editDistance_spaceOptimised(string &s1,string &s2){
     vector<int> curr(m+1,0);
     iota(prev.begin(),prev.end(),0);
     for(int i=1;i<=n;i++){
-        prev[0]=i;
+        curr[0]=i;
         for(int j=1;j<=m;j++){
             if(s1[i-1]==s2[j-1]) curr[j]=prev[j-1];
             else{
@@ -2634,6 +2634,28 @@ int editDistance_spaceOptimised(string &s1,string &s2){
     }
 
     return prev[m];
+}
+//There is a for loop at the start taking m time 
+//There is a nested loop as well which takes mn time
+//Space is used by the dp table of mn size
+//Time Complexity will be O(mn+m)
+//Space Complexity will be O(mn)
+
+//Further Optimisation
+int editDistance(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> dp(m+1,0);
+    iota(dp.begin(),dp.end(),0);
+    for(int i=1;i<=n;i++){
+        dp[0]=i;
+        for(int j=1;j<=m;j++){
+            int diag=dp[j-1];
+            if(s1[i-1]==s2[j-1]) dp[j]=diag;
+            else dp[j]=1+min(dp[j-1],min(dp[j],diag));
+        }
+    }
+    return dp[m];
 }
 //DP on Stocks
 
@@ -4191,7 +4213,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //Space Complexity will be O(3n)
 
 //Remaining problems
-//Dp 32 : 29
 //Dp 33 : 30
 //Dp 34 : 31
 //Dp 56 : 31
