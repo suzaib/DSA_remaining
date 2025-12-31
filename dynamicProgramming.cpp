@@ -2618,6 +2618,22 @@ int editDistance_spaceOptimised(string &s1,string &s2){
     int m=s2.size();
     vector<int> prev(m+1,0);
     vector<int> curr(m+1,0);
+    iota(prev.begin(),prev.end(),0);
+    for(int i=1;i<=n;i++){
+        prev[0]=i;
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]) curr[j]=prev[j-1];
+            else{
+                int ins=1+curr[j-1];
+                int del=1+prev[j];
+                int rep=1+prev[j-1];
+                curr[j]=min(ins,min(del,rep));
+            }
+        }
+        prev=curr;
+    }
+
+    return prev[m];
 }
 //DP on Stocks
 
