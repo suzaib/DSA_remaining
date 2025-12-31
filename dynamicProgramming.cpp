@@ -2673,12 +2673,11 @@ int editDistance(string &s1,string &s2){
 //We only need to tell whether or not the strings are matching or not
 //Hence we only need to return true or false
 bool wildcardHelper_brute(int i,int j,string &s1,string &s2){
-    if(s1[i]==s2[j]) return wildcardHelper_brute(i-1,j-1,s1,s2);
-    if(s1[i]=='?') return wildCardHelper_brute(i-1,j-1,s1,s2);
+    if(s1[i]==s2[j] || s1[i]=='?') return wildcardHelper_brute(i-1,j-1,s1,s2);
     if(s1[i]=='*'){
-        i--;
-        while(s1[i]!=s2[j]) j--;
-        return wildcardHelper_brute(i-1,j-1,s1,s2);
+        bool skip=wildcardHelper_brute(i,j-1,s1,s2);
+        bool notSkip=wildcardHelper_brute(i-1,j-1,s1,s2);
+        return (skip || notSkip);
     }
     return false;
 }
