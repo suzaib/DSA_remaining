@@ -4370,8 +4370,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //Time Complexity will be O(3n2)
 //Space Complexity will be O(3n)
 
-//Remaining problems
-//Dp 56 : 31
 
 //See if you can further optimize stocks II problem
 //In further optimization of minCoins function, why do we loop from front(in the second loop) when usually such problems are looped from backwards 
