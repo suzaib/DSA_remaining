@@ -350,6 +350,8 @@ class Trie{
                 node=node->get(bit);
             }
         }
+        //The loop runs for 32 times
+        //Time Complexity will be O(32)
 
         int getMax(int n){
             Node* node=root;
@@ -365,4 +367,42 @@ class Trie{
 
             return ans;
         }
+        //The loop runs for 32 times
+        //Time Complexity will be O(32)
 };
+
+//Now we solve our question
+//Max XOR with array elements
+int maxXOR(int x,vector<int> &arr){
+    int n=arr.size();
+    Trie t;
+    for(int i=0;i<n;i++) t.insert(arr[i]);
+    return t.getMax(x);
+}
+//The for loop runs for n times and the insert function runs for 32 times
+//The getMax function runs for 32 times
+//Time Complexity will be O(32n+32)
+
+
+
+//XOR of elements taken from two arrays
+int maxXORII(vector<int> &arr1,vector<int> &arr2){
+    int n=arr1.size();
+    int m=arr2.size();
+
+    //First we insert all of arr1 elements in the trie
+    Trie t;
+    for(int i=0;i<n;i++) t.insert(arr1[i]);
+
+    //Now we take each element from arr2 one by one and compare the XOR
+    int ans=0;
+    for(int i=0;i<m;i++){
+        int maxi=t.getMax(arr2[i]);
+        ans=max(ans,maxi);
+    }
+    return ans;
+}
+//The first for loop takes n time and 32 for insertion, totalling 32*n
+//The second for loop runs for m*32 times (32 for the getMax function)
+//Time Complexity will be O(32(m+n))
+
