@@ -2637,9 +2637,9 @@ int editDistance_spaceOptimised(string &s1,string &s2){
 }
 //There is a for loop at the start taking m time 
 //There is a nested loop as well which takes mn time
-//Space is used by the dp table of mn size
+//Space is used by the two 1d arrays of m size
 //Time Complexity will be O(mn+m)
-//Space Complexity will be O(mn)
+//Space Complexity will be O(2m)
 
 //Further Optimisation
 int editDistance(string &s1,string &s2){
@@ -2719,7 +2719,7 @@ bool wildcardHelper_memoization(int i,int j,string &s1,string &s2,vector<vector<
         bool oneChar=wildcardHelper_memoization(i,j-1,s1,s2,dp);
         return dp[i][j]=(empty || oneChar);
     } 
-    return false;
+    return dp[i][j]=false;
 }
 bool wildcardMatching_memoization(string &s1,string &s2){
     int n=s1.size();
@@ -2727,6 +2727,90 @@ bool wildcardMatching_memoization(string &s1,string &s2){
     vector<vector<int>> dp(n,vector<int> (m,-1));
     return wildcardHelper_memoization(n-1,m-1,s1,s2,dp);
 }
+//The code runs to fill the dp table 
+//Space is occupied by the recursion stack and dp table of mn size
+//Time Complexity will be O(mn)
+//Space Complexity will be O(mn+n+m)
+
+//Tabulation
+bool wildcardMatching_tabulation(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<bool>> dp(n+1,vector<bool> (m+1,false));
+    dp[0][0]=true;
+    for(int i=1;i<=n;i++){
+
+        //Instead of writing a for loop, this time we have used a smart logic
+        //We could also write a for loop (k=1 to k=i) and set a flag as false whenever the s1[k-1]!='*'
+        //But this is a more cleaner method
+        if(s1[i-1]!='*') dp[i][0]=false;
+        else dp[i][0]=dp[i-1][0];
+    }
+
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1] || s1[i-1]=='?') dp[i][j]=dp[i-1][j-1];
+            else if(s1[i-1]=='*') dp[i][j]=(dp[i-1][j] || dp[i][j-1]);
+            else dp[i][j]=false;
+        }
+    }
+    
+    return dp[n][m];
+}
+//The intial for loops also runs for somewhat n times
+//The code runs for mn time in the nested loop
+//Space is occupied by the dp table of mn size
+//Time Complexity will be O(mn+n)
+//Space Complexity will be O(mn)
+
+//Space Optimisation
+bool wildcardMatching_spaceOptimisation(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<bool> prev(m+1,false);
+    vector<bool> curr(m+1,false);
+    prev[0]=true;
+
+    for(int i=1;i<=n;i++){
+        curr[0]=((s1[i-1]=='*') && (prev[0]));
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1] || s1[i-1]=='?') curr[j]=prev[j-1];
+            else if(s1[i-1]=='*') curr[j]=(prev[j] || curr[j-1]);
+            else curr[j]=false;
+        }
+        prev=curr;
+    }
+    return prev[m];
+}
+//The nested loop runs for nm
+//Space is occupied by prev and curr arrays
+//Time Complexity will be O(mn)
+//Space Complexity will be O(2m)
+
+//Further Optimisation
+bool wildcardMatching(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<bool> dp(m+1,0);
+    dp[0]=true;
+    for(int i=1;i<=n;i++){
+        bool diag=dp[0];
+        dp[0]=((s1[i-1]=='*') && (dp[0]));
+        for(int j=1;j<=m;j++){
+            bool temp=dp[j];
+            if(s1[i-1]==s2[j-1] || s1[i-1]=='?') dp[j]=diag;
+            else if(s1[i-1]=='*') dp[j]=(dp[j] || dp[j-1]);
+            else dp[j]=false;
+            diag=temp;
+        }
+    }
+
+    return dp[m];
+}
+//The nested loop runs for mn times
+//Space is occupied by the dp array 
+//Time Complexity will be O(mn)
+//Space Complexity will be O(m)
 
 
 
