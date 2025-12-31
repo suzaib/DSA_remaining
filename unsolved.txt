@@ -6,4 +6,4 @@ Question : Longest String Chain(use hash map since the current code uses too muc
 https://www.geeksforgeeks.org/problems/longest-string-chain/1
 
 
-Complete : Printing all LCS in lexicographical order (Complete in DP Playlists)
+Complete : Printing all LCS in lexicographical order (Complete in DP repo)

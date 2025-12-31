@@ -4371,8 +4371,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //Space Complexity will be O(3n)
 
 //Remaining problems
-//Dp 33 : 30
-//Dp 34 : 31
 //Dp 56 : 31
 
 //See if you can further optimize stocks II problem
@@ -4380,7 +4378,6 @@ int maxRectangle(vector<vector<int>> &mat){
 //See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
 // for existence of subset sum, we need to also write code for the case when the array has 0 as well, watch the next video of dp18 striver
 
-//Also write code for the problem in which we have to print all lcs
 int main(){
     vector<int> arr={5,4,11,1,16,8};
     vector<int> ans=printLIS(arr);
