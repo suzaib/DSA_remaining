@@ -59,6 +59,7 @@ int nthFibonacci(int n){
     return curr;
 }
 
+
 //Total number of ways to climb stairs 
 //You can take at max 2 steps at a time
 int totalWaysToClimbStairs_brute(int n){
@@ -83,6 +84,9 @@ int totalWaysToClimbStairs(int n){
 }
 //Time Complexity will be O(n)
 
+
+//Frog Jump I
+//Can jump one or two steps at max
 int fxFJ(vector<int> &arr,int idx){
     if(idx==0) return 0;
     int left=fxFJ(arr,idx-1)+abs(arr[idx-1]-arr[idx]);
@@ -149,6 +153,7 @@ int frogJump(vector<int> &arr){
     return curr;
 }
 //Time Complexity will be O(n)
+
 
 //Frog Jump II
 //Frog can jump k distance at a time
@@ -221,8 +226,12 @@ int houseRobber_brute(vector<int> arr){
     int ans=robHouse(arr,n-1);
     return ans;
 }
+//The code runs exponentially, since for every element we have two choices
+//Space is used by recursion stack
+//Time Complexity will be pow(2,n)
+//Space Complexity will be O(n)
 
-//Using Memoization
+//Memoization
 int robHouse_memo(vector<int> &arr,vector<int> &dp,int idx){
     if(idx<0) return 0;
     if(dp[idx]!=-1) return dp[idx];
@@ -238,8 +247,10 @@ int houseRobber_memoization(vector<int> arr){
     int ans=robHouse_memo(arr,dp,n-1);
     return ans;
 }
-//Time Complexity will be O(n) (earlier it was exponential due to multiple recursion calls)
-//Space Complexity will be O(n) for recursion stack space + O(n) for dp array
+//The code runs to fill all the dp states 
+//Space is used by the dp array and by recursion stack
+//Time Complexity will be O(n) 
+//Space Complexity will be O(2n)
 
 //Tabulation Method
 int houseRobber_tabulation(vector<int> arr){
@@ -254,8 +265,10 @@ int houseRobber_tabulation(vector<int> arr){
     }
     return dp[n-1];
 }
+//There is one for loop that runs n time
+//Space is used by the dp table
 //Time Complexity will be O(n)
-//Space Complexity will be O(n) (due to dp array)
+//Space Complexity will be O(n)
 
 //Space Optimisation
 int houseRobber(vector<int> arr){
@@ -272,8 +285,43 @@ int houseRobber(vector<int> arr){
     }
     return curr;
 }
+//The code runs for a for loop taking n time
+//No extra space is occupied
 //Time Complexity will be O(n)
-//Most Efficient Solution
+//Space Complexity will be O(1)
+
+
+//House Robber II
+//This time the array is circular so first and last elements are also adjacent
+//We can solve this by calling the robberI function first by excluding 0th element and then by excluding (n-1)th element
+//Then we can take maximum of both
+int houseRobberII(vector<int> &arr){
+    int n=arr.size();
+
+    //If the array has a single element we can just return that
+    if(n==1) return arr[0];
+
+    //If the array has two elements, we can return the max of them
+    if(n==2) return max(arr[0],arr[1]);
+
+    //Let's create two arrays
+    vector<int> arr1(n-1);
+    for(int i=0;i<n-1;i++) arr1[i]=arr[i+1];
+
+    vector<int> arr2=arr;
+    arr2.pop_back();
+
+    int a=houseRobber(arr1);
+    int b=houseRobber(arr2);
+    return max(a,b);
+}
+//The code uses houseRobberI function two times 
+//The code also has a for loop
+//Space is occupied by the two temp array
+//Time Complexity will be O(3n)
+//Space Complexity will be O(2n)
+
+
 
 
 //2D Dynamic Programming
