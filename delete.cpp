@@ -66,7 +66,30 @@ int largestRectangle(vector<int> &arr){
 //Time Complexity will be O(2n)
 //Space Complexity will be O(2n)
 
+vector<int> nse(vector<int> &arr){
+    int n=arr.size();
+    vector<int> ans(n);
+    for(int i=n-1;i>=0;i--){
+        while(!st.empty() && st.top()>=arr[i]) st.pop();
+        ans[i]=(st.empty()? -1:st.top());
+        st.push(arr[i]);
+    }
+    return ans[i];
+}
 
+int largest(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    vector<int> nse=findNSE(arr);
+    vector<int> pse=findPSE(arr);
+    for(int i=0;i<n;i++){
+        int l=pse[i];
+        int r=nse[i];
+        int area=(r-l-1)*arr[i];
+        maxArea=max(maxArea,area);
+    }
+    return maxArea;
+}
 int main(){
     vector<int> arr={1,3,5};
     vector<int> lows(1)
