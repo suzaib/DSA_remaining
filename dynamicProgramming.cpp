@@ -2531,7 +2531,94 @@ int distinctSubseq(string &s1,string &s2){
 //Space Complexity will be O(m)
 
 
+//Edit Distance
+//Similar to previous problem
+int editDistanceHelper_brute(int i,int j,string &s1,string &s2){
+    if(i<0) return j+1;
+    if(j<0) return i+1;
+    if(s1[i]==s2[j]) return (0+editDistanceHelper_brute(i-1,j-1,s1,s2));
 
+    //This is the case when string char don't match, We can do three things
+    //First is to insert another character similar to it in front
+    int ins=1+editDistanceHelper_brute(i,j-1,s1,s2);
+
+    //Second is delete that char and see if the next one matches, so only i will move back
+    int del=1+editDistanceHelper_brute(i-1,j,s1,s2);
+
+    //Third is to replace that char so that they match, then move both the pointers
+    int rep=1+editDistanceHelper_brute(i-1,j-1,s1,s2);
+    return min(ins,min(del,rep));
+    
+}
+int editDistance_brute(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    return editDistanceHelper_brute(n-1,m-1,s1,s2);
+}
+//The code will run exponentially
+//Space is used by recursion stack which can be n+m
+//Time Complexity will be exponential
+//Space Complexity will be O(n+m)
+
+//Memoization
+int editDistanceHelper_memoization(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+    if(i<0) return j+1;
+    if(j<0) return i+1;
+
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(s1[i]==s2[j]) return dp[i][j]=editDistanceHelper_memoization(i-1,j-1,s1,s2,dp);
+
+    int ins=1+editDistanceHelper_memoization(i,j-1,s1,s2,dp);
+    int del=1+editDistanceHelper_memoization(i-1,j,s1,s2,dp);
+    int rep=1+editDistanceHelper_memoization(i-1,j-1,s1,s2,dp);
+    return dp[i][j]=min(ins,min(del,rep));
+}
+int editDistance_memoization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    return editDistanceHelper_memoization(n-1,m-1,s1,s2,dp);
+}
+//The code runs to fill the complete dp table
+//Space is used by the dp array and recursion stack of n+m
+//Time Complexity will be O(nm)
+//Space Complexity will be O(nm+n+m)
+
+//Tabulation
+int editDistance_tabulation(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n+1,vector<int> (m+1,0));
+    for(int j=0;j<=m;j++) dp[0][j]=j;
+    for(int i=1;i<=n;i++) dp[i][0]=i;
+    
+    for(int i=1;i<=n;i++){
+        for(int j=1;j<=m;j++){
+            if(s1[i-1]==s2[j-1]) dp[i][j]=dp[i-1][j-1];
+            else{
+                int ins=1+dp[i][j-1];
+                int del=1+dp[i-1][j];
+                int rep=1+dp[i-1][j-1];
+                dp[i][j]=min(ins,min(del,rep));
+            }
+        }
+    }
+
+    return dp[n][m];
+}
+//There are two loop at the start taking a time of n+m
+//Then there is a nested loop which runs for mn time
+//Space is used by the dp table of mn size
+//Time Complexity will be O(mn+m+n)
+//Space Complexity will be O(mn)
+
+//Space Optimisation
+int editDistance_spaceOptimised(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<int> prev(m+1,0);
+    vector<int> curr(m+1,0);
+}
 //DP on Stocks
 
 
