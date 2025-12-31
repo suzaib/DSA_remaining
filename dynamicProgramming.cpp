@@ -2673,11 +2673,23 @@ int editDistance(string &s1,string &s2){
 //We only need to tell whether or not the strings are matching or not
 //Hence we only need to return true or false
 bool wildcardHelper_brute(int i,int j,string &s1,string &s2){
+
+    //If both the strings got exhausted then the comparsion was successful
+    if(i<0 && j<0) return true;
+
+    //If only s1 got exhausted then the comparsion was not successful
+    if(i<0) return false;
+    
+    //If s2 got exhausted and there's still s1 left, the match can still be made if there is only * left in s1
+    if(j<0){
+        for(int k=0;k<=i;k++) if(s1[k]!='*') return false;
+        return true;
+    }
     if(s1[i]==s2[j] || s1[i]=='?') return wildcardHelper_brute(i-1,j-1,s1,s2);
     if(s1[i]=='*'){
-        bool skip=wildcardHelper_brute(i,j-1,s1,s2);
-        bool notSkip=wildcardHelper_brute(i-1,j-1,s1,s2);
-        return (skip || notSkip);
+        bool empty=wildcardHelper_brute(i-1,j,s1,s2);
+        bool oneChar=wildcardHelper_brute(i,j-1,s1,s2);
+        return (empty || oneChar);
     }
     return false;
 }
@@ -2685,6 +2697,35 @@ bool wildcardMatching_brute(string &s1,string &s2){
     int n=s1.size();
     int m=s2.size();
     return wildcardHelper_brute(n-1,m-1,s1,s2);
+}
+//The code will run exponential times
+//Space will be occupied by the recursion stack of n+m size
+//Time Complexity will be exponential
+//Space Complexity will be O(n+m)
+
+//Memoization
+bool wildcardHelper_memoization(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
+    if(i<0 && j<0) return true;
+    if(i<0) return false;
+    if(j<0){
+        for(int k=0;k<=i;k++) if(s1[k]!='*') return false;
+        return true;
+    }
+
+    if(dp[i][j]!=-1) return dp[i][j];
+    if(s1[i]==s2[j] || s1[i]=='?') return dp[i][j]=wildcardHelper_memoization(i-1,j-1,s1,s2,dp);
+    if(s1[i]=='*'){
+        bool empty=wildcardHelper_memoization(i-1,j,s1,s2,dp);
+        bool oneChar=wildcardHelper_memoization(i,j-1,s1,s2,dp);
+        return dp[i][j]=(empty || oneChar);
+    } 
+    return false;
+}
+bool wildcardMatching_memoization(string &s1,string &s2){
+    int n=s1.size();
+    int m=s2.size();
+    vector<vector<int>> dp(n,vector<int> (m,-1));
+    return wildcardHelper_memoization(n-1,m-1,s1,s2,dp);
 }
 
 
