@@ -1,62 +1,72 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void dfs(string word,vector<string> &seq,string &startWord,vector<vector<string>> &ans,unordered_map<string,int>> &mp){
-    int n=word.size();
-    if(word==startWord){
-        reverse(seq.begin(),seq.end());
-        ans.push_back(seq);
-        reverse(seq.begin(),seq.end());
-        return;
-    }
-    int steps=mp[word];
+//Area of Largest Rectangle in a Histogram
+//Brute Force Approach
+//Just try to count in leftwards and rightwards direction
+int largestRectangle_brute(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
     for(int i=0;i<n;i++){
-        char orgChar=word[i];
-        for(char c='a';c<='z';c++){
-            if(orgChar==c) continue;
-            word[i]=c;
-            if(mp.find(word)!=mp.end() && mp[word]=steps-1){
-                seq.push_back(word);
-                dfs(word,seq,startWord,ans,mp);
-                seq.pop_back();
-            }
-        }
-        word[i]=char;
+        int r=i;
+        int l=i;
+        while(r<n && arr[r]>=arr[i]) r++;
+        while(l>=0 && arr[l]>=arr[i]) l--;
+        int area=(r-l-1)*(arr[i]);
+        maxArea=max(area,maxArea);
     }
+    return maxArea;
 }
-vector<vector<string>> wordLadderII(string &startWord,string &endWord,vector<string> &wordList){
-    queue<string> q;
-    q.push(startWord);
-    unordered_map<string,int> mp;
-    mp[startWord]=1;
-    unordered_set<string> st;
-    int s=startWord.size();
-    while(!q.empty()){
-        string word=q.front();
-        q.pop();
-        int steps=mp[word];
-        if(wod==endWord) break;
-        for(int i=0;i<s;i++){
-            char orgChar=c;
-            for(char c='a';c<='z';c++){
-                if(orgChar==c) continue;
-                word[i]=c;
-                if(st.find(word)!=st.end()){
-                    st.erase(word);
-                    q.push(word);
-                    mp[word]=steps+1;
-                }
-            }
-            word[i]=orgChar;
-        }
-    }
+//Time Complexity will be O(n2)
 
-    vector<vector<string>> ans;
-    if(mp.find(endWord)==mp.end()) return {};
-    vector<string> seq={endWord};
-    dfs(endWord,seq,startWord,ans,mp);
-    return ans;
+//Better Approach
+//We can also use the concepts of pse and nse to solve this
+int largestRectangle_better(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    vector<int> nse=findNSE(arr);
+    vector<int> pse=findPSE(arr);
+    for(int i=0;i<n;i++){
+        int l=pse[i];
+        int r=nse[i];
+        int area=(r-l-1)*arr[i];
+        maxArea=max(maxArea,area);
+    }
+    return maxArea;
 }
+//Time Complexity will be O(2n+2n+n)
+//Space Complexity will be O(2n+2n+n+n)
+
+//Optimal Approach
+//Quite Complex Approach hence video is recommended
+int largestRectangle(vector<int> &arr){
+    int n=arr.size();
+    int maxArea=0;
+    int nse,pse;
+    stack<pair<int,int>> st;
+    for(int i=0;i<n;i++){
+        while(!st.empty() && arr[i]<st.top().second){
+            nse=i;
+            int x=st.top().second;
+            st.pop();
+            pse=(st.empty() ? -1 : st.top().first);
+            maxArea=max((nse-pse-1)*x,maxArea);
+        }
+        st.push({i,arr[i]});
+    }
+    nse=n;
+    while(!st.empty()){
+        int x=st.top().second;
+        st.pop();
+        int pse=(st.empty()? -1:st.top().first);
+        maxArea=max((nse-pse-1)*x,maxArea);
+    }
+    return maxArea;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(2n)
+
+
 int main(){
     vector<int> arr={1,3,5};
     vector<int> lows(1)
