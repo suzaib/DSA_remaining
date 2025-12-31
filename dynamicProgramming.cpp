@@ -2648,15 +2648,26 @@ int editDistance(string &s1,string &s2){
     vector<int> dp(m+1,0);
     iota(dp.begin(),dp.end(),0);
     for(int i=1;i<=n;i++){
+        diag=dp[0];
         dp[0]=i;
         for(int j=1;j<=m;j++){
-            int diag=dp[j-1];
+            int temp=dp[j];
             if(s1[i-1]==s2[j-1]) dp[j]=diag;
             else dp[j]=1+min(dp[j-1],min(dp[j],diag));
+            diag=temp;
         }
     }
     return dp[m];
 }
+//The iota function takes n m time to run
+//The nested loop takes mn time
+//Space is occupied only by the dp array
+//Time Complexity will be O(mn+m)
+//Space Complexity will be O(m)
+
+
+
+
 //DP on Stocks
 
 
