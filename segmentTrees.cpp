@@ -22,7 +22,7 @@ The first node will be node 0 and will be stored at index 0 of the segment array
 The left child will be 2*idx+1 and the right child will be 2*idx+2
 For memory, just start numbering the nodes from 0, level wise, and skip the numbers if the nodes aren't there
 
-We also need to know how much longer array would we need for storing the complete segment tree
+We also need to know how much longer array would we need for storing the full segment tree
 There's a proof that shows to store the segment tree we will need an array of size O(4n), which will always have enough space
 The proof is quite long and hence we will not discuss it. n in the above is the size of the array
 
@@ -51,22 +51,22 @@ The query being 2-4 and the node's range being 1-2 is also partial overlap
 2) No Overlap : return INT_MAX (since we are looking for min value)
 If the query is 2-4 and we have a node whose range is 0-1, this is no overlap, in this case return INT_MAX
 
-3) Complete Overlap
-If the query is 2-4 and the node's range is 3-3, return seg[idx] in this case of complete overlap
+3) full Overlap
+If the query is 2-4 and the node's range is 3-3, return seg[idx] in this case of full overlap
 
 Let us tell by an example
 Consider the array [1,3,2,0,4,5] we always start from the 0th node which will have the range as 0-5 (6 elements in total)
 Consider the query to be 2-4, 0th node in that case is having partial overlap therefore it will return (min(leftNode,rightNode))
 The left node is 0-2 and the right node is 3-5 both of which again have partial overlap
 Now consider the 0-2 return min(leftNode,rightNode), its left node will be 0-1, this will return INT_MAX since no overlap(and hence it contributes nothing) 
-And the right node would be 2-2 which is a complete overlap
+And the right node would be 2-2 which is a full overlap
 Therefore the right node will return seg[idx]
 This will keep happening
 
 Now consider l and r be the query range and low and high denote the range associated with the node
 Then our three cases would be :
 No overlap       : if r<low || high<l
-Complete Overlap : low>=l && high<=r
+full Overlap : low>=l && high<=r
 Partial Overlap  : no need for condition, will be handled by the else case
 
 Types of Queries
@@ -97,13 +97,13 @@ update(idx,low,high,_idx,val){
 
 
 We will now discuss the time complexity for queries
-In case of complete or no overlap, we simply return, therefore time taken O(1)
+In case of full or no overlap, we simply return, therefore time taken O(1)
 So we need to study the time taken in case of partial overlap only
 
 First let's consider small range, in that case most time we will get no overlap due to small range of query, and mostly we will have to travel to deepest point for only some time
 Therefore in case of small query range, time taken will be logn (time taken to reach the depth of tree)
 
-Incase of very large query range, most of the cases will be of complete overlap so we return mostly, again we can say that at max logn will be the time taken
+Incase of very large query range, most of the cases will be of full overlap so we return mostly, again we can say that at max logn will be the time taken
 Incase of medium overlap we can also say that at max the depth of the tree will be covered since partial overlaps won't be that much
 Therefore Time Complexity will be O(logn), this can be 2logn or 3logn etc
 
@@ -148,7 +148,7 @@ class SGTree{
             //No Overlap
             if(l>high || r<low) return INT_MAX;
 
-            //Complete Overlap
+            //full Overlap
             if(l<=low && r>=high) return seg[idx];
 
             //Partial Overlap
@@ -299,22 +299,49 @@ int solve3(){
 
 
 //Codeforces Problem 380C : Sereja and Brackets
-class SGTree{
+class Node{
     public:
-        vector<int> seg;
+        int open;
+        int closed;
+        int full;
 
-        SGTree(int n){
-            seg.resize(4*n+1) //One extra just to be safe
+        Node(){
+            open=0;
+            closed=0;
+            full=0;
         }
 
-        void build(int idx,int low, int high,string& s){
+};
+
+class SGTree{
+    public:
+        vector<Node*> seg;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,string &str){
             if(low==high){
-                seg[idx]=0;
+                char c=str[low];
+                if(c=='(') seg[idx]->open++;
+                else seg[idx]->closed++;
                 return;
             }
+
             int mid=(low+high)>>1;
-            build(2*idx+1,low,mid,s);
-            build(2*idx+2,high)
+            build(2*idx+1,low,mid,str);
+            build(2*idx+2,mid+1,high,str);
+            int leftOpen=seg[2*idx+1]->open;
+            int rightClosed=seg[2*idx+2]->closed;
+            int leftClosed=seg[2*idx+1]->closed;
+            int rightOpen=seg[2*idx+2]->open;
+            int leftMatches=seg[2*idx+1]->full;
+            int rightMatches=seg[2*idx+2]->full;
+            int newMatches=min(leftOpen,rightClosed);
+            seg[idx]->full=leftMatches+rightMatches+newMatches;
+            seg[idx]->open=leftOpen+rightOpen-newMatches;
+            seg[idx]->closed=leftClosed+rightClosed-newMatches;
         }
 }
 ///Start at 2:00:00
