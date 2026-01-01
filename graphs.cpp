@@ -1555,6 +1555,55 @@ int binaryMaze(vector<vector<int>> &mat,pair<int,int> &src,pair<int,int> target)
     return -1;
 }
 
+
+//Path with minimum effort
+int pathWithMinEffort(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    vector<vector<int>> dist(n,vector<int>(m,1e9));
+    dist[0][0]=0;
+    priority_queue<pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> pq;
+    pq.push({0,{0,0}});
+
+    //Using arr to traverse neighbours
+    vector<int> dx={-1,0,1,0};
+    vector<int> dy={0,1,0,-1};
+
+    while(!pq.empty()){
+        int effort=pq.top().first;
+        int i=pq.top().second.first;
+        int j=pq.top().second.second;
+        pq.pop();
+
+        //For this particular problem, when we take out the destination from the pq, it will be the answer
+        //Since any value taken out later on from the priority queue, will have a higher or at least equal diff with this so no point in moving forward
+        if(i==n-1 && j==m-1) return effort;
+        if(effort>dist[i][j]) continue;
+        for(int k=0;k<4;k++){
+            int ni=i+dx[k];
+            int nj=j+dy[k];
+            if(ni>=0 && ni<n && nj>=0 && nj<m){
+                int heightDiff=abs(mat[i][j]-mat[ni][nj]);
+                int newEffort=max(heightDiff,dist[i][j]);
+                if(newEffort<dist[ni][nj]){
+                    dist[ni][nj]=newEffort;
+                    pq.push({newEffort,{ni,nj}});
+                }
+            }
+        }
+    }
+    return dist[n-1][m-1];
+}
+//Time taken by dijkstra is ElogV as discussed before
+//So time taken in this code will be around as well
+//Edges in a grid are equal to n*m*4(4 neighbours)
+//So E=4mn and V=mn
+//Space will be used by priority queue(can hold 2 or three times the nodes at max) and dist table
+//Time Complexity will be O(4mnlogmn)
+//Space Complexity will be O(2mn)
+
+
+
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
 //This can be used even when the edgeWts are negative
