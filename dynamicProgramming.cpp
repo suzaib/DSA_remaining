@@ -2212,48 +2212,7 @@ vector<vector<int>> lcsTable(string &s1,string &s2){
 //Time Complexity will be O(mn)
 //Space Complexity will be o(mn)
 
-set<string> backTrack(int i,int j,string &s1,string &s2,vector<vector<int>> &dp){
 
-    //Base Case
-    if(i==0 || j==0) return {""};
-
-    //Character match, must be taken
-    if(s1[i-1]==s2[j-1]){
-        set<string> prev=backTrack(i-1,j-1,s1,s2,dp);
-        set<string> result;
-        for(auto &str:prev) result.insert(str+s1[i-1]);
-        return result;
-    }
-
-    set<string> result;
-    //Characters don't match --> branch
-    if(dp[i-1][j]==dp[i][j]){
-        auto top=backTrack(i-1,j,s1,s2,dp);
-        result.insert(top.begin(),top.end());
-    }
-
-    if(dp[i][j-1]==dp[i][j]){
-        auto left=backTrack(i,j-1,s1,s2,dp);
-        result.insert(left.begin(),left.end());
-    }
-
-    return result;
-}
-
-set<string> allLCS(string &s1,string &s2){
-    vector<vector<int>> dp=lcsTable(s1,s2);
-    return backTrack(s1.size(),s2.size(),s1,s2,dp);
-}
-
-
-
-
-//The above code only prints one LCS
-//Below we write code to print all the lcs
-//We are using set to store only unique lcs, if you want duplicates as well, use some other data structure, that's all
-set<string> allLCS(string &s1,string s2){
-
-}
 
 //Longest Common Substring 
 //Substrings are continuous, unlike subsequences
