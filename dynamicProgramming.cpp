@@ -2194,9 +2194,7 @@ string printingLCS(string &s1,string &s2){
 //Space Complexity will be O(MN)
 
 
-//Printing all lcs
-//Let's first create a function to create the dp table
-//Similar to the previous question
+//Printing lcs table
 vector<vector<int>> lcsTable(string &s1,string &s2){
     int n1=s1.size();
     int n2=s2.size();
