@@ -1932,7 +1932,7 @@ int unboundedKnapsack(int maxWt,vector<int> &wt,vector<int> &val){
 
     for(int i=1;i<n;i++){
         for(int j=wt[i];j<=maxWt;j++){
-            dp[j]=max(dp[j],val+dp[j-wt[i]]);
+            dp[j]=max(dp[j],val[i]+dp[j-wt[i]]);
         }
     }
     return dp[maxWt];
@@ -2653,7 +2653,7 @@ int editDistance(string &s1,string &s2){
     vector<int> dp(m+1,0);
     iota(dp.begin(),dp.end(),0);
     for(int i=1;i<=n;i++){
-        diag=dp[0];
+        int diag=dp[0];
         dp[0]=i;
         for(int j=1;j<=m;j++){
             int temp=dp[j];
@@ -3538,7 +3538,7 @@ vector<int> printLIS(vector<int> &arr){
 
 //LIS Using Binary Search
 //We just print the length of LIS
-int lengthOfLIS(vector<int> &arr){
+int lengthOfLISII(vector<int> &arr){
     int n=arr.size();
     vector<int> ans;
     ans.push_back(arr[0]);
