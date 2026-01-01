@@ -1671,6 +1671,62 @@ vector<vector<int>> floydWarshallAlgorithm(int n,vector<vector<int>> &edges){
 //Space Complexity will be O(1)
 
 
+//Find the city with the smallest number of neighbours at a threshold distance
+//Incase more than one cities are there, give the largest numbered ciy
+//Just typical use of Floyd Warshall Algorithm
+//Make sure this time the edge is bidirectional, so fill the cost array both ways
+int thresholdNeigbour(int n,vector<vector<int>> &edges,int threshold){
+
+    //We will create the cost matrix similar to floyd Warshall algorithm
+    vector<vector<int>> cost(n,vector<int> (n,1e9));
+    for(int i=0;i<n;i++) cost[i][i]=0;
+    for(auto it:edges){
+        int u=it[0];
+        int v=it[1];
+        int wt=it[2];
+        cost[u][v]=wt;
+        cost[v][u]=wt;
+    }
+    //Takes m time
+
+    for(int k=0;k<n;k++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(cost[i][k]==1e9 || cost[k][j]==1e9) continue;
+                cost[i][j]=min(cost[i][j],cost[i][k]+cost[k][j]);
+            }
+        }
+    }
+    //Takes n3 time
+
+    int cntCity=n;
+    int cityNo=-1;
+
+    for(int city=0;city<n;city++){
+        int cnt=0;
+        for(int adjCity=0;adjCity<n;adjCity++){
+            
+            //Skip when adjCity and city are same
+            if(city==adjCity) continue;
+            if(cost[city][adjCity]<=threshold) cnt++;
+        }
+        if(cnt<=cntCity){
+            cntCity=cnt;
+            cityNo=city;
+        }
+    }
+    //Takes n2 time
+
+    return cityNo;
+}
+//The biggest loop runs for about n3 times
+//Space is used by the cost matrix
+//Time Complexity will be O(n3)
+//Space Complexity will be O(n2)
+
+
+
+
 //Spanning Tree : Concept
 //A graph which has N nodes and N-1 edges and all nodes are reachable from each other, ie, the graph doesn't have disjoint components
 //Search on internet for examples to better understand
@@ -1951,7 +2007,65 @@ vector<vector<string>> mergeAccounts(vector<vector<string>> &details){
 
 //Number of Islands II
 //This is an online query type problem, where we will be given queries and we need to tell the answer after receiving each query
+//For this problem we would need to convert 2D arr indices to 1D arr indices and vice versa
+//Also the original matrix will be all 0s so only matrix order is given
+vector<int> noOfIslandsII(int n,int m,vector<pair<int,int>> &operators){
+    DisjointSet ds(n*m);
 
+    //We would also need a table to keep track of visited elements
+    vector<vector<bool>> vis(n,vector<bool> (m,0));
+    int cnt=0;//count of islands initially
+
+    vector<int> ans; //Stores the answers of all queries
+
+    //To traverse the neighbours we would need the dx arrays
+    vector<int> dx={-1,0,1,0};
+    vector<int> dy={0,1,0,-1};
+
+    for(auto it:operators){
+        int i=it.first;
+        int j=it.second;
+
+        int node=m*i+j;
+
+        //Incase this index is already visited, there would be no change in count of islands and we can push the answer of this query as is
+        if(vis[i][j]){
+            ans.push_back(cnt);
+            continue;
+        }
+
+        //Incase it is not visited, first mark it visited and then increase the count of islands
+        vis[i][j]=true;
+        cnt++;
+
+        //Now check its neighbours
+        for(int k=0;k<4;k++){
+            int ni=i+dx[k];
+            int nj=j+dy[k];
+
+            //We check if the neighbour is an island or not, if it is not an island, no need to do anything
+            if(ni>=0 && ni<n && nj>=0 && nj<m && vis[ni][nj]==1){
+
+                //Now we also need to check for connectivity, are they connected or not?
+                //First let us get the convert the index
+                int adjNode=m*ni+nj;
+                if(ds.findUltimatePar(node)==ds.findUltimatePar(adjNode)) continue;
+                else{   //We connect them
+                    ds.unionByRank(node,adjNode);
+                    cnt--;
+                }
+            }
+        }
+        ans.push_back(cnt);
+
+    }
+
+    return ans;
+}
+//The loop runs for q times where q is the number of queries
+//The disjoint sets operations take 4a time
+//There's also a loop that runs 4 times to calculate neighbours
+//Time Complexity will be O(q*4*4a)
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
