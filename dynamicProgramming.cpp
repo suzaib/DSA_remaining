@@ -4531,7 +4531,6 @@ int countSquareSubmatrices(vector<vector<int>> &mat){
 
 
 //See if you can further optimize stocks II problem
-//See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
 // for existence of subset sum, we need to also write code for the case when the array has 0 as well, watch the next video of dp18 striver
 
 int main(){
