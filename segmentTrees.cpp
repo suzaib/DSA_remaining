@@ -275,7 +275,7 @@ class SGTree{
 };
 
 //The upper class is to be used here
-int solve3(){
+int XeniaAndBits(){
     int n,m;
     cin>>n>>m;
     int el=1<<n;
@@ -305,44 +305,70 @@ class Node{
         int closed;
         int full;
 
-        Node(){
-            open=0;
-            closed=0;
-            full=0;
+        Node(int open,int closed,int full){
+            this->open=open;
+            this->closed=closed;
+            this->full=full;
         }
 
 };
 
 class SGTree{
     public:
-        vector<Node*> seg;
 
+        vector<Node> seg;
         SGTree(int n){
             seg.resize(4*n+1);
         }
 
+        void merge(Node &curr, Node &left, Node &right){
+            curr.open=left.open+right.open-min(left.open,right.closed);
+            curr.closed=left.closed+right.closed-min(left.open,right.closed);
+            curr.full=left.full+right.full+min(left.open,right.open);
+        }
+
         void build(int idx,int low,int high,string &str){
             if(low==high){
-                char c=str[low];
-                if(c=='(') seg[idx]->open++;
-                else seg[idx]->closed++;
+                seg[idx]=new Node(str[low]=='(',str[low]==')',0);
                 return;
             }
 
             int mid=(low+high)>>1;
             build(2*idx+1,low,mid,str);
             build(2*idx+2,mid+1,high,str);
-            int leftOpen=seg[2*idx+1]->open;
-            int rightClosed=seg[2*idx+2]->closed;
-            int leftClosed=seg[2*idx+1]->closed;
-            int rightOpen=seg[2*idx+2]->open;
-            int leftMatches=seg[2*idx+1]->full;
-            int rightMatches=seg[2*idx+2]->full;
-            int newMatches=min(leftOpen,rightClosed);
-            seg[idx]->full=leftMatches+rightMatches+newMatches;
-            seg[idx]->open=leftOpen+rightOpen-newMatches;
-            seg[idx]->closed=leftClosed+rightClosed-newMatches;
+            merge(seg[idx],seg[2*idx+1],seg[2*idx+2]);
         }
+
+        int query(int idx,int low,int high,int l,int r){
+
+            //Complete Overlap
+            if(low>=l && high<=r){
+            }
+
+            //No Overlap
+            else if(low>r || high<l){}
+
+            //Partial Overlap
+            else{}
+        }
+};
+
+void SerejaAndBrackets(){
+    string s;
+    cin>>s;
+    int q;
+    cin>>q;
+    int n=s.size();
+    sg.build(0,0,n-1,s,seg);
+    SGTree sg(n);
+    while(q--){
+        int l,r;
+        cin>>l>>r;
+
+        //The question has 1 based indexing therefore we reduce the value by one unit
+        l--;
+        r--;
+    }
 }
 ///Start at 2:00:00
 
