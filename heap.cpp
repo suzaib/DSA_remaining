@@ -70,63 +70,6 @@ void insertInMinHeap(vector<int> &arr,int k){
 //Time Complexity will be O(logn)
 //Space Complexity will be O(1)
 
-
-//We can use class to make it more readable
-//This will be a max heap
-class Heap{
-    public:
-        vector<int> arr;
-
-        Heap(int n){
-            arr.resize(n)
-        }
-
-        void insert(int k){
-            int n=arr.size();
-            arr.push_back(k);
-            i=n;
-            while(i>0){
-                int pi=(i-1)/2;
-                if(arr[i]<arr[pi]){
-                    swap(arr[i],arr[pi]);
-                    i=pi;
-                }
-                else return;
-            }
-        }
-
-        void delRoot(){
-            int n=arr.size();
-            if(n==0) return;
-            arr[0]=arr[n-1];
-            arr.pop_back();
-            n=arr.size();
-            if(n==0) return;
-
-            int i=0;
-
-            //Now taking the root to its correct position
-            while(i<n){
-                int l=2*i+1;
-                int r=2*i+2;
-
-                //No children ==> stop here
-                if(l>=n) break;
-
-                //Picking the largest child
-                int largest=l;
-                if(r<n && arr[r]>arr[l]) largest=r;
-
-                //If heap property not satisfied
-                if(arr[largest]>arr[i]){
-                    swap(arr[largest],arr[i]);
-                    i=largest;
-                }
-                else break;
-
-        }
-}
-
 //Deletion in a Heap
 //Deletion in a heap only happens at the root
 //First replace the root element with the last element
@@ -189,33 +132,65 @@ void delInMinHeap(vector<int> &arr){
 //Time Complexity will be O(logn)
 
 
+//We can use class to make it more readable
+//This will be a max heap
+class Heap{
+    public:
+        vector<int> arr;
+
+        Heap(int n){
+            arr.resize(n)
+        }
+
+        void insert(int k){
+            int n=arr.size();
+            arr.push_back(k);
+            i=n;
+            while(i>0){
+                int pi=(i-1)/2;
+                if(arr[i]<arr[pi]){
+                    swap(arr[i],arr[pi]);
+                    i=pi;
+                }
+                else return;
+            }
+        }
+
+        void delRoot(){
+            int n=arr.size();
+            if(n==0) return;
+            arr[0]=arr[n-1];
+            arr.pop_back();
+            n=arr.size();
+            if(n==0) return;
+
+            int i=0;
+
+            //Now taking the root to its correct position
+            while(i<n){
+                int l=2*i+1;
+                int r=2*i+2;
+
+                //No children ==> stop here
+                if(l>=n) break;
+
+                //Picking the largest child
+                int largest=l;
+                if(r<n && arr[r]>arr[l]) largest=r;
+
+                //If heap property not satisfied
+                if(arr[largest]>arr[i]){
+                    swap(arr[largest],arr[i]);
+                    i=largest;
+                }
+                else break;
+        }
+    }
+    //Time Complexity will be O(logn)
+}
+
 
 //Heapify Algorithm
-//f(arr,i) will take index i to its correct position in the heap
-//Some thing to be noted that the if we consider only the leaf nodes(present in array from index n/2+1 to n) they are already in heap form, see yourself
-//So we need to heapify the tree only from index 0 to n/2
-void heapifyHelper(vector<int> &arr,int i){
-    int n=arr.size();
-    int largest=i;
-    int left=2*i;
-    int right=2*i+1;
-
-    if(left<n && arr[largest]<=arr[left]) largest=left;
-
-    if(right<n && arr[largest]<=arr[right]) largest=right;
-
-    if(largest!=i){
-        swap(arr[largest],arr[i]);
-        heapifyHelper(arr,largest);
-    }
-}
-
-void heapify(vector<int> &arr){
-    int n=arr.size();
-    for(int i=n/2;i>0;i--) heapifyHelper(arr,i);
-}
-
-//Lecture 74 code help
 int main(){
 
 }
