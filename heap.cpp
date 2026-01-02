@@ -20,9 +20,9 @@ Heap are only represented as trees for understanding purpose, but they must be i
 Reason? 
 Consider an array with first index filled with a null value
 Now fill this array with the heap elements(start from level 0 of the corresponding binary tree, and start filling from left to right)
-We will notice a very nice property, if any node is at index i in the array, then its left child will be at index 2*i in the same array
-and its right index will be at 2*i+1 in the same array.
-Also if a node is at ith index in the array, its parent will be at the (i/2)th index in the array.
+We will notice a very nice property, if any node is at index i in the array, then its left child will be at index 2*i+1 in the same array
+and its right index will be at 2*i+2 in the same array.
+Also if a node is at ith index in the array, its parent will be at the ((i-1)/2)th index in the array.
 */
 #include<bits/stdc++.h>
 using namespace std;
@@ -35,17 +35,19 @@ void insertInMaxHeap(vector<int> &arr,int k){
     int n=arr.size();
     arr.push_back(k);
     int idx=n;
-    while(idx>1){
-        int parentIdx=idx/2;
+    while(idx>0){
+        int parentIdx=(idx-1)/2;
         if(arr[idx]>arr[parentIdx]){
             swap(arr[idx],arr[parentIdx]);
             idx=parentIdx;
         }
-        else return;
+        else break;
     }
 }
-//Time Complexity will be O(logn)
+//The code runs for the depth of the heap
 //No extra space is needed, the original array is although changed
+//Time Complexity will be O(logn)
+//Space Complexity will be O(1)
 
 
 //Insertion in a Min Heap
@@ -54,8 +56,8 @@ void insertInMinHeap(vector<int> &arr,int k){
     int n=arr.size();
     arr.push_back(k);
     int idx=n;
-    while(idx>1){
-        int pIdx=idx/2;
+    while(idx>0){
+        int pIdx=(idx-1)/2;
         if(arr[idx]<arr[pIdx]){
             swap(arr[idx],arr[pIdx]);
             idx=pIdx;
@@ -63,8 +65,67 @@ void insertInMinHeap(vector<int> &arr,int k){
         else return;
     }
 }
+//The code at max runs for the height of the tree
+//No extra space is needed
 //Time Complexity will be O(logn)
+//Space Complexity will be O(1)
 
+
+//We can use class to make it more readable
+//This will be a max heap
+class Heap{
+    public:
+        vector<int> arr;
+
+        Heap(int n){
+            arr.resize(n)
+        }
+
+        void insert(int k){
+            int n=arr.size();
+            arr.push_back(k);
+            i=n;
+            while(i>0){
+                int pi=(i-1)/2;
+                if(arr[i]<arr[pi]){
+                    swap(arr[i],arr[pi]);
+                    i=pi;
+                }
+                else return;
+            }
+        }
+
+        void delRoot(){
+            int n=arr.size();
+            if(n==0) return;
+            arr[0]=arr[n-1];
+            arr.pop_back();
+            n=arr.size();
+            if(n==0) return;
+
+            int i=0;
+
+            //Now taking the root to its correct position
+            while(i<n){
+                int l=2*i+1;
+                int r=2*i+2;
+
+                //No children ==> stop here
+                if(l>=n) break;
+
+                //Picking the largest child
+                int largest=l;
+                if(r<n && arr[r]>arr[l]) largest=r;
+
+                //If heap property not satisfied
+                if(arr[largest]>arr[i]){
+                    swap(arr[largest],arr[i]);
+                    i=largest;
+                }
+                else break;
+
+        }
+}
 
 //Deletion in a Heap
 //Deletion in a heap only happens at the root
@@ -126,6 +187,7 @@ void delInMinHeap(vector<int> &arr){
     }
 }
 //Time Complexity will be O(logn)
+
 
 
 //Heapify Algorithm

@@ -311,6 +311,12 @@ class Node{
             this->full=full;
         }
 
+        Node(){
+            this->open=0;
+            this->closed=0;
+            this->full=0;
+        }
+
 };
 
 class SGTree{
@@ -321,35 +327,39 @@ class SGTree{
             seg.resize(4*n+1);
         }
 
-        void merge(Node &curr, Node &left, Node &right){
+        Node merge(Node left, Node right){
+            Node curr=Node(0,0,0);
             curr.open=left.open+right.open-min(left.open,right.closed);
             curr.closed=left.closed+right.closed-min(left.open,right.closed);
-            curr.full=left.full+right.full+min(left.open,right.open);
+            curr.full=left.full+right.full+min(left.open,right.closed);
+            return curr; 
         }
 
         void build(int idx,int low,int high,string &str){
             if(low==high){
-                seg[idx]=new Node(str[low]=='(',str[low]==')',0);
+                seg[idx]=Node(str[low]=='(',str[low]==')',0);
                 return;
             }
 
             int mid=(low+high)>>1;
             build(2*idx+1,low,mid,str);
             build(2*idx+2,mid+1,high,str);
-            merge(seg[idx],seg[2*idx+1],seg[2*idx+2]);
+            seg[idx]=merge(seg[2*idx+1],seg[2*idx+2]);
         }
 
-        int query(int idx,int low,int high,int l,int r){
+        Node query(int idx,int low,int high,int l,int r){
 
             //Complete Overlap
-            if(low>=l && high<=r){
-            }
+            if(low>=l && high<=r) return seg[idx];
 
             //No Overlap
-            else if(low>r || high<l){}
+            else if(low>r || high<l) return Node();
 
             //Partial Overlap
-            else{}
+            int mid=(low+high)>>1;
+            Node left=query(2*idx+1,low,mid,l,r);
+            Node right=query(2*idx+2,mid+1,high,l,r);
+            return merge(left,right);
         }
 };
 
@@ -359,8 +369,8 @@ void SerejaAndBrackets(){
     int q;
     cin>>q;
     int n=s.size();
-    sg.build(0,0,n-1,s,seg);
     SGTree sg(n);
+    sg.build(0,0,n-1,s);
     while(q--){
         int l,r;
         cin>>l>>r;
@@ -368,10 +378,12 @@ void SerejaAndBrackets(){
         //The question has 1 based indexing therefore we reduce the value by one unit
         l--;
         r--;
+        Node node=sg.query(0,0,n-1,l,r);
+        cout<<node.full*2<<"\n";
     }
 }
-///Start at 2:00:00
-
+///Start at 2:41:00
+//Start second lecture at 12:53
 int main(){
     //Your function
     return 0;
