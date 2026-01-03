@@ -2171,6 +2171,7 @@ int largeIsland(vector<vector<int>> &mat){
             }
         }
     }
+    //Time Complexity will be O(mn)
     if(flag==false) return (m*n);
 
     DisjoingSet ds(n*m);
@@ -2194,6 +2195,7 @@ int largeIsland(vector<vector<int>> &mat){
             }
         }
     }
+    //Time Complexity will be O(4mn)
 
     //Now we start by setting zeroes
     int maxi=1;
@@ -2218,8 +2220,13 @@ int largeIsland(vector<vector<int>> &mat){
             maxi=max(maxi,islandCnt);
         }
     }
+    //Time Complexity will be O(4mn)
     return maxi;
 }
+//There are three loops in total which run about 4mn+4mn+mn time
+//Space is occupied by the DisjointSet data structure which has been discussed before
+//Time Complexity will be O(9mn)
+//Space Complexity will be O(2mn)
 
 
 //Optimal Method for detect cycle in directed graph

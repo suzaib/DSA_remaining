@@ -406,3 +406,83 @@ int maxXORII(vector<int> &arr1,vector<int> &arr2){
 //The second for loop runs for m*32 times (32 for the getMax function)
 //Time Complexity will be O(32(m+n))
 
+
+//Number of Distinct Substrings in a string
+//Brute Force
+//Use a loop and set to build and store unique strings
+int noOfDistSubstr_brute(string &s){
+    int n=s.size();
+    unordered_set<string> st;
+    for(int i=0;i<n;i++){
+        string temp="";
+        for(int j=i;j<n;j++){
+            temp+=s[j];
+            st.insert(temp);
+        }
+    }
+    return st.size()+1;
+}
+//The for loop runs for about n2 times
+//Inside the loop, adding temp+=str[i] makes it n3 in total due to string copying
+//Space is taken by the unordered_set equal to the number of distinct substrings
+//Time Complexity will be O(n3)
+//Space Complexity will be O(m)
+
+//Optimal Method
+//This uses the same logic behind trie, but we won't need a complete trie, the trie node will do
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool containsChar(char c){
+            return links[c-'a']!=nullptr;
+        }
+
+        Node* get(char c){
+            return links[c-'a'];
+        }
+
+        void put(char c,Node* node){
+            links[c-'a']=node;
+        }
+};
+
+int distSubstr(string &s){
+    int n=s.size();
+    Node* root=new Node();
+    Node* node=root;
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        Node* node=root;
+        for(int j=i;j<n;j++){
+            if(!node->containsChar(s[i])){
+                cnt++;
+                node->put(s[i],new Node());
+            }
+            node=node->get(s[i]);
+        }
+    }
+}
+
+int fx(string &s){
+    int n=s.size();
+    Node* root=new Node();
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        Node* node=root;
+        for(int j=i;j<n;j++){
+            if(!node->containsChar(s[i])){
+                cnt++;
+                node->put(s[i],new Node());
+            }
+            node=node->get(s[i]);
+        }
+    }
+    return cnt;
+}
+
+
+int main(){
+    //Your code here
+    return 0;
+}
+
