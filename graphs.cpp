@@ -1615,9 +1615,31 @@ int cheapestFlight(int n,int src,int target,int k,vector<vector<int>> &flights){
     }
 
     vector<int> cost(n,1e9);
+
+    //Queue will store {stops,{node,distance}}
     queue<pair<int,pair<int,int>>> q;
     q.push({0,{src,0}});
     cost[src]=0;
+    while(!q.empty()){
+        auto it=q.front();
+        q.pop();
+        int stops=it.first;
+        int node=it.second.first;
+        int dist=it.second.second;
+
+        if(stops>k) continue;
+        for(auto it:adj[node]){
+            int adjNode=it.first;
+            int wt=it.second;
+            if(dist+wt<cost[adjNode] && stops<=k){
+                cost[adjNode]=dist+wt;
+                q.push({stops+1,{adjNode,cost[adjNode]}});
+            }
+        }
+    }
+
+    if(cost[target]==1e9) return -1;
+    return cost[target];
 }
 
 //Bellman Ford Algorithm
@@ -2131,6 +2153,74 @@ vector<int> noOfIslandsII(int n,int m,vector<pair<int,int>> &operators){
 //The disjoint sets operations take 4a time
 //There's also a loop that runs 4 times to calculate neighbours
 //Time Complexity will be O(q*4*4a)
+
+
+//Making a large island
+int largeIsland(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+
+    //First let us do a simple check to see if there are all ones
+    bool flag=false;
+    for(int i=0;i<n;i++){
+        if(flag==true) break;
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==0){
+                flag=true;
+                break;
+            }
+        }
+    }
+    if(flag==false) return (m*n);
+
+    DisjoingSet ds(n*m);
+    vector<int> dx={0,-1,0,1};
+    vector<int> dy={1,0,-1,0};
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==0) continue;
+            int node=m*i+j;
+            for(int k=0;k<4;k++){
+                int ni=i+dx[k];
+                int nj=j+dy[k];
+                if(ni>=0 && ni<n && nj>=0 && nj<m && mat[ni][nj]==1){
+                    //Check if they are joined
+                    int adjNode=m*ni+nj;
+                    int pu=ds.findUltimatePar(node);
+                    int pv=ds.findUltimatePar(adjNode);
+                    if(pu==pv) continue;
+                    ds.unionBySize(node,adjNode);
+                }
+            }
+        }
+    }
+
+    //Now we start by setting zeroes
+    int maxi=1;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==1) continue;
+            int islandCnt=1;
+            unordered_set<int> st;
+            for(int k=0;k<4;k++){
+                int ni=i+dx[k];
+                int nj=j+dy[k];
+                if(ni>=0 && ni<n && nj>=0 && nj<m && mat[ni][nj]==1){
+                    int adjNode=m*ni+nj;
+                    int pu=ds.findUltimatePar(adjNode);
+                    st.insert(pu);
+                }
+            }
+            for(auto it:st){
+                int cnt=ds.size[it];
+                islandCnt+=cnt;
+            }
+            maxi=max(maxi,islandCnt);
+        }
+    }
+    return maxi;
+}
+
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
