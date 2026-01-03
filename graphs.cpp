@@ -1603,6 +1603,22 @@ int pathWithMinEffort(vector<vector<int>> &mat){
 //Space Complexity will be O(2mn)
 
 
+//Cheapest Flights within K stops
+//Modified Dijkstra
+int cheapestFlight(int n,int src,int target,int k,vector<vector<int>> &flights){
+    vector<vector<pair<int,int>>> adj(n);
+    for(auto it:flights){
+        int u=it[0];
+        int v=it[1];
+        int cost=it[2];
+        adj[u].push_back({v,cost});
+    }
+
+    vector<int> cost(n,1e9);
+    queue<pair<int,pair<int,int>>> q;
+    q.push({0,{src,0}});
+    cost[src]=0;
+}
 
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
