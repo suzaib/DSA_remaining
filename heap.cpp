@@ -191,6 +191,63 @@ class Heap{
 
 
 //Heapify Algorithm
+//First we do it for maxHeap
+//This algorithm takes a node to its correct position in the heap 
+//Some things to be noted here are:
+//Leaf nodes are always in correct order, since they don't have any children and hence no need to compare them
+//The index of these leaf nodes in a complete binary tree is from n/2 to n-1 index in the array
+//Hence when we are heapyfying, we only need to take care of non leaf nodes which start from 0 to n/2 -1
+void heapifyHelper(int i,int n,vector<int> &arr){
+    while(i<n){
+        int l=2*i+1;
+        int r=2*i+2;
+        if(l>=n) break;
+
+        //Picking the largest child
+        int largest=l;
+        if(r<n && arr[r]>arr[l]) largest=r;
+
+        if(arr[largest]>arr[i]){
+            swap(arr[largest],arr[i]);
+            i=largest;
+        }
+        else break;
+    }
+}
+void heapify(){
+    int n=arr.size();
+    for(int i=n/2-1;i>=0;i--){
+        heapifyHelper(i,n,arr);
+    }
+}
+
+
+//Heap Sort
+//The heap sort is very easy, it involves two steps
+//Let's consider a max heap which is represented by an array arr
+//We need to sort the array using the fact that the array is a max heap
+//First step is to note that since it is a max heap hence the maximum element will be present at the root, that is arr[0]
+//Therefore simply replace max element at the end(arr[n-1])
+//Now reduce the size(don't delete anything,just assume the size got shrinked)
+//And use the heapify helper function to move the replaced root node to its correct position, so we have got a heap again
+//Again move the root node(which is the max) to the back and so on
+//Eventually the array will be sorted
+//This will take the same time as nlogn
+void heapSort(vector<int> &arr){
+    int s=arr.size();
+    int n=arr.size();
+    for(int i=1;i<n;i++){
+        swap(arr[0],arr[s-1]);
+        s--;
+        heapifyHelper(0,s,arr);
+    }
+}
+//Time Complexity will be O(nlogn)
+
+
+
+//Build heap sort and heapify algorithm and heapifyHelper function for min heap as well
+//Also build heap class for min heap as well
 int main(){
 
 }
