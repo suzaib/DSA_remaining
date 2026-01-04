@@ -309,6 +309,64 @@ string longestCompleteStr(vector<string> &arr){
 }
 
 
+//Number of Distinct Substrings in a string
+//Brute Force
+//Use a loop and set to build and store unique strings
+int noOfDistSubstr_brute(string &s){
+    int n=s.size();
+    unordered_set<string> st;
+    for(int i=0;i<n;i++){
+        string temp="";
+        for(int j=i;j<n;j++){
+            temp+=s[j];
+            st.insert(temp);
+        }
+    }
+    return st.size()+1;
+}
+//The for loop runs for about n2 times
+//Inside the loop, adding temp+=str[i] makes it n3 in total due to string copying
+//Space is taken by the unordered_set equal to the number of distinct substrings
+//Time Complexity will be O(n3)
+//Space Complexity will be O(m)
+
+//Optimal Method
+//This uses the same logic behind trie, but we won't need a complete trie, the trie node will do
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool containsChar(char c){
+            return links[c-'a']!=nullptr;
+        }
+
+        Node* get(char c){
+            return links[c-'a'];
+        }
+
+        void put(char c,Node* node){
+            links[c-'a']=node;
+        }
+};
+
+int distSubstr(string &s){
+    int n=s.size();
+    Node* root=new Node();
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        Node* node=root;
+        for(int j=i;j<n;j++){
+            if(!node->containsChar(s[j])){
+                cnt++;
+                node->put(s[j],new Node());
+            }
+            node=node->get(s[j]);
+        }
+    }
+    return cnt;
+}
+//Time Complexity will be O(n2)
+
+
 
 //XOR Problems
 //These are generally solved using tries
@@ -407,62 +465,81 @@ int maxXORII(vector<int> &arr1,vector<int> &arr2){
 //Time Complexity will be O(32(m+n))
 
 
-//Number of Distinct Substrings in a string
+
+
+
+//Maximum XOR with offline Queries
 //Brute Force
-//Use a loop and set to build and store unique strings
-int noOfDistSubstr_brute(string &s){
-    int n=s.size();
-    unordered_set<string> st;
-    for(int i=0;i<n;i++){
-        string temp="";
-        for(int j=i;j<n;j++){
-            temp+=s[j];
-            st.insert(temp);
+//Simply find the xor with all the elements lesser than a[i] and then find the max among them
+vector<int> maxXORIII_brute(vector<int> &arr,vector<pair<int,int>> &queries){
+    int n=arr.size();
+    vector<int> ans;
+    for(auto it:queries){
+        int x=it.first;
+        int y=it.second;
+        int maxi=0;
+        for(int i=0;i<n;i++){
+            if(arr[i]>y) continue;
+            maxi=max(maxi,x^arr[i]);
         }
+        ans.push_back(maxi);
     }
-    return st.size()+1;
+    return ans;
 }
-//The for loop runs for about n2 times
-//Inside the loop, adding temp+=str[i] makes it n3 in total due to string copying
-//Space is taken by the unordered_set equal to the number of distinct substrings
-//Time Complexity will be O(n3)
-//Space Complexity will be O(m)
+//Let q be the size of the queries table
+//The nested loop will run for nq times
+//No space is needed to solve the question
+//Time Complexity will be O(nq)
+//Space Complexity will be O(q)
 
 //Optimal Method
-//This uses the same logic behind trie, but we won't need a complete trie, the trie node will do
-class Node{
-    public:
-        Node* links[26]={nullptr};
-        bool containsChar(char c){
-            return links[c-'a']!=nullptr;
-        }
+//We will use the trie made from the previous question
+vector<int> maxXORIII(vector<int> &arr,vector<pair<int,int>> &queries){
+    int n=arr.size();
 
-        Node* get(char c){
-            return links[c-'a'];
-        }
+    //First we need to sort the array itself
+    sort(arr.begin(),arr.end());
+    //Time Complexity will be O(nlogn)
+    
+    vector<pair<int,pair<int,int>>> oQ;
+    int q=queries.size();
+    for(int i=0;i<n;i++) oQ.push_back({queries[1],{queries[0],i}});
 
-        void put(char c,Node* node){
-            links[c-'a']=node;
-        }
-};
-
-int distSubstr(string &s){
-    int n=s.size();
-    Node* root=new Node();
-    int cnt=0;
-    for(int i=0;i<n;i++){
-        Node* node=root;
-        for(int j=i;j<n;j++){
-            if(!node->containsChar(s[j])){
-                cnt++;
-                node->put(s[j],new Node());
-            }
-            node=node->get(s[j]);
-        }
-    }
-    return cnt;
+    //Now we sort the queries table
+    sort(oQ.begin(),oQ.end());
+    //Time Complexity will be O(klogk)
 }
 
+vector<int> maxXORIII(vector<int> &arr,vector<pair<int,int>> &queries){
+    int n=arr.size();
+
+    //First we need to sort our array
+    sort(arr.begin(),arr.end());
+    //Time Complexity will be O(nlogn)
+
+    //Now lets create a new table to store queries with their original serial no
+    vector<pair<int,pair<int,int>>> oO;
+    int q=queries.size();
+    for(int i=0;i<n;i++) oQ.push_back({queries[i][1],{queries[i][0],i}});
+
+    //Now we sort the newly made queries table
+    sort(oQ.begin(),oQ.end());
+    //Time Complexity will be O(qlogq)
+    
+    //Creating an ans array to store the answers
+    vector<int> ans(q);
+    Trie t;
+    for(auto it:oQ){
+        int y=it.first;
+        int x=it.second.first;
+        int idx=it.second.second;
+        t.insert(y);
+        int a=t.getMax(x);
+        ans[idx]=a;
+    }
+    return ans;
+
+}
 
 int main(){
     //Your code here
