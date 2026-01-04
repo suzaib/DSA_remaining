@@ -497,49 +497,51 @@ vector<int> maxXORIII_brute(vector<int> &arr,vector<pair<int,int>> &queries){
 vector<int> maxXORIII(vector<int> &arr,vector<pair<int,int>> &queries){
     int n=arr.size();
 
-    //First we need to sort the array itself
-    sort(arr.begin(),arr.end());
-    //Time Complexity will be O(nlogn)
-    
-    vector<pair<int,pair<int,int>>> oQ;
-    int q=queries.size();
-    for(int i=0;i<n;i++) oQ.push_back({queries[1],{queries[0],i}});
-
-    //Now we sort the queries table
-    sort(oQ.begin(),oQ.end());
-    //Time Complexity will be O(klogk)
-}
-
-vector<int> maxXORIII(vector<int> &arr,vector<pair<int,int>> &queries){
-    int n=arr.size();
-
     //First we need to sort our array
     sort(arr.begin(),arr.end());
     //Time Complexity will be O(nlogn)
 
     //Now lets create a new table to store queries with their original serial no
-    vector<pair<int,pair<int,int>>> oO;
+    vector<pair<int,pair<int,int>>> oQ;
     int q=queries.size();
-    for(int i=0;i<n;i++) oQ.push_back({queries[i][1],{queries[i][0],i}});
+    for(int i=0;i<q;i++) oQ.push_back({queries[i].second,{queries[i].first,i}});
 
     //Now we sort the newly made queries table
     sort(oQ.begin(),oQ.end());
     //Time Complexity will be O(qlogq)
     
     //Creating an ans array to store the answers
-    vector<int> ans(q);
+    vector<int> ans(q,0);
+
+    int idx=0;
     Trie t;
     for(auto it:oQ){
         int y=it.first;
         int x=it.second.first;
-        int idx=it.second.second;
-        t.insert(y);
-        int a=t.getMax(x);
-        ans[idx]=a;
-    }
-    return ans;
+        int qIdx=it.second.second;
 
+        while(idx<n && arr[idx]<=y){
+
+            t.insert(arr[idx]);
+            //Insert function takes 32 time
+
+            idx++;
+        }
+        //The while loop runs for n in total
+
+        if(idx==0) ans[qIdx]=-1;
+        else ans[qIdx]=t.getMax(x);
+        //getMax function runs for O(32) time
+    }
+
+    //This loop runs for (q+n)*32
+
+    return ans;
 }
+//The total time is qlogq + nlogn + 32(q+n)
+//Space Complexity is quite complex to compute in case of tries
+//Time Complexity will be O(qlogq+nlogn+32(q+n))
+
 
 int main(){
     //Your code here
