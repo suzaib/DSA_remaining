@@ -593,7 +593,7 @@ class SGTree{
 
         }
 }
-//Start at 12:53
+//First write the code for update again, then start at query(in lecture)
 int main(){
     //Your function
     return 0;
