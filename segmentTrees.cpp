@@ -426,18 +426,174 @@ class SGTree{
 
             //Partial Overlap
             int mid=(low+high)>>1;
-            int left=query(2*idx+1,low,mid);
-            int right=query(2*idx+2,mid+1,high);
+            int left=query(2*idx+1,low,mid,l,r);
+            int right=query(2*idx+2,mid+1,high,l,r);
             return (left+right);
         }
-}
+};
 
 void rangeSumQuery(){
-    int n,int m;
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    SGTree sg(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+
+    int q;
+    cin>>q;
+    while(q--){
+        int type;
+        cin>>type;
+        if(type==1){
+            int l,r;
+            cin>>l>>r;
+            int ans=sg.query(0,0,n-1,l,r);
+            cout<<ans<<"\n";
+        }
+        else{
+            int i,val;
+            cin>>i>>val;
+            sg.update(0,0,n-1,i,val);
+            arr[i]=val;
+        }
+    }
 
 }
-///Start at 2:41:00
-//Start second lecture at 12:53
+
+
+//Count Inversions
+//This can also be done using the same trick as merge sort
+//But we will do it using segment trees
+void countInversions(){
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    int mx=0;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+        mx=max(mx,arr[i]);
+    }
+    mx++;
+    vector<int> freq(mx,1);
+    SGTree sg(mx);
+    sg.build(0,0,mx-1,freq);
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        freq[arr[i]]--;
+        sg.update(0,0,mx-1,arr[i],-1)
+
+        cnt+=sg.query(0,0,mx-1,1,arr[i]-1);
+    }
+}
+
+void countInversion(){
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    int mx=0;
+    for(int i=0;i<n;i++){
+        cin>>arr[i];
+        mx=max(mx,arr[i]);
+    }
+    mx++;
+    vector<int> freq(mx,0);
+    for(int i=0;i<n;i++) freq[arr[i]]++;
+    SGTree sg(mx);
+    sg.build(0,0,mx-1,freq);
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        freq[arr[i]]--;
+        sg.update(0,0,mx-1,arr[i],freq[arr[i]]);
+        cnt+=sg.query(0,0,mx-1,0,arr[i]-1);
+    }
+    cout<<cnt<<"\n";
+}
+
+/*
+
+A Video is recommended for the below topic
+
+Handling Range Updates
+Earlier we only used to update point in the segment tree
+Now we will be given a range k and we need to update it
+Brute Force
+Loop from l to r and update using the concept of point update
+Point update takes logn time so this will take klogn time
+The optimal method to do this is called lazy propagation in segment trees
+
+Lazy Propagation
+Step 1 : Update the node when you see it
+Step 2 : After updating, propagate the update downwards
+
+Doing Range Updates
+Increase the value by val(given)
+
+Some Rules to follow
+Traverse the tree and you will get three conditions
+1)Complete Overlap : Update the node, lazy propagate down and return
+2)No Overlap : Just return, no need to do anything
+3)Partial Overlap : Call left, call right and then use node=left+right
+
+*/
+
+class SGTree{
+    public:
+        vector<int> seg,lazy;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+            lazy.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,vector<int> &arr){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr);
+            build(2*idx+2,mid+1,high,arr);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,int i,int val){
+            //In this we first check if there is a previous update remaining
+            //If yes, then we first take care of that
+            if(lazy[idx]!=0){
+                seg[idx]+=(high-low+1)*lazy[idx];
+
+                //Now we propagate downwards for the remaining elements
+                //The node will have children only when low!=high
+                if(low!=high){
+                    lazy[2*idx+1]+=lazy[idx];
+                    lazy[2*idx+2]+=lazy[idx];
+                }
+            }
+
+            //Now we handle our overlap cases
+            //No Overlap : Simply return
+            if(high<l || r<low) return;
+
+            //Complete Overlap
+            if(low>=l && high<=r){
+                seg[idx]=(high-low+1)*val;
+                if(low!=high){
+                    lazy[2*idx+1]+=val;
+                    lazy[2*idx+2]+=val;
+                }
+                return;
+            }
+
+            //Partial Overlap
+            int mid=(low+high)>>1;
+            update(2*idx+1,low,mid,l,r,val);
+            update(2*idx+2,mid+1,high,l,r,val);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+
+        }
+}
+//Start at 12:53
 int main(){
     //Your function
     return 0;
