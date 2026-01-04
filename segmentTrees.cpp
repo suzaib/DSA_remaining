@@ -382,6 +382,60 @@ void SerejaAndBrackets(){
         cout<<node.full*2<<"\n";
     }
 }
+
+
+
+//Range Query
+//This time instead of giving the max or min element, we need to give the sum of all elements in that range
+class SGTree{
+    public:
+        vector<int> seg;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,vector<int> &arr){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr);
+            build(2*idx+2,mid+1,high,arr);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,int i,int val){
+            if(low==high){
+                seg[idx]=val;
+                return;
+            }
+            int mid=(low+high)>>1;
+            if(i<=mid) update(2*idx+1,low,mid,i,val);
+            else update(2*idx+2,mid+1,high,i,val);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+
+        int query(int idx,int low,int high,int l,int r){
+            //Complete Overlap
+            if(low>=l && high<=r) return seg[idx];
+
+            //No Overlap
+            if(l>high || r<low) return 0;
+
+            //Partial Overlap
+            int mid=(low+high)>>1;
+            int left=query(2*idx+1,low,mid);
+            int right=query(2*idx+2,mid+1,high);
+            return (left+right);
+        }
+}
+
+void rangeSumQuery(){
+    int n,int m;
+
+}
 ///Start at 2:41:00
 //Start second lecture at 12:53
 int main(){
