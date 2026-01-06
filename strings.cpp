@@ -29,7 +29,7 @@ Indexing in strings is 0 based
 
 Commonly Used Methods:
 substr(pos,len) : to extract a new string from a string. pos means starting position and len means the length of string to be formed
-
+If 
 
 */
 
