@@ -221,7 +221,12 @@ Phase 1 : Prefix Techniques (Foundation)
 Prefix Function (KMP Preprocessing)
 Prefix Function (n array)
 
-Remember "apple" is a prefix of the word "apple"
+Consider the string "apple"
+Prefixes : "", "a", "ap", "app", "appl", "apple" ("apple" is not a proper prefix)
+Suffixes : "", "e", "le", "ple", "pple", "apple" ("apple" is not a proper suffix)
+Border : Elements appearing in both prefix and suffix
+The string "" is called a trivial border
+
 
 */
 
