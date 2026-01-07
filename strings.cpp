@@ -104,7 +104,7 @@ int lexicoCompare(string &a,string &b){
 
 //Prefix Equality Check
 //See if one string is a prefix of the other
-bool isPrefix(string &prefix,string &s){
+bool isPrefixI(string &prefix,string &s){
     int m=prefix.size();
     int n=s.size();
     if(m>n) return false;
@@ -115,6 +115,23 @@ bool isPrefix(string &prefix,string &s){
 }
 //The loop runs for m times
 //No extra space is used
+//Time Complexity will be O(m)
+//Space Complexity will be O(1)
+
+
+//Suffix equality check
+//See if one string is a suffix of the other
+bool isSuffixI(string &suffix,string &s){
+    int n=s.size();
+    int m=suffix.size();
+    if(m>n) return false;
+    for(int i=m-1;i>=0;i--){
+        if(s[n-m+i]!=suffix[i]) return false;
+    }
+    return true;
+}
+//The loop runs for m times at worst
+//No extra space is needed to solve the question
 //Time Complexity will be O(m)
 //Space Complexity will be O(1)
 
@@ -224,10 +241,124 @@ Prefix Function (n array)
 Consider the string "apple"
 Prefixes : "", "a", "ap", "app", "appl", "apple" ("apple" is not a proper prefix)
 Suffixes : "", "e", "le", "ple", "pple", "apple" ("apple" is not a proper suffix)
-Border : Elements appearing in both prefix and suffix
+Border : Elements appearing in both prefix and suffix(only hte proper prefix and proper suffix)
 The string "" is called a trivial border
+The trivial border is often ignored in competitive programming
 
+Let us make a function that checks whether a strings is a border of another string or not
+We already have functions that check for prefix, but they also include the string itself
+We need proper prefix and suffix this time, so we will make a different function
 
 */
+
+bool isPrefix(string &pre,string &s){
+    int n=s.size();
+    int m=pre.size();
+    if(m>=n) return false;
+    if(m==0) return false;
+    for(int i=0;i<m;i++){
+        if(s[i]!=pre[i]) return false;
+    }
+    return true;
+}
+//The for loop runs for maximum m times
+//No space is needed to solve the question
+//Time Complexity will be O(m)
+//Space Complexity will be O(1)
+
+bool isSuffix(string &suf,string &s){
+    int n=s.size();
+    int m=suf.size();
+    if(m>=n) return false;
+    if(m==0) return false;
+    for(int i=m-1;i>=0;i--){
+        if(s[i+n-m]!=suf[i]) return false;
+    }
+    return true;
+}
+//The for loop runs for maximum of m times
+//No extra space is needed to solve the question
+//Time Complexity will be O(m)
+//Space Complexity will be O(1)
+
+
+bool isBorder(string &bor,string &s){
+
+    //We only need to check if this string bor is both a proper prefix and suffix
+    return (isPrefix(bor,s) && isSuffix(bor,s));
+}
+//The code runs for these two functions taking m+m time
+//No extra space is used to solve the question
+//Time Complexity will be O(2m)
+//Space Complexity will be O(1)
+
+
+/*
+Prefix Array
+This is also called pie array
+Consider the string "ababacaba"
+Let us denote the pie array as p(denote it with pie symbol), then p[i] means take the string till i
+For eg p[3] means take the string till index 3 which is abab and tell the value of the longest border that it has
+Hence p[i] tells you the length of the longest border in the substring 0 to i
+*/
+
+vector<int> pieArr_brute(string &s){
+    int n=s.size();
+    vector<int> pie(n,0);
+    string temp="";
+    for(int i=0;i<n;i++){
+        temp+=s[i];
+        string str=temp;
+        while(temp.size()>0 && !isBorder(temp,str)){
+            temp.pop_back();
+        }
+        if(isBorder(temp,str)) pie[i]=temp.size();
+        temp=str;
+    }
+
+    return pie;
+}
+//The worst case result in the loops running for a total of n2
+//The addition can also take n time in worst cases
+//Space is used by the temp and the str strings
+//Time Complexity will be O(n3)
+//Space Complexity will be O(2n)
+
+//Better Method
+vector<int> pieArr_better(string &s){
+    int n=s.size();
+    vector<int> pie(n,0);
+    for(int i=1;i<n;i++){
+        for(int len=i;len>=1;len--){
+            if(s.substr(0,len)==s.substr(i-len+1,len)){
+                pie[i]=len;
+                break;
+            }
+        }
+    }
+    return pie;
+}
+
+//Optimal Method
+//Try to manually build the pie array on paper for the sequence "bababacbba"
+//You will notice that the values in the pie array are following a general rule
+//They either stay same or fall back to 0
+//Even when they increase they increase only by one
+//Hence pie[i+1]<=pie[i]+1
+//Watch this video to understand better : https://www.youtube.com/watch?v=nJbNe0Yzjhw
+//Now we create the pie array
+vector<int> pieArr(string &s){
+    int n=s.size();
+    if(n==0) return {};
+    vector<int> pie(n,0);
+    for(int i=1;i<n;i++){
+        int l=pie[i-1];
+        while(l>0 && s[i]!=s[l]) l=pie[l-1];
+        if(s[i]==s[l]) l++;
+        pie[i]=l;
+    }
+    return pie;
+}
+
 
 vector<int> arr;
