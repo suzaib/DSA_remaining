@@ -359,6 +359,11 @@ vector<int> pieArr(string &s){
     }
     return pie;
 }
+//The code will run for maybe 2n or 3n times
+//No extra space will be used
+//Time Complexity will be O(n)
+//Space Complexity will be O(1)
+
 
 
 vector<int> arr;
