@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> 
+int peak(vector<int> &arr){
+    int n=arr.size();
+    for(int i)
+}
 
 int main(){
     vector<int> arr={1,3,5};
