@@ -2230,45 +2230,42 @@ int largeIsland(vector<vector<int>> &mat){
 
 
 //Most Stones removed with same row or column
+//Video is recommended since the concept may seem easy, but is not
 //The answer to this question is n-k (where n is the total number of stones and k is the total number of connected components)
-int stoneRemoval(vector<vector<int>> &mat){
-    int n=mat.size();
-    int m=mat[0].size();
-    DisjointSet ds(n*m);
-    for(int i=0;i<n;i++){
-        for(int j=0;j<m;j++){
-            if(mat[i][j]==0) continue;
-            int node=m*i+j;
-            //Going With row
-            for(int k=0;k<m;k++){
-                if(mat[i][k]==0 || k==j) continue;
-                int adjNode=m*i+k;
-                ds.unionBySize(node,adjNode);
-            }
+//We are given the list of vectors which denotes the coordinates of stones
+int stoneRemoval(int n,vector<vector<int>> &stones){
 
-            //Going for Column
-            for(int k=0;k<n;k++){
-                if(mat[k][j]==0 || k==i) continue;
-                ind adjNode=m*k+j;
-                ds.unionBySize(node,adjNode):
-            }
-        }
+    //First we need to find out the grid size
+    int maxRow=0;
+    int maxCol=0;
+    for(auto it:stones){
+        maxRow=max(maxRow,it[0]);
+        maxCol=max(maxCol,it[1]);
     }
 
-    int ans=0;
-    for(int i=0;i<m*n;i++){
-        if(ds.parent[i]==i){
-            int totalComp=ds.size[i];
-            ans+=(totalComp-1);
-        }
-    }
-    return ans;
+    DisjointSet ds(maxRow+maxCol+1)//+1 for safety reasons
+    unordered_map<int,int> stoneNodes;
 
+    for(auto it:stones){
+        int nodeRow=it[0];
+        int nodeCol=it[1]+maxRow+1;
+        ds.unionBySize(nodeRow,nodeCol);
+        stoneNodes[nodeRow]=1;
+        stoneNodes[nodeCol]=1;
+    }
+
+    int cnt=0;
+    for(auto it:stoneNodes){
+        if(ds.findUltimatePar(it.first)==it.first) cnt++;
+    }
+    return n-cnt;
 }
 
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
+//The stones Removal problem can explode in memory for some test cases, try to correct that
+
 
 
 //Done till 29, every lecture
