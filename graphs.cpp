@@ -2229,6 +2229,14 @@ int largeIsland(vector<vector<int>> &mat){
 //Space Complexity will be O(2mn)
 
 
+//Most Stones removed with same row or column
+int stoneRemoval(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    
+}
+
+
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 
