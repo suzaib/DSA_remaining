@@ -2230,10 +2230,40 @@ int largeIsland(vector<vector<int>> &mat){
 
 
 //Most Stones removed with same row or column
+//The answer to this question is n-k (where n is the total number of stones and k is the total number of connected components)
 int stoneRemoval(vector<vector<int>> &mat){
     int n=mat.size();
     int m=mat[0].size();
-    
+    DisjointSet ds(n*m);
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==0) continue;
+            int node=m*i+j;
+            //Going With row
+            for(int k=0;k<m;k++){
+                if(mat[i][k]==0 || k==j) continue;
+                int adjNode=m*i+k;
+                ds.unionBySize(node,adjNode);
+            }
+
+            //Going for Column
+            for(int k=0;k<n;k++){
+                if(mat[k][j]==0 || k==i) continue;
+                ind adjNode=m*k+j;
+                ds.unionBySize(node,adjNode):
+            }
+        }
+    }
+
+    int ans=0;
+    for(int i=0;i<m*n;i++){
+        if(ds.parent[i]==i){
+            int totalComp=ds.size[i];
+            ans+=(totalComp-1);
+        }
+    }
+    return ans;
+
 }
 
 
