@@ -2264,6 +2264,7 @@ int stoneRemoval(int n,vector<vector<int>> &stones){
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
+//Do Stones removal again
 //The stones Removal problem can explode in memory for some test cases, try to correct that
 
 
