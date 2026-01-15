@@ -1,50 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class DisjointSet{
-    public:
-        vector<int> rank;
-        vector<int> cnt;
-        vector<int> parent;
+int upperBound(vector<int> &arr,int x){
+    int n=arr.size();
+    int low=0;
+    int high=n-1;
+    while(low<=high){
+        int mid=(low+high)>>1;
+        if(arr[mid]>x) high=mid-1;
+        else low=mid+1;
+    }
+    return low;
+}
+int blackbox(vector<vector<int>> &mat,int mid){
+    int n=mat.size();
+    int m=mat[0].size();
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        cnt+=upperbound(mat[i],mid);
+    }
+    return cnt;
+}
 
-        DisjointSet(int n){
-            rank.resize(n+1,0);
-            cnt.resize(n+1,1);
-            parent.resize(n+1);
-            iota(parent.begin(),parent.end());
-        }
+int median(vector<vector<int>> &mat){
+    int n=mat.size();
+    int m=mat[0].size();
+    int low=INT_MAX;
+    int high=INT_MIN;
+    for(int i=0;i<n;i++){
+        low=min(low,arr[i][0]);
+        high=max(high,arr[i][m-1]);
+    }
 
-        int findUltimatePar(int node){
-            if(parent[node]==node) return node;
-            return parent[node]=findUltimatePar(parent[node]);
-        }
+    int req=(n*m)/2;
 
-        void unionByRank(int u,int v){
-            int pu=findUltimatePar(u);
-            int pv=findUltimatePar(v);
-            if(pu==pv) return;
-
-            if(rank[pu]>rank[pv]) parent[pv]=pu;
-            else if(rank[pu]<rank[pv]) parent[pu]=pv;
-            else{
-                parent[pu]=pv;
-                rank[pu]++;
-            }
-        }
-
-        void unionBySize(int u,int v){
-            int pu=findUltimatePar(u);
-            int pv=findUltimatePar(v);
-            if(pu==pv) return;
-            if(cnt[pv]<cnt[pu]){
-                parent[pv]=pu;
-                count[pu]+=count[pv];
-            }
-            else{
-                parent[pu]=pv;
-                count[pu]+=count[pv];
-            }
-        }
+    while(low<=high){
+        int mid=(low+high)>>1;
+        int lesserThanOrEqualTo=blackbox(mat,mid);
+        if(lesserThanOrEqualTo>req) high=mid-1;
+        else low=mid+1;
+    }
+    return low;
 }
 int main(){
     vector<int> arr={1,3,5};
