@@ -1,0 +1,314 @@
+PHASE 0 — BASICS (Don’t Skip)
+Topics
+
+String representation
+
+ASCII vs Unicode (only ASCII needed)
+
+Indexing, slicing
+
+Immutable vs mutable behavior
+
+Character arithmetic ('a' + 1)
+
+Lexicographical comparison
+
+Algorithms / Concepts
+
+Manual string comparison
+
+Prefix equality check
+
+Counting frequency array (26 / 256)
+
+Must-solve problem types
+
+Palindrome check
+
+Anagram check
+
+Frequency based problems
+
+String reversal
+
+Lexicographical min/max
+
+PHASE 1 — PREFIX TECHNIQUES (FOUNDATION)
+1️⃣ Prefix Function (KMP preprocessing)
+Algorithms
+
+Prefix Function (π array)
+
+KMP Pattern Matching
+
+Core Problems
+
+Pattern searching
+
+Find all occurrences
+
+Period of a string
+
+Smallest string by repeating pattern
+
+Border of a string
+
+⚠️ If you don’t deeply understand prefix function transitions, stop here.
+
+PHASE 2 — Z ALGORITHM
+Algorithms
+
+Z-Algorithm
+
+Core Problems
+
+Pattern matching
+
+Count occurrences
+
+String compression
+
+Prefix matching queries
+
+String similarity
+
+🔑 You must know when Z is simpler than KMP.
+
+PHASE 3 — BASIC STRING TRANSFORMATIONS
+Topics
+
+Rotation of string
+
+Cyclic shifts
+
+Concatenation tricks (s + '#' + t)
+
+Reversal tricks
+
+Algorithms
+
+String rotation via KMP/Z
+
+Minimal lexicographic rotation (Booth’s Algorithm)
+
+Core Problems
+
+Check rotation
+
+Find minimal rotation
+
+Cyclic equivalence
+
+PHASE 4 — HASHING (ABSOLUTELY CRITICAL)
+Algorithms
+
+Polynomial Rolling Hash
+
+Double Hashing
+
+Prefix Hash + Power array
+
+String Hashing with modulo
+
+Randomized base
+
+Core Problems
+
+Substring equality queries
+
+Palindrome substring queries
+
+Longest common substring
+
+Detect plagiarism / matching substrings
+
+Replace string algorithms with hashing
+
+⚠️ If you don’t fear collisions, you’re doing it wrong.
+
+PHASE 5 — PALINDROME ALGORITHMS
+Algorithms
+
+Manacher’s Algorithm
+
+Palindromic prefix/suffix tricks
+
+Hash-based palindrome checking
+
+Core Problems
+
+Longest palindromic substring
+
+Count palindromic substrings
+
+Palindromic partitions
+
+Extend string to palindrome
+
+PHASE 6 — TRIE & DICTIONARY STRUCTURES
+Algorithms
+
+Trie (Prefix Tree)
+
+Compressed Trie
+
+Trie + DFS
+
+Binary Trie (for bits)
+
+Core Problems
+
+Dictionary problems
+
+Prefix queries
+
+Auto-complete
+
+Word search
+
+XOR problems with Binary Trie
+
+PHASE 7 — ADVANCED PATTERN MATCHING
+Algorithms
+
+Aho–Corasick Algorithm
+
+Multiple pattern matching
+
+Failure links
+
+Core Problems
+
+Multi-pattern search
+
+Forbidden strings
+
+Dictionary matching in text
+
+Virus signature detection type problems
+
+PHASE 8 — SUFFIX STRUCTURES (MOST IMPORTANT PART)
+1️⃣ Suffix Array
+Algorithms
+
+Suffix Array (O(n log n))
+
+LCP Array (Kasai)
+
+RMQ on LCP
+
+Core Problems
+
+Longest repeated substring
+
+Longest common substring
+
+Number of distinct substrings
+
+Lexicographical substring queries
+
+2️⃣ Suffix Automaton (VERY IMPORTANT)
+Algorithms
+
+Suffix Automaton (SAM)
+
+State cloning
+
+Endpos concept
+
+Core Problems
+
+Number of distinct substrings
+
+Frequency of substrings
+
+Longest common substring
+
+Online string processing
+
+⚠️ SAM is a rating booster. Learn it properly.
+
+3️⃣ Suffix Tree (OPTIONAL but elite)
+Algorithms
+
+Ukkonen’s Algorithm
+
+Use
+
+Only if you want theory completeness
+
+PHASE 9 — STRING DP (HARD)
+Topics
+
+DP on strings
+
+Subsequence DP
+
+Edit distance DP
+
+Palindrome DP
+
+Algorithms
+
+LCS
+
+Longest Palindromic Subsequence
+
+Edit Distance
+
+DP + automaton
+
+DP + Aho–Corasick
+
+PHASE 10 — ADVANCED & RARE (FOR 1900+)
+Algorithms
+
+Lyndon Factorization
+
+Duval’s Algorithm
+
+Minimum representation
+
+String periodicity
+
+Runs in string
+
+Problems
+
+Factorization
+
+Repetitive structure problems
+
+Advanced combinatorics on strings
+
+FINAL CHECKLIST (YOU’RE DONE WHEN)
+
+You can:
+
+Choose KMP vs Z vs Hash instantly
+
+Replace brute force substring checks with hashing
+
+Solve substring problems with Suffix Array or SAM
+
+Handle multi-pattern queries using Aho–Corasick
+
+Detect palindrome structure in O(n)
+
+STRICT ADVICE (DON’T IGNORE)
+
+Don’t jump to suffix array without mastering prefix + Z
+
+Don’t rely only on hashing
+
+Don’t skip SAM
+
+Don’t treat strings as “easy”
+
+If you want, next I can:
+
+Convert this into a 30-day string grind plan
+
+Give CP problem lists per topic
+
+Give when to use which algorithm decision tree
