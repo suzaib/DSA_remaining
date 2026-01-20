@@ -1,4 +1,8 @@
+#include<bits/stdc++.h> 
+using namespace std;
+
 /*
+
 Strings
 
 Strings are mutable
@@ -349,12 +353,13 @@ vector<int> pieArr_better(string &s){
 //Now we create the pie array
 vector<int> pieArr(string &s){
     int n=s.size();
-    if(n==0) return {};
+    //No need to check for n==0 since the loop won't run anyway
+    
     vector<int> pie(n,0);
     for(int i=1;i<n;i++){
         int l=pie[i-1];
         while(l>0 && s[i]!=s[l]) l=pie[l-1];
-        if(s[i]==s[l]) l++;
+        if(s[l]==s[i]) l++;
         pie[i]=l;
     }
     return pie;
@@ -365,5 +370,9 @@ vector<int> pieArr(string &s){
 //Space Complexity will be O(1)
 
 
+int main(){
+    //Your code here
+    return 0;
+}
 
-vector<int> arr;
+
