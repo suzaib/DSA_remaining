@@ -354,7 +354,7 @@ vector<int> pieArr_better(string &s){
 vector<int> pieArr(string &s){
     int n=s.size();
     //No need to check for n==0 since the loop won't run anyway
-    
+
     vector<int> pie(n,0);
     for(int i=1;i<n;i++){
         int l=pie[i-1];
@@ -370,6 +370,60 @@ vector<int> pieArr(string &s){
 //Space Complexity will be O(1)
 
 
+//Given two strings : s="baacabacabacabb" and t="acabaca"
+//The problem is around checking if t exists in s or not, and finding its occurences
+//Brute Force
+//Iterate over the strings to find out
+bool stringMatching_brute(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+    
+    //If string t is empty, then return true, since empty substring exists in every string
+    if(m==0) return true;
+
+    //If s is however empty then the answer can't be true since we have already checked that t is not empty
+    //Also if t is larger then s then also answer will be false
+    //Both these condition can be checked by m>n since if n==0, m>n is already true
+    if(m>n) return false;
+
+    for(int i=0;i<=n-m;i++){
+        int j=0;
+        while(j<m && s[i+j]==t[j]) j++;
+        if(j==m) return true;
+    }
+    return false;
+}
+//The code has a nested loop which can run for a maximum of n*m times
+//No extra space is used
+//Time Complexity will be O(mn)
+//Space Complexity will be O(1)
+
+//Better Method
+//KMP : Knuth Morris Pratt Algorithm
+//Concept : Join the two strings by putting a # in between so that new string is "t#s"
+//Now create the pie array and check if at any index, pie array holds the value=m
+bool stringMatching_better(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+
+    if(m==0) return true;
+    if(m>n) return false;
+    string str=t+"#"+s;
+    vector<int> pie=pieArr(str);
+
+    //We will start checking after the t string's part since uptil that we can't get m
+    if(find(pie.begin()+m,pie.end(),m)!=pie.end()) return true;
+    return false;
+}
+//The concatenation of t and s takes a total of n+m time
+//Forming the pie array takes around total str size which is n+m
+//The find function runs for n times
+//Space is used since we create a pie array and an extra string both of size n+m
+//Time Complexity will be O(3n+2m)
+//Time Complexity will be O(2(n+m))
+
+//Optimal Method
+//
 int main(){
     //Your code here
     return 0;

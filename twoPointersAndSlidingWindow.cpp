@@ -154,7 +154,7 @@ int maxPointsFromCards_brute(vector<int> cards,int k){
 }
 
 //We keep a track of left sum and right sum and that gives us the optimal solution
-int maxPointsFromCards_optimal(vector<int> cards,int k){
+int maxPointsFromCards(vector<int> cards,int k){
     int n=cards.size();
     int leftSum=0;
     int rightSum=0;
