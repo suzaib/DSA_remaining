@@ -1,18 +1,31 @@
 #include <bits/stdc++.h>
 using namespace std;
-void srtHelper(int prev,stack<int> st){
-    if(st.empty()) return prev;
-    int curr=st.top();
-    st.pop();
-    srtHelper(curr,st);
-    
-}
-stack<int> srtStack(stack<int> st){
-    int curr=st.top();
-    st.pop();
-    stSrtHelper(curr,st);
+class Node{
+    public:
+        int val;
+        Node* left;
+        Node* right;
+        Node(){
+            val=0;
+            left=nullptr;
+            right=nullptr;
+        }
+        Node(int val){
+            this->val=val;
+            left=nullptr;
+            right=nullptr;
+        }
+        Node(int val,Node* left,Node* right){
+            this->val=val;
+            this->left=left;
+            this->right=right;
+        }
 }
 
+bool isBalanced(Node* root){
+    if(!root->left && !root->right) return true;
+    
+}
 
 int main(){
     vector<int> arr={1,3,5};

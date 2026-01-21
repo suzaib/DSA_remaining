@@ -423,7 +423,7 @@ bool stringMatching_better(string &s,string &t){
 //Time Complexity will be O(2(n+m))
 
 //Optimal Method
-//
+//The concept remains same, but this time we will shrink down the space from m+n to just m
 int main(){
     //Your code here
     return 0;
