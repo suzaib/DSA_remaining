@@ -2366,6 +2366,11 @@ int numberOfSCCs(vector<vector<int>> &adj){
 
 
 
+//Bridges in a graph
+//A bridge is a link between two nodes such that if you remove that link, the graph(more specifically, that component) splits into two components
+//We need to print the number of bridges
+//We require two arrays for this, one will record time of insertion and the other will have the lowest time of insertion
+//This is famously the Tarjan's Algorithm of Time in and low time
 
 //Write code to print the SCCs, (same logic as finding the number of SCCs)
 //Optimal Method for detect cycle in directed graph
