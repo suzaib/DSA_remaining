@@ -2371,9 +2371,7 @@ int numberOfSCCs(vector<vector<int>> &adj){
 
 
 
-//Done till 29, every lecture
 
-//Lecture 30 Word Ladder 2
 //Lecture 40
 //Lecture 43
 //Revise TC and SC for dijkstra's algorithm  II
