@@ -1642,6 +1642,38 @@ int cheapestFlight(int n,int src,int target,int k,vector<vector<int>> &flights){
     return cost[target];
 }
 
+
+//Minimum Multiplications to reach end
+int minMultiplicationsToReachEnd(int start,int end,vector<int> &arr){
+    int n=arr.size();
+    int modulo=1e5;
+    queue<pair<int,int>> q;
+    q.push({0,start});
+    vector<int> dist(100000,1e9);
+    dist[start]=0;
+    while(!q.empty()){
+        int node=q.front().second;
+        int steps=q.front().first;
+        q.pop();
+        for(int i=0;i<n;i++){
+            int num=(arr[i]*node)%modulo;
+            if(steps+1<dist[num]){
+                dist[num]=steps+1;
+                if(num==end) return dist[num];
+                q.push({dist[num],num});
+            }
+        }
+    }
+    return -1;
+}
+//Time Taken at max can be 1e5 since that many nodes will be taken out in the worst case
+//Same for space complexity as the queue will store that many nodes
+//However remember that is almost impossible, since the probability that you can generate all the numbers from 1 to 1e5 by just multiplcation from numbers given from arr
+//That is next to impossible
+//Therefore calcuation of time and space compelexity in this problem is not something we can do
+//At max as we said, hypothetically, it can go up to 1e5 at max, space and time both
+
+
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
 //This can be used even when the edgeWts are negative
@@ -2262,6 +2294,34 @@ int stoneRemoval(int n,vector<vector<int>> &stones){
 }
 
 
+//Strongly Connected Components
+//SCCs are only valid in directed graphs
+//We solve this using Kosaraju's Algorithm
+//In interviews there can be two kind of question
+//One type is to find the number of SCCs(Strongly Connected Components)
+//The other type is to print those SCCs
+
+//Kosaraju's Algorithm
+//Intuition : We somehow need to separate the SCCs, since on normal traversal through the graph, we will end up going through each node and hence won't find SCCs
+//Therefore if we can somehow stop the traversal from one SCC to another, that will be it
+//Concept : If we reverse the edge connecting one scc to another, then we can stop that traversal
+//How to find out which is the edge connecting two SCCs?
+//Simple, reverse all the edges, since reversing edges inside SCC doesn't matter, try yourself
+//Reverse all the edges and then count the number of components, that will be the number of SCCs
+//However consider graphs as s1->s2->s3(where s1,s2,s3 are all SCCs) and after reversing we get s1<-s2<-s3
+//This logic fails if src was in s3, then even after reversing we would still travel the whole graph as on component
+//Hence the idea of arranging the edges may feel convenient
+//Therefore we first do a dfs and store all the nodes in a stack
+
+int numberOfSCCs(vector<vector<int>> &adj){
+    adj=reverseLinks(adj);
+    stack<int> st;
+    int n=adj.size();
+    for(int i=0;i<n;i++){
+        
+    }
+}
+
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 //Do Stones removal again
@@ -2272,7 +2332,7 @@ int stoneRemoval(int n,vector<vector<int>> &stones){
 //Done till 29, every lecture
 
 //Lecture 30 Word Ladder 2
-//Lecture 37
+//Lecture 40
 //Lecture 43
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
