@@ -2364,6 +2364,10 @@ int numberOfSCCs(vector<vector<int>> &adj){
 //Time Complexity will be O(V+E)
 //Space Complexity will be O(V+E)
 
+
+
+
+//Write code to print the SCCs, (same logic as finding the number of SCCs)
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 //Do Stones removal again
