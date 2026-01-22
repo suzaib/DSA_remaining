@@ -2313,14 +2313,56 @@ int stoneRemoval(int n,vector<vector<int>> &stones){
 //Hence the idea of arranging the edges may feel convenient
 //Therefore we first do a dfs and store all the nodes in a stack
 
-int numberOfSCCs(vector<vector<int>> &adj){
-    adj=reverseLinks(adj);
-    stack<int> st;
-    int n=adj.size();
-    for(int i=0;i<n;i++){
-        
+//A function to do dfs to store the nodes in stack
+void SCCdfs(int node,stack<int> &st,vector<bool> &vis,vector<vector<int>> &adj){
+    vis[node]=true;
+    for(auto it:adj[node]){
+        if(!vis[it]) SCCdfs(it,st,vis,adj);
+    }
+    st.push(node);
+}
+
+//A second helper function to handle the second dfs traversal
+//New function since this time, we don't need to have a stack in arguments
+void SCCdfsII(int node,vector<bool> &vis,vector<vector<int>> &adj){
+    vis[node]=true;
+    for(auto it:adj[node]){
+        if(!vis[it]) SCCdfsII(it,vis,adj);
     }
 }
+int numberOfSCCs(vector<vector<int>> &adj){
+    stack<int> st;
+    int n=adj.size();
+
+    //First we create a visited array to help us in the dfs
+    vector<bool> vis(n,false);
+
+    //Now we do a dfs and store the elements in the stack
+    for(int i=0;i<n;i++){
+        if(vis[i]) continue;
+        SCCdfs(i,st,vis,adj);
+    }
+
+    //Next step is reversing the links using the previously created revLinks function
+    adj=revLinks(adj);
+
+    //Now we only have to find out the number of components
+    //We can do a normal dfs or use the disjoint set for this part
+    //Applying Disjoint set here can be overkill, as a simple traversal is much more easier and optimal
+    //Therefore we apply a normal traversal, but lets first reset the visited array
+    vis.assign(n,false);
+    int cnt=0;
+    while(!st.empty()){
+        int node=st.top();
+        st.pop();
+        if(vis[node]) continue;
+        cnt++;
+        SCCdfsII(node,vis,adj);
+    }
+    return cnt;
+}
+//Time Complexity will be O(V+E)
+//Space Complexity will be O(V+E)
 
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
