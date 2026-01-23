@@ -2367,10 +2367,46 @@ int numberOfSCCs(vector<vector<int>> &adj){
 
 
 //Bridges in a graph
+//Tarjan's Algorithm
 //A bridge is a link between two nodes such that if you remove that link, the graph(more specifically, that component) splits into two components
 //We need to print the number of bridges
 //We require two arrays for this, one will record time of insertion and the other will have the lowest time of insertion
 //This is famously the Tarjan's Algorithm of Time in and low time
+//The logic is this : if the node's time of insertion is lesser than the lowest time of it's adjacent, then the adjacent node can only be reached by the link
+//There in that case that link is a bridge
+//We will use a global variable for this problem
+int timer=1;
+void bridgeHelper(int node,int parent,vector<bool> &vis,vector<int> &in,vector<int> &least,vector<vector<int>> &adj,vector<vector<int>> &bridge){
+    vis[node]=true;
+    in[node]=least[node]=timer;
+    timer++;
+    for(auto it:adj[node]){
+        if(it==parent) continue;
+        if(!vis[it]){
+            bridgeHelper(it,node,vis,in,least,adj,bridge);
+            least[node]=min(least[it],least[node]);
+            //Now we check can this link node-----it be a bridge
+            if(in[node]<least[it]){
+                bridge.push_back({node,it});
+            }
+        }
+        else least[node]=min(least[node],least[it]);
+    }
+}
+int cntBridges(vector<vector<int>> &adj){
+    int n=adj.size();
+    vector<int> in(n,0);
+    vector<int> least(n,0);
+    vector<bool> vis(n,false);
+    vector<vector<int>> bridge;
+    for(int i=0;i<n;i++){
+        if(vis[i]) continue;
+        bridgeHelper(i,-1,vis,in,least,adj,bridge)
+    }
+    return bridge.size();
+}
+//Time Complexity will be O(V+E)
+//Space Complexity will be O(V+E)
 
 //Write code to print the SCCs, (same logic as finding the number of SCCs)
 //Optimal Method for detect cycle in directed graph
