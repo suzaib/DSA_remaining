@@ -2502,10 +2502,7 @@ vector<int> articulationPoint(vector<vector<int>> &adj){
 
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
-    vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
-    cout<<countDistIslands(matrix);
-
-
+    return 0;
 }
 
 
