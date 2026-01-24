@@ -52,3 +52,14 @@ set<string> allLCS(string &s1,string s2){
 
 See if you can print the subsequence for the problem of longest string chain(it is not in the video, but maybe u can print it using hash)
 
+
+
+//Graphs:
+//Write code to print the SCCs, (same logic as finding the number of SCCs)
+//Optimal Method for detect cycle in directed graph
+//Use a single visited array, you can mark 2 for path visited and 1 for visited
+//Do Stones removal again
+//The stones Removal problem can explode in memory for some test cases, try to correct that
+//The eventual safe states code is incorrect(by chatgpt)
+//Revise TC and SC for dijkstra's algorithm  II
+

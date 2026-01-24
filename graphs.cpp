@@ -2495,13 +2495,6 @@ vector<int> articulationPoint(vector<vector<int>> &adj){
 
 
 
-//Write code to print the SCCs, (same logic as finding the number of SCCs)
-//Optimal Method for detect cycle in directed graph
-//Use a single visited array, you can mark 2 for path visited and 1 for visited
-//Do Stones removal again
-//The stones Removal problem can explode in memory for some test cases, try to correct that
-//The eventual safe states code is incorrect(by chatgpt)
-//Revise TC and SC for dijkstra's algorithm  II
 int main(){
     return 0;
 }
