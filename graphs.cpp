@@ -900,6 +900,7 @@ vector<int> safeStates(int n,vector<vector<int>> &adj){
     for(int i=0;i<n;i++){
         if(check[i]==1) ans.push_back(i);
     }
+    return ans;
 }
 //Time Compelexity will be O(V+2E)
 //Space Compelexity will be O(2V)
@@ -1291,7 +1292,7 @@ vector<vector<string>> wordLadderII_brute(string &startWord,string &endWord,vect
                 found=true;
                 continue;
             }
-            ladderIIHelper(lastWord,st,q,temp,elToDel);
+            ladderIIHelper_brute(lastWord,st,q,temp,elToDel);
         }
         for(auto it:elToDel) st.erase(it);
     }
@@ -2023,7 +2024,7 @@ class DisjointSet{
             }
         }
         //Time Complexity will be O(4*a)
-}
+};
 
 
 //Kruskal's Algorithm
@@ -2243,7 +2244,7 @@ int largeIsland(vector<vector<int>> &mat){
     //Time Complexity will be O(mn)
     if(flag==false) return (m*n);
 
-    DisjoingSet ds(n*m);
+    DisjointSet ds(n*m);
     vector<int> dx={0,-1,0,1};
     vector<int> dy={1,0,-1,0};
     for(int i=0;i<n;i++){
@@ -2312,7 +2313,7 @@ int stoneRemoval(int n,vector<vector<int>> &stones){
         maxCol=max(maxCol,it[1]);
     }
 
-    DisjointSet ds(maxRow+maxCol+1)//+1 for safety reasons
+    DisjointSet ds(maxRow+maxCol+1);//+1 for safety reasons
     unordered_map<int,int> stoneNodes;
 
     for(auto it:stones){
@@ -2499,7 +2500,7 @@ vector<int> articulationPoint(vector<vector<int>> &adj){
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 //Do Stones removal again
 //The stones Removal problem can explode in memory for some test cases, try to correct that
-
+//The eventual safe states code is incorrect(by chatgpt)
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
     return 0;
