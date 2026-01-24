@@ -1015,7 +1015,7 @@ vector<int> courseScheduleII(int n,vector<pair<int,int>> schedule){
 //Now apply the kahn's algorithm, pushing nodes with indeg 0 into queue, and when the queue is empty, those will be your safe states
 //Sort the answer array since the nodes we get at the end may be randomly arranged
 //First we create a function which reverses the links of a directed graph
-vector<vector<int>> reverseLinks(vector<vector<int>> &adj){
+vector<vector<int>> revLinks(vector<vector<int>> &adj){
     int n=adj.size();
     vector<vector<int>> revAdj(n);
     for(int i=0;i<n;i++){
@@ -1026,7 +1026,7 @@ vector<vector<int>> reverseLinks(vector<vector<int>> &adj){
 //The nested loop runs for V+E times
 //V is vertex which is same as n , nodes
 vector<int> eventualSafeStates(int n,vector<vector<int>> &adj){
-    vector<vector<int>> revAdj=reverseLinks(adj);
+    vector<vector<int>> revAdj=revLinks(adj);
 
     //An indeg array stores the indeg(for reversed graph)
     vector<int> inDeg(n,0);
@@ -2284,7 +2284,7 @@ int largeIsland(vector<vector<int>> &mat){
                 }
             }
             for(auto it:st){
-                int cnt=ds.size[it];
+                int cnt=ds.count[it];
                 islandCnt+=cnt;
             }
             maxi=max(maxi,islandCnt);
@@ -2439,7 +2439,7 @@ int cntBridges(vector<vector<int>> &adj){
     vector<vector<int>> bridge;
     for(int i=0;i<n;i++){
         if(vis[i]) continue;
-        bridgeHelper(i,-1,vis,in,least,adj,bridge)
+        bridgeHelper(i,-1,vis,in,least,adj,bridge);
     }
     return bridge.size();
 }
