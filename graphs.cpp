@@ -1674,6 +1674,40 @@ int minMultiplicationsToReachEnd(int start,int end,vector<int> &arr){
 //At max as we said, hypothetically, it can go up to 1e5 at max, space and time both
 
 
+//Number of ways to arrive at destination
+//Only count the ways which take the shortest time
+int waysToArriveAtDest(int src,int tar,vector<vector<pair<int,int>>> &adj){
+    int n=adj.size();
+    vector<int> ways(n,0);
+    vector<int> dist(n,1e9);
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+    pq.push({0,src});
+    ways[src]=1;
+    dist[src]=0;
+    
+    while(!pq.empty()){
+        int node=pq.top().second;
+        int dis=pq.top().first;
+        pq.pop();
+        if(dis>dist[node]) continue;
+        for(auto it:adj[node]){
+            int newDist=it.second+dis;
+            int adjNode=it.first;
+            if(newDist==dist[adjNode]) ways[adjNode]+=ways[node];
+            else if(newDist<dist[adjNode]){
+                ways[adjNode]=ways[node];
+                dist[adjNode]=newDist;
+                pq.push({newDist,adjNode});
+            }
+        }
+    }
+    if(dist[tar]==1e9) return -1;
+    return ways[tar];
+}
+//Time Complexity for dijkstra is ElogV
+//Space is occupied by the ways(V) and dist(V) and pq(E)
+//Time Complexity will be O((E+V)logV)
+//Space Complexity will be O(E+V)
 //Bellman Ford Algorithm
 //This is also used to find the shortest path, but it works where dijkstra's algorithm fails
 //This can be used even when the edgeWts are negative
