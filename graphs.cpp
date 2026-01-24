@@ -2445,17 +2445,61 @@ int cntBridges(vector<vector<int>> &adj){
 //Time Complexity will be O(V+E)
 //Space Complexity will be O(V+E)
 
+
+//Articulation Point
+//Same concept as bridges in a graph, but applied to nodes
+//A node is an articulation point, if its removal splits the graph into more than one component
+
+//First we need a dfs function and a global variable named cnt
+int cnt=0;
+void articulationPointDfs(int node,int parent,vector<bool> &vis,vector<int> &tin,vector<int> &low,vector<int> &hash,vector<vector<int>> &adj){
+    vis[node]=true;
+    tin[node]=low[node]=cnt;
+    cnt++;
+    int child=0;
+    for(auto it:adj[node]){
+        if(it==parent) continue;
+        if(vis[it]) low[node]=min(low[node],tin[it]);
+        else{
+            articulationPointDfs(it,node,vis,tin,low,hash,adj);
+            low[node]=min(low[node],low[it]);
+            if(low[it]>=tin[node] && parent!=-1) hash[node]=1;
+
+            //Increase the cnt of child, only inside the not visited component, otherwise a cycle will confuse the count
+            child++;
+        }
+    }
+    if(child>1 && parent==-1) hash[node]=1;
+}
+vector<int> articulationPoint(vector<vector<int>> &adj){
+    int n=adj.size();
+    vector<bool> vis(n,false);
+    vector<int> tin(n,0);
+    vector<int> low(n,0);
+    vector<int> hash(n,0);
+    for(int i=0;i<n;i++){
+        if(vis[i]) continue;
+        articulationPointDfs(i,-1,vis,tin,low,hash,adj);
+    }
+    vector<int> ans;
+    for(int i=0;i<n;i++){
+        if(hash[i]!=0) ans.push_back(i);
+    }
+    if(ans.size()==0) return {-1};
+    return ans;
+}
+//Time Complexity will be O(V+E)
+//Space Complexity will be O(V)
+
+
+
+
 //Write code to print the SCCs, (same logic as finding the number of SCCs)
 //Optimal Method for detect cycle in directed graph
 //Use a single visited array, you can mark 2 for path visited and 1 for visited
 //Do Stones removal again
 //The stones Removal problem can explode in memory for some test cases, try to correct that
 
-
-
-
-//Lecture 40
-//Lecture 43
 //Revise TC and SC for dijkstra's algorithm  II
 int main(){
     vector<vector<int>> matrix={{1,1,0,1,1},{1,0,0,0,0},{0,0,0,1,1},{1,1,0,1,0}};
