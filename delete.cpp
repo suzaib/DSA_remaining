@@ -92,7 +92,57 @@ bool frogJumpTabulation_brute(vector<int> &stones){
 //Clearly as we saw, the tabulation like this, is not much helpful
 //The main problem is to find out whether the particular stone lies in the array or not
 //For this reason we should use a map that will also help us to store the index of that element 
-bool canCrossRive
+
+
+
+class SGTree{
+    public:
+        vector<int> seg;
+        vector<int> lazy;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+            lazy.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,vector<int> &arr){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr);
+            build(2*idx+2,mid+1,high,arr);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,int l,int r,int val){
+            if(lazy[idx]!=0){
+                seg[idx]+=(high-low+1)*lazy[idx];
+
+                if(low!=high){
+                    lazy[2*idx+1]+=lazy[idx];
+                    lazy[2*idx+2]+=lazy[idx];
+                }
+            }
+
+            if(high<l || r<low) return;
+            if(low>=l && high<=r){
+                seg[idx]=(high-low+1)*val;
+                if(low!=high){
+                    lazy[2*idx+1]+=val;
+                    lazy[2*idx+2]+=val;
+                }
+                return;
+            }
+
+            int mid=(low+high)>>1;
+            update(2*idx+1,low,mid,l,r,val);
+            update(2*idx+2,mid+1,high,l,r,val);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+}
 int main(){
     vector<int> arr={1,3,5};
     vector<int> lows(1)

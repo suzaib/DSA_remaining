@@ -534,6 +534,15 @@ Traverse the tree and you will get three conditions
 2)No Overlap : Just return, no need to do anything
 3)Partial Overlap : Call left, call right and then use node=left+right
 
+Doing Range Queries
+
+Some Rules to follow
+First complete any previous updates if remaining
+1) Complete Overlap : return seg[idx] value
+2) No Overlap : return 0
+3) Partial Overlap : go left, go right, bring the sum and return left+right
+
+
 */
 
 class SGTree{
@@ -544,6 +553,7 @@ class SGTree{
             seg.resize(4*n+1);
             lazy.resize(4*n+1);
         }
+        //Time Complexity will be O(8n)
 
         void build(int idx,int low,int high,vector<int> &arr){
             if(low==high){
@@ -556,8 +566,10 @@ class SGTree{
             build(2*idx+2,mid+1,high,arr);
             seg[idx]=seg[2*idx+1]+seg[2*idx+2];
         }
+        //Every node is visited once, total of 4n nodes
+        //Time Complexity will be O(4n)
 
-        void update(int idx,int low,int high,int i,int val){
+        void update(int idx,int low,int high,int l,int r,int val){
             //In this we first check if there is a previous update remaining
             //If yes, then we first take care of that
             if(lazy[idx]!=0){
@@ -569,6 +581,7 @@ class SGTree{
                     lazy[2*idx+1]+=lazy[idx];
                     lazy[2*idx+2]+=lazy[idx];
                 }
+                lazy[idx]=0;
             }
 
             //Now we handle our overlap cases
@@ -577,7 +590,7 @@ class SGTree{
 
             //Complete Overlap
             if(low>=l && high<=r){
-                seg[idx]=(high-low+1)*val;
+                seg[idx]+=(high-low+1)*val;
                 if(low!=high){
                     lazy[2*idx+1]+=val;
                     lazy[2*idx+2]+=val;
@@ -590,10 +603,47 @@ class SGTree{
             update(2*idx+1,low,mid,l,r,val);
             update(2*idx+2,mid+1,high,l,r,val);
             seg[idx]=seg[2*idx+1]+seg[2*idx+2];
-
         }
+        //Time Complexity will be O(logn)
+
+        int query(int idx,int low,int high,int l,int r){
+
+            //First we check if there's a previous update remaining
+            if(lazy[idx]!=0){
+                seg[idx]+=(high-low+1)*lazy[idx];
+                
+                //If children exists, propagate downwards
+                if(low!=high){
+                    lazy[2*idx+1]+=lazy[idx];
+                    lazy[2*idx+2]+=lazy[idx];
+                }
+                
+                //As we have done updation, reset lazy node value to 0
+                lazy[idx]=0;
+            }
+
+            //Now we check for overlapping cases
+            //Case I : No overlap
+            //Simply return 0
+            if(l>high || r<low) return 0;
+
+            //Case II : Complete Overlap
+            //Simply return seg[idx]
+            if(low>=l && high<=r) return seg[idx];
+
+            //Case III : Partial Overlap
+            //Go left and right and then return left+right
+            int mid=(low+high)>>1;
+            int left=query(2*idx+1,low,mid,l,r);
+            int right=query(2*idx+2,mid+1,high,l,r);
+            return (left+right);
+        }
+
 }
-//First write the code for update again, then start at query(in lecture)
+
+
+
+
 int main(){
     //Your function
     return 0;
