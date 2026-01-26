@@ -691,6 +691,9 @@ class SGTree{
             build(2*idx+2,mid+1,high,arr);
             seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
         }
+        //Every node is visited once
+        //Time Complexity will be O(n)
+
 
         void update(int idx,int low,int high,int l,int r,int val){
             if(lazy[idx]!=0){
@@ -723,6 +726,8 @@ class SGTree{
             update(2*idx+2,mid+1,high,l,r,val);
             seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
         }
+        //Time Complexity will be O(logn)
+
 
         int query(int idx,int low,int high,int l,int r){
             if(lazy[idx]!=0){
@@ -749,6 +754,8 @@ class SGTree{
             int right=query(2*idx+2,mid+1,high,l,r);
             return min(left,right);
         }
+        //Time Complexity will be O(logn)
+        
 }
 
 int main(){
