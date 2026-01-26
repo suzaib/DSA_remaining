@@ -707,11 +707,11 @@ class SGTree{
             }
 
             //No Overlap
-            if(high<l || r<low) return INT_MAX;
+            if(high<l || r<low) return;
 
             //Complete Overlap
             if(low>=l && high<=r){
-                seg[idx]+=lazy[idx];
+                seg[idx]+=val;
 
                 if(low!=high){
                     lazy[2*idx+1]+=val;
@@ -743,7 +743,7 @@ class SGTree{
             }
 
             //No Overlap
-            if(high<l || r<l) return INT_MAX;
+            if(high<l || r<low) return INT_MAX;
             
             //Complete Overlap
             if(low>=l && high<=r) return seg[idx];
@@ -755,8 +755,14 @@ class SGTree{
             return min(left,right);
         }
         //Time Complexity will be O(logn)
-        
+
 }
+
+
+//Question 
+//Given an array say : [1,1,0,0,1,0,1] , here 1=head and 0=tails and we will be given two types of queries
+//Type 1 : range [l,r] : Tell how many heads are in range l,r 
+//Type 2 : flip the coin, that is head becomes tails and tails becomes head so the array will look like : [0,0,1,1,0,1,0]
 
 int main(){
     //Your function
