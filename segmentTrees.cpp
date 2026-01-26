@@ -669,7 +669,87 @@ void solve3(){
 }
 
 
+//Range Min query and update
+class SGTree{
+    public:
+        vector<int> seg;
+        vector<int> lazy;
+        
+        SGTree(int n){
+            seg.resize(4*n+1);
+            lazy.resize(4*n+1);
+        }
 
+        void build(int idx,int low,int high,vector<int> &arr){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+            
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr);
+            build(2*idx+2,mid+1,high,arr);
+            seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
+        }
+
+        void update(int idx,int low,int high,int l,int r,int val){
+            if(lazy[idx]!=0){
+                seg[idx]+=lazy[idx];
+
+                if(low!=high){
+                    lazy[2*idx+1]+=lazy[idx];
+                    lazy[2*idx+2]+=lazy[idx];
+                }
+                lazy[idx]=0;
+            }
+
+            //No Overlap
+            if(high<l || r<low) return INT_MAX;
+
+            //Complete Overlap
+            if(low>=l && high<=r){
+                seg[idx]+=lazy[idx];
+
+                if(low!=high){
+                    lazy[2*idx+1]+=val;
+                    lazy[2*idx+2]+=val;
+                }
+                return;
+            }
+
+            //Partial Overlap
+            int mid=(low+high)>>1;
+            update(2*idx+1,low,mid,l,r,val);
+            update(2*idx+2,mid+1,high,l,r,val);
+            seg[idx]=min(seg[2*idx+1],seg[2*idx+2]);
+        }
+
+        int query(int idx,int low,int high,int l,int r){
+            if(lazy[idx]!=0){
+                seg[idx]+=lazy[idx];
+
+                //If children exists, propagate downwards
+                if(low!=high){
+                    lazy[2*idx+1]+=lazy[idx];
+                    lazy[2*idx+2]+=lazy[idx];
+                }
+
+                lazy[idx]=0;
+            }
+
+            //No Overlap
+            if(high<l || r<l) return INT_MAX;
+            
+            //Complete Overlap
+            if(low>=l && high<=r) return seg[idx];
+
+            //Partial Overlap
+            int mid=(low+high)>>1;
+            int left=query(2*idx+1,low,mid,l,r);
+            int right=query(2*idx+2,mid+1,high,l,r);
+            return min(left,right);
+        }
+}
 
 int main(){
     //Your function
