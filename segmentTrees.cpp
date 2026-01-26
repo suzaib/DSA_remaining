@@ -638,7 +638,34 @@ class SGTree{
             int right=query(2*idx+2,mid+1,high,l,r);
             return (left+right);
         }
+}
 
+//This solve3 function is in respect to the above tree
+void solve3(){
+    int n;
+    cin>>n;
+    vector<int> arr(n);
+    for(int i=0;i<n;i++) cin>>arr[i];
+    SGTree sg(n);
+    sg.build(0,0,n-1,arr);
+
+    //Taking the queries
+    int q;
+    cin>>q;
+    while(q--){
+        int type;
+        cin>>type;
+        if(type==1){
+            int l,r;
+            cin>>l>>r;
+            cout<<sg.query(0,0,n-1,l,r)<<"\n";
+        }
+        else{
+            int l,r,val;
+            cin>>l>>r>>val;
+            sg.update(0,0,n-1,l,r,val);
+        }
+    }
 }
 
 
