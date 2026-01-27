@@ -770,7 +770,78 @@ class SGTree{
         }
 
         void build(int idx,int low,int high,vector<int> &arr){
-            
+            if(low==high){
+                seg[idx]=arr[low]
+                return;
+            }
+
+            int mid=(low+high)>>1;
+            build(2*idx+1,low,mid,arr);
+            build(2*idx+2,mid+1,high,arr);
+            seg[idx]=seg[2*idx+1]+seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,int l,int r){
+            if(lazy[idx]!=0){
+                int heads=seg[idx];
+                int tails=(high-low+1)-seg[idx];
+
+                seg[idx]=tails;
+                
+                if(low!=high){
+                    lazy[2*idx+1]+=1;
+                    lazy[2*idx+2]+=1;
+                }
+            }
+
+            //No Overlap
+            if(r<low || l>high) return;
+
+            //Complete Overlap
+            if(low>=l && high<=r){
+                int tails=(high-low+1)-seg[idx];
+                int heads=seg[idx];
+                seg[idx]=tails;
+
+                if(low!=high){
+                    lazy[2*idx+1]+=1;
+                    lazy[2*idx+2]+=1;
+                }
+
+                return;
+            }
+
+            int mid=(low+high)>>1;
+            update(2*idx+1,low,mid,l,r);
+            update(2*idx+2,mid+1,high,l,r);
+            seg[idx]=(seg[2*idx+1]+seg[2*idx+2]);
+        }
+
+        int query(int idx,int low,int high,int l,int r){
+            if(lazy[idx]%2!=0){
+                int heads=seg[idx];
+                int tails=(high-low+1)-seg[idx];
+                seg[idx]=tails;
+
+                if(low!=high){
+                    lazy[2*idx+1]+=1;
+                    lazy[2*idx+2]+=1;
+                }
+
+                lazy[idx]=0;
+            }
+
+            //No Overlap
+            if(r<low || high<l) return 0;
+
+            //Complete Overlap
+            if(low>=l && high<=r) return seg[idx];
+
+            //Partial Overlap
+            int mid=(low+high)>>1;
+            int left=query(2*idx+1,low,mid,l,r);
+            int right=query(2*idx+2,mid+1,high,l,r);
+            return left+right;
         }
 }
 //Question 
