@@ -759,6 +759,16 @@ class SGTree{
 }
 
 
+
+//Question 
+//Given an array say : [1,1,0,0,1,0,1] , here 1=head and 0=tails and we will be given two types of queries
+//Type 1 : range [l,r] : Tell how many heads are in range l,r 
+//Type 2 : flip the coin, that is head becomes tails and tails becomes head so the array will look like : [0,0,1,1,0,1,0]
+
+//We will again use lazy propagation
+//The lazy node will store a value which will indicate the number of flips
+//Since a coin has only two sides, therefore two flips=no flip or same as previous
+//In the update function we will return the sum of the below nodes as we need to give the number of heads
 class SGTree{
     public:
         vector<int> seg;
@@ -769,9 +779,10 @@ class SGTree{
             lazy.resize(4*n+1);
         }
 
+        //First we build the segment tree
         void build(int idx,int low,int high,vector<int> &arr){
             if(low==high){
-                seg[idx]=arr[low]
+                seg[idx]=arr[low];
                 return;
             }
 
@@ -781,9 +792,12 @@ class SGTree{
             seg[idx]=seg[2*idx+1]+seg[2*idx+2];
         }
 
+        //The update function flips the coins
         void update(int idx,int low,int high,int l,int r){
-            if(lazy[idx]!=0){
-                int heads=seg[idx];
+
+            //Before doing anything, we must check if the current node needs to be updated
+            //That will only happen if the lazy node has an odd value
+            if(lazy[idx]%2!=0){
                 int tails=(high-low+1)-seg[idx];
 
                 seg[idx]=tails;
@@ -792,15 +806,19 @@ class SGTree{
                     lazy[2*idx+1]+=1;
                     lazy[2*idx+2]+=1;
                 }
+
+                //Reset the lazy node
+                lazy[idx]=0;
             }
 
+            //Now we take care of our cases
+            
             //No Overlap
             if(r<low || l>high) return;
 
             //Complete Overlap
             if(low>=l && high<=r){
                 int tails=(high-low+1)-seg[idx];
-                int heads=seg[idx];
                 seg[idx]=tails;
 
                 if(low!=high){
@@ -844,10 +862,6 @@ class SGTree{
             return left+right;
         }
 }
-//Question 
-//Given an array say : [1,1,0,0,1,0,1] , here 1=head and 0=tails and we will be given two types of queries
-//Type 1 : range [l,r] : Tell how many heads are in range l,r 
-//Type 2 : flip the coin, that is head becomes tails and tails becomes head so the array will look like : [0,0,1,1,0,1,0]
 
 int main(){
     //Your function
