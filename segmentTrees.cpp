@@ -791,6 +791,8 @@ class SGTree{
             build(2*idx+2,mid+1,high,arr);
             seg[idx]=seg[2*idx+1]+seg[2*idx+2];
         }
+        //Each node is visited once
+        //Time Complexity will be O(n)
 
         //The update function flips the coins
         void update(int idx,int low,int high,int l,int r){
@@ -812,7 +814,7 @@ class SGTree{
             }
 
             //Now we take care of our cases
-            
+
             //No Overlap
             if(r<low || l>high) return;
 
@@ -834,10 +836,11 @@ class SGTree{
             update(2*idx+2,mid+1,high,l,r);
             seg[idx]=(seg[2*idx+1]+seg[2*idx+2]);
         }
+        //Time Complexity will be O(logn)
 
+        //Function to handle query
         int query(int idx,int low,int high,int l,int r){
             if(lazy[idx]%2!=0){
-                int heads=seg[idx];
                 int tails=(high-low+1)-seg[idx];
                 seg[idx]=tails;
 
@@ -861,6 +864,7 @@ class SGTree{
             int right=query(2*idx+2,mid+1,high,l,r);
             return left+right;
         }
+        //Time Complexity will be O(logn)
 }
 
 int main(){
