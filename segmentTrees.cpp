@@ -759,6 +759,20 @@ class SGTree{
 }
 
 
+class SGTree{
+    public:
+        vector<int> seg;
+        vector<int> lazy;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+            lazy.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,vector<int> &arr){
+            
+        }
+}
 //Question 
 //Given an array say : [1,1,0,0,1,0,1] , here 1=head and 0=tails and we will be given two types of queries
 //Type 1 : range [l,r] : Tell how many heads are in range l,r 
