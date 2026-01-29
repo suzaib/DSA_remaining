@@ -147,6 +147,7 @@ int jumpGameII_memoization(vector<int> &arr){
 //Space Complexity will be O(2n)
 
 //Tabulation
+//The tabulation method is all the optimisation dp techniques can provide. The most optimal approach requires the greedy algorithm
 int jumpGameII_tabulation(vector<int> &arr){
     int n=arr.size();
     if(n<=1) return 0;
@@ -163,7 +164,6 @@ int jumpGameII_tabulation(vector<int> &arr){
 //Space Complexity will be O(n)
 
 //Optimal Method
-//The tabulation method is all the optimisation dp techniques can provide. The most optimal approach requires the greedy algorithm
 int jumpGameII(vector<int> &arr){
     int n=arr.size();
     int r=0;
@@ -572,6 +572,8 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 
 
 //Q.9) Lecture 9
+//Check first jump game II(revise)
+//Check parenthesis helper (revise)
 //Q.11 Valid parenthesis, complete the tabulation etc
 
 //For n jobs, the optimal solution is by using the disjoint sets to optimise the second loop which finds max deadline
