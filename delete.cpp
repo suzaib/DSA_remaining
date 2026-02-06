@@ -97,7 +97,7 @@ bool frogJumpTabulation_brute(vector<int> &stones){
 
 int main(){
     vector<int> arr={1,3,5};
-    vector<int> lows(1)
+    vector<int> lows(1);
     
 }
 
