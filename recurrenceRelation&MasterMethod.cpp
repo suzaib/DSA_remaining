@@ -113,6 +113,18 @@ void test(int n){
 
 /*
 T(n)=2T(n-1)+1
+T(n)=(2^k)*T(n-k) + 2^0+2^1+2^2+...+2^(k-1)
+As for n=0 T(n)=1, therefore
+T(n)=(2^n)*1+(2^n)-1
+T(n)=2^(n+1)-1
+Writing in asymptotic form
+T(n)=2^n
+*/
+
+/*
+Now generalising our solution
+T(n)=k*T(n-1)+1 ===> T(n)=k^n
+
 */
 int main(){
     return 0;

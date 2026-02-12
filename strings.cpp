@@ -17,6 +17,8 @@ Hence in such case when the memory chunk gets full, the push_back operations can
 
 If you just initialise like vector<int> arr, the size of capacity allocated can be anything
 In case you do vector<int> arr(200) then the memory chunk will be atleast 200, meaning it can be anything>=200
+In most cases, the capacity is usually double the size defined, that is in this case the capacity would be 400, and it fills up, it doubles, say when all 400 
+Would have been used the capacity will grow to 800, then 1600 and so on
 
 Concatenation : Consider two strings, a of len n and b of len m. The operation of adding one string to another, whether at the back or at the front, takes time n+m
 Adding at the front : The whole string has to be shifted and hence the time taken is O(n)
@@ -45,7 +47,7 @@ Convert to lowercase : c+32
 Convert to uppercase : c-32
 
 Comparision in strings : Compared lexicographically
-That means lower ASCII value means less and if one strings ends earlier the shorted one is smaller
+That means lower ASCII value means less and if one strings ends earlier the shorter one is smaller
 The method s1<s2 is built in and runs in optimal O(min(l1,l2))
 Eg. "apple">"Banana" since ASCII value of a is bigger than B
 
@@ -240,12 +242,12 @@ bool isPalindrome(string &s){
 /*
 Phase 1 : Prefix Techniques (Foundation)
 Prefix Function (KMP Preprocessing)
-Prefix Function (n array)
+Prefix Function (pie array)
 
 Consider the string "apple"
 Prefixes : "", "a", "ap", "app", "appl", "apple" ("apple" is not a proper prefix)
 Suffixes : "", "e", "le", "ple", "pple", "apple" ("apple" is not a proper suffix)
-Border : Elements appearing in both prefix and suffix(only hte proper prefix and proper suffix)
+Border : Elements appearing in both prefix and suffix(only the proper prefix and proper suffix)
 The string "" is called a trivial border
 The trivial border is often ignored in competitive programming
 
