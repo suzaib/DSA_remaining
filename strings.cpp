@@ -426,6 +426,53 @@ bool stringMatching_better(string &s,string &t){
 
 //Optimal Method
 //The concept remains same, but this time we will shrink down the space from m+n to just m
+//We have designed this function to return the number of times the subsequence t appears in s
+//If you want this function to just check whether t exists in s or not, check if cnt value returned by the function is greater than 0 or not
+int kmp(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+    
+    //We will ignore the t="" case this time
+    //Incase t is larger than s, is can't exist inside s
+    if(m>n) return 0;
+
+    int cnt=0;
+    int prev=0;
+    int l;
+    vector<int> pie=pieArr(t);
+
+    for(int i=0;i<n;i++){
+        l=prev;
+
+        while(l>0 && s[i]!=t[l]) l=pie[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pie[l-1];
+        }
+        prev=l;
+    }
+    return cnt;
+}
+
+int fx(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+
+    vector<int> pie=pieArr(t);
+    int l=0;
+    int cnt=0;
+    for(int i=0;i<n;i++){
+        while(l>0 && s[i]==t[l]) l=pie[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pie[l-1];
+        }
+    }
+    return cnt;
+}
+
 int main(){
     //Your code here
     return 0;

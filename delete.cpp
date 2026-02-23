@@ -95,6 +95,39 @@ bool frogJumpTabulation_brute(vector<int> &stones){
 
 
 
+int kmp(string &s, string &t){
+    int n = s.size();
+    int m = t.size();
+
+    if(m > n) return 0;
+
+    vector<int> pie = pieArr(t);
+
+    int cnt = 0;
+    int prev = 0;
+    int l;
+
+    for(int i = 0; i < n; i++){
+        l = prev;
+
+        while(l > 0 && s[i] != t[l])
+            l = pie[l - 1];
+
+        if(s[i] == t[l])
+            l++;
+
+        if(l == m){
+            cnt++;
+            l = pie[l - 1];   // 🔥 important for overlapping matches
+        }
+
+        prev = l;
+    }
+
+    return cnt;
+}
+
+
 int main(){
     vector<int> arr={1,3,5};
     vector<int> lows(1);

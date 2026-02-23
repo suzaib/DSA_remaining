@@ -83,7 +83,8 @@ T(n)=logn+T(n-1), again use backward substitution
 T(n)=T(n-k-1)+log((n!)/(n-k-1)!)
 Put k=n-1 to get T(n)=log(n!)+1
 Upper Bound of n! is n^n
-Therefore T(n)=nlogn+1 or T(n)=nlogn (asymptotic Time Complexity
+Therefore T(n)=nlogn+1 or T(n)=nlogn (asymptotic Time Complexity)
+(The approximation of T(n!)=T(nlogn) is called Stirling's approximation)
 */
 
 /*
@@ -124,8 +125,47 @@ T(n)=2^n
 /*
 Now generalising our solution
 T(n)=k*T(n-1)+1 ===> T(n)=k^n
+T(n)=k*T(n-1)+f(n) ===> T(n)=f(n)*(k^n)
+*/
+
+
+/*
+Master's Theorem for Decreasing functions
+T(n)=a*T(n-b)+f(n) where a>0 && b>0 and f(n) is of the form O(n^k) where k>=0
+Case I : a=1
+T(n)=T(n-k)+f(n) ==> O((n/k)*f(n))
+
+Case II : a<1
+T(n)=0.7T(n-k)+f(n) ===> O(f(n))
+
+Case III : a>1
+T(n)=aT(n-b)+f(n) ==> T(n)=f(n)*(a^(n/b))
+*/
+
+
+//Dividing Functions
+void test(int n){
+    if(n>1){
+        cout<<n<<"\n";
+        test(n/2);
+    }
+}
+
+/*
+Time Complexity can be written as 
+T(n)=1+T(n/2)
+Use backward substitution
+T(n)=T(n/2^k)+k
+We are given T(1)=1 therefore put n/2^k=1
+That is put 2^k=n
+k=logn
+T(n)=T(1)+logn
+T(n)=logn
 
 */
+
+
+
 int main(){
     return 0;
 }
