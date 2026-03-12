@@ -178,6 +178,24 @@ Space Complexity will be O(k)
 The counting sort is very good when you know the range and the numbers are not like [2,20000,3,4], in this case, counting sort is not ideal
 */
 
+void countingSort(vector<int> &arr, int k){
+    int n=arr.size();
+    vector<int> hash(k+1,0);
+    for(int i=0;i<n;i++) hash[arr[i]]++;
+    int idx=0;
+    for(int i=0;i<=k;i++){
+        while(hash[i]>0){
+            arr[idx]=i;
+            idx++;
+            hash[i]--;
+        }
+    }
+}
+//Time Complexity will be O(n+k)
+//Space Complexity will be O(k)
+
+
+
 /*
 Bucket Sort
 The concept of this question is this
