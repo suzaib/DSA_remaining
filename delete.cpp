@@ -208,6 +208,11 @@ Counting sort can be used if the range of the bucket is small
 However standard implementations say to use insertion sort as the number of elements in a bucket are expected to be very less, and when the elements are not many, insertion sort is best
 After sorting each bucket, we just concatenate each bucket to get the sorted array
 
+Bucket sort is often used for decimal valued numbers like [0.45,0.23,0.67] etc
+Here the buckets we create are for 0-0.1 , 0.1-0.2 and so on
+To see which numbers belong to a bucket, we multiply them by 10, for eg 0.45 multiplied by 10 becomes 4.5, it then goes on to the bucket with 4 index
+Bucket are often as 0,1,2,3 denoting 0-0.1 0.1-0.2 and so on.
+
 */
 int main(){
     vector<int> arr={1,3,5};
