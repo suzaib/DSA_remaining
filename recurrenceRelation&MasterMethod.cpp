@@ -162,6 +162,21 @@ k=logn
 T(n)=T(1)+logn
 T(n)=logn
 
+
+
+Consider the function : T(n)=T(n/2)+n for n>1 and 1 when n==1
+Keep using backward substitution to get 
+T(n)=T(n/2^k)+(n+n/2+n/4+n/8+....+n/2^(k-1))
+Substitute k=logn in the above recurrence relation to get T(n)=1+n(2+(1/2^k-1))
+Trimming down the complexity becomes T(n)=1+2n ==> O(n)
+
+
+
+Consider the example : T(n)=2*T(n/2)+n (when n>1 and 1 when n=1)
+Use backward substitution to get T(n)=2^k*(T(n/2^k))+nk
+Use k=logn(base 2) to solve it as T(n)=n+nlogn
+T(n)=nlogn
+
 */
 
 
