@@ -128,6 +128,69 @@ int kmp(string &s, string &t){
 }
 
 
+
+ 
+/*
+Radix Sort
+
+Concept 
+Consider an array say [904,46,5,74,62,1]
+Other sorting methods use comparison based sorting that is comparing the digits and then rearranging them.
+Radix sort instead sorts digit by digit, it is not a comparison based sorting method
+We sort the digits from least significant digit to the most significant digit
+
+Method 
+First see which number has the largest number of digits, that is 904, which has 3 digits
+Now make all the numbers of three digits(add 0 to the front)
+Now compare the ones place, after sorting that the array looks like : [001,062,904,074,005,046]
+Observe, if the ones digits are same, then the relative order is kept
+
+Now sort using the tens place
+The array becomes : [001,904,005,046,062,074]
+
+Now sort using the hundreds place
+The array becomes : [001,005,046,062,074,904]
+
+This is the sorted array
+This was the whole concept behind radix sort
+*/
+
+
+/*
+Counting Sort
+This is a non comparison based sorting algorithm
+In this, we will be also given a range in which the inputs will lie, for eg range k
+This is the easiest sorting method
+Consider the example : [2,1,2,3,1,2,4], with the range given to be 0-5
+Now all you need to do is to take an hash array of 6 size and mark the numbers as they appear
+For eg the hash array would look like (assuming 1 based indexing) : [0,2,3,1,1,0]
+This means 0 appears 0 times, 1 appears 2 times and 2 appears 3 times and so on
+Now just start from the beginning and keep writing each number in order : 1,1,2,2,2,3,4
+There you go, you have got you sorted array
+
+Discussing Complexities
+We will traverse the array of n size once to fill in the hash table therefore n
+We will traverse the hash array of size k(range) to get the sorted array
+Space will be needed to make the hash array which is of k size(range)
+Time Complexity will be O(n+k)
+Space Complexity will be O(k)
+
+The counting sort is very good when you know the range and the numbers are not like [2,20000,3,4], in this case, counting sort is not ideal
+*/
+
+/*
+Bucket Sort
+The concept of this question is this
+Say we have an array like [8,5,3,4,6,1,2,7]
+We create buckets for different sizes as 1-3 4-6 7-8 and put numbers corresponding to each bucket
+If only single elements are in one bucket(this happens when numbers are uniformly distributed), just concatening the buckets gives us the sorted array
+However if one bucket contains more than one element, then we sort the elements inside the bucket
+This can be done using different ways, one of them is couting sort discussed before
+Counting sort can be used if the range of the bucket is small
+However standard implementations say to use insertion sort as the number of elements in a bucket are expected to be very less, and when the elements are not many, insertion sort is best
+After sorting each bucket, we just concatenate each bucket to get the sorted array
+
+*/
 int main(){
     vector<int> arr={1,3,5};
     vector<int> lows(1);
