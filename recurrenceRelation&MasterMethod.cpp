@@ -176,6 +176,11 @@ Consider the example : T(n)=2*T(n/2)+n (when n>1 and 1 when n=1)
 Use backward substitution to get T(n)=2^k*(T(n/2^k))+nk
 Use k=logn(base 2) to solve it as T(n)=n+nlogn
 T(n)=nlogn
+*/
+
+/*
+Master's Theorem for Dividing Functions
+T(n)=a*T(n/b)+f(n), where a>=1 and b>1 and f(n) is of the form fx((n^k)*((logn)^p))
 
 */
 
