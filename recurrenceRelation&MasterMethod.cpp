@@ -180,6 +180,24 @@ T(n)=nlogn
 */
 
 
+
+
+//// END RESULTS ////
+/*
+/*
+Master's Theorem for Decreasing functions
+T(n)=a*T(n-b)+f(n) where a>0 && b>0 and f(n) is of the form O(n^k) where k>=0
+Case I : a=1
+T(n)=T(n-k)+f(n) ==> O((n/k)*f(n))
+
+Case II : a<1
+T(n)=0.7T(n-k)+f(n) ===> O(f(n))
+
+Case III : a>1
+T(n)=aT(n-b)+f(n) ==> T(n)=f(n)*(a^(n/b))
+*/
+*/
+
 int main(){
     return 0;
 }
