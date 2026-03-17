@@ -5,6 +5,8 @@
 Here we discuss the Master Method which is used to find the time complexity of the recurrence relations
 For that we first need to discuss recurrence relations and how to find the time complexity 
 We are already much aware of what a recurrence relation is, therefore we will try to find the time complexity of some recurrence relation
+
+NOTE : All logs(unless mentioned otherwise, are to base 2
 */
 
 #include<bits/stdc++.h>
@@ -181,11 +183,42 @@ T(n)=nlogn
 /*
 Master's Theorem for Dividing Functions
 T(n)=a*T(n/b)+f(n), where a>=1 and b>1 and f(n) is of the form fx((n^k)*((logn)^p))
+Calculate two things first
+One is value of k(power of n in f(n))
+Next is log_b(a)(b is base), let log_b(a) be denoted by z
+then compare k and z
+Case I) z>k
+Then O(n^z)
+
+Case II) z==k
+    Case a) p>-1 : O(n^k * (logn)^(p+1))
+    Case b) p==-1: O(n^k * (log(logn)))
+    Case c) p<-1 : O(n^k)
+
+Case III) z<k
+    Case a) p>0 : O(n^k * (logn)^p)
+    Case b) p<=0 : O(n^k)
 
 */
 
 
+//Recurrence Relation for root functions
+void test(int n){
+    if(n>2){
+        cout<<n<<"\n";
+        test(sqrt(n));
+    }
+}
 
+/*
+T(n)=T(n^(1/2))+1 when n>2 and =1 when n=2
+T(n)=T(n^(1/4))+2
+T(n)=T(n^(1/8))+3 and so on..
+T(n)=T(T^(1/2^k)) + k
+Put k=log(logn) for base condition
+T(n)=log(logn)
+
+*/
 
 //// END RESULTS ////
 /*
@@ -201,7 +234,30 @@ T(n)=0.7T(n-k)+f(n) ===> O(f(n))
 Case III : a>1
 T(n)=aT(n-b)+f(n) ==> T(n)=f(n)*(a^(n/b))
 */
+
+/*
+Master's Theorem for Dividing Functions
+T(n)=a*T(n/b)+f(n), where a>=1 and b>1 and f(n) is of the form fx((n^k)*((logn)^p))
+Calculate two things first
+One is value of k(power of n in f(n))
+Next is log_b(a)(b is base), let log_b(a) be denoted by z
+then compare k and z
+Case I) z>k
+Then O(n^z)
+
+Case II) z==k
+    Case a) p>-1 : O(f(n)*logn)
+    Case b) p==-1: O(n^k * (log(logn)))
+    Case c) p<-1 : O(n^k)
+
+Case III) z<k
+    Case a) p>0 : O(f(n))
+    Case b) p<=0 : O(n^k)
+
 */
+
+
+
 
 int main(){
     return 0;
