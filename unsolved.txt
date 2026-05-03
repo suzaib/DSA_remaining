@@ -63,3 +63,20 @@ See if you can print the subsequence for the problem of longest string chain(it 
 //The eventual safe states code is incorrect(by chatgpt)
 //Revise TC and SC for dijkstra's algorithm  II
 
+
+
+
+
+
+//String
+Leetcode : 796, Rotate String(only after completing string theory)
+also understand this one:
+bool rotateString(string s, string goal) {
+    int n=s.size();
+    int m=goal.size();
+    if(n!=m) return false;
+    s=s+s;
+    if(s.find(goal)!=string::npos) return true;
+    return false;
+}
+
