@@ -12,7 +12,7 @@ First let us discuss how memory is allocated for dynamic structures like strings
 Consider you create a vector or string, the system allocates some memory chunk for it which is large enough to store say 20 or 30 characters
 Now the push_back or append operations happen in O(1) time. After some time, this space get filled up
 Then that memory chunk is deleted and a new memory chunk is allocated which is often 2 times the size (the size grows geometrically, it can be 2x or 3x or 4x)
-And then the whole string or vector is copied to that new chunk
+And then the whole string or vector is copid to that new chunk
 Hence in such case when the memory chunk gets full, the push_back operations can take O(n) 
 
 If you just initialise like vector<int> arr, the size of capacity allocated can be anything
@@ -24,7 +24,7 @@ Concatenation : Consider two strings, a of len n and b of len m. The operation o
 Adding at the front : The whole string has to be shifted and hence the time taken is O(n)
 Adding at the back :  Suppose you are adding s to ticket to make it tickets. Now two things can happen
 First is that there is space/memory available and so s can be just put ahead of ticket. In that case time taken will be O(1)
-Incase no memory is available, a new memory block will be created in which first the ticket will be copied and then s will be appended
+Incase no memory is available, a new memory block will be created in which first the ticket will be copid and then s will be appended
 Copying dominates and make the time complexity to n
 
 Character Arithmetic :
@@ -202,7 +202,7 @@ bool anagramCheck(string &s1,string &s2){
     return true;
 }
 //Only two loops one runs n times and the other running 26 times
-//Space is occupied by the single freq array of 26 size
+//Space is occupid by the single freq array of 26 size
 //Time Complexity will be O(n+26)
 //Space Complexity will be O(26)
 
@@ -242,7 +242,7 @@ bool isPalindrome(string &s){
 /*
 Phase 1 : Prefix Techniques (Foundation)
 Prefix Function (KMP Preprocessing)
-Prefix Function (pie array)
+Prefix Function (pi array)
 
 Consider the string "apple"
 Prefixes : "", "a", "ap", "app", "appl", "apple" ("apple" is not a proper prefix)
@@ -301,16 +301,16 @@ bool isBorder(string &bor,string &s){
 
 /*
 Prefix Array
-This is also called pie array
+This is also called pi array
 Consider the string "ababacaba"
-Let us denote the pie array as p(denote it with pie symbol), then p[i] means take the string till i
+Let us denote the pi array as p(denote it with pi symbol), then p[i] means take the string till i
 For eg p[3] means take the string till index 3 which is abab and tell the value of the longest border that it has
 Hence p[i] tells you the length of the longest border in the substring 0 to i
 */
 
-vector<int> pieArr_brute(string &s){
+vector<int> piArr_brute(string &s){
     int n=s.size();
-    vector<int> pie(n,0);
+    vector<int> pi(n,0);
     string temp="";
     for(int i=0;i<n;i++){
         temp+=s[i];
@@ -318,11 +318,11 @@ vector<int> pieArr_brute(string &s){
         while(temp.size()>0 && !isBorder(temp,str)){
             temp.pop_back();
         }
-        if(isBorder(temp,str)) pie[i]=temp.size();
+        if(isBorder(temp,str)) pi[i]=temp.size();
         temp=str;
     }
 
-    return pie;
+    return pi;
 }
 //The worst case result in the loops running for a total of n2
 //The addition can also take n time in worst cases
@@ -331,40 +331,40 @@ vector<int> pieArr_brute(string &s){
 //Space Complexity will be O(2n)
 
 //Better Method
-vector<int> pieArr_better(string &s){
+vector<int> piArr_better(string &s){
     int n=s.size();
-    vector<int> pie(n,0);
+    vector<int> pi(n,0);
     for(int i=1;i<n;i++){
         for(int len=i;len>=1;len--){
             if(s.substr(0,len)==s.substr(i-len+1,len)){
-                pie[i]=len;
+                pi[i]=len;
                 break;
             }
         }
     }
-    return pie;
+    return pi;
 }
 
 //Optimal Method
-//Try to manually build the pie array on paper for the sequence "bababacbba"
-//You will notice that the values in the pie array are following a general rule
+//Try to manually build the pi array on paper for the sequence "bababacbba"
+//You will notice that the values in the pi array are following a general rule
 //They either stay same or fall back to 0
 //Even when they increase they increase only by one
-//Hence pie[i+1]<=pie[i]+1
+//Hence pi[i+1]<=pi[i]+1
 //Watch this video to understand better : https://www.youtube.com/watch?v=nJbNe0Yzjhw
-//Now we create the pie array
-vector<int> pieArr(string &s){
+//Now we create the pi array
+vector<int> piArr(string &s){
     int n=s.size();
     //No need to check for n==0 since the loop won't run anyway
 
-    vector<int> pie(n,0);
+    vector<int> pi(n,0);
     for(int i=1;i<n;i++){
-        int l=pie[i-1];
-        while(l>0 && s[i]!=s[l]) l=pie[l-1];
+        int l=pi[i-1];
+        while(l>0 && s[i]!=s[l]) l=pi[l-1];
         if(s[l]==s[i]) l++;
-        pie[i]=l;
+        pi[i]=l;
     }
-    return pie;
+    return pi;
 }
 //The code will run for maybe 2n or 3n times
 //No extra space will be used
@@ -403,7 +403,7 @@ bool stringMatching_brute(string &s,string &t){
 //Better Method
 //KMP : Knuth Morris Pratt Algorithm
 //Concept : Join the two strings by putting a # in between so that new string is "t#s"
-//Now create the pie array and check if at any index, pie array holds the value=m
+//Now create the pi array and check if at any index, pi array holds the value=m
 bool stringMatching_better(string &s,string &t){
     int n=s.size();
     int m=t.size();
@@ -411,16 +411,16 @@ bool stringMatching_better(string &s,string &t){
     if(m==0) return true;
     if(m>n) return false;
     string str=t+"#"+s;
-    vector<int> pie=pieArr(str);
+    vector<int> pi=piArr(str);
 
     //We will start checking after the t string's part since uptil that we can't get m
-    if(find(pie.begin()+m,pie.end(),m)!=pie.end()) return true;
+    if(find(pi.begin()+m,pi.end(),m)!=pi.end()) return true;
     return false;
 }
 //The concatenation of t and s takes a total of n+m time
-//Forming the pie array takes around total str size which is n+m
+//Forming the pi array takes around total str size which is n+m
 //The find function runs for n times
-//Space is used since we create a pie array and an extra string both of size n+m
+//Space is used since we create a pi array and an extra string both of size n+m
 //Time Complexity will be O(3n+2m)
 //Time Complexity will be O(2(n+m))
 
@@ -428,7 +428,8 @@ bool stringMatching_better(string &s,string &t){
 //The concept remains same, but this time we will shrink down the space from m+n to just m
 //We have designed this function to return the number of times the subsequence t appears in s
 //If you want this function to just check whether t exists in s or not, check if cnt value returned by the function is greater than 0 or not
-int kmp(string &s,string &t){
+
+int kmp(const string &s,const string &t){
     int n=s.size();
     int m=t.size();
     
@@ -439,21 +440,50 @@ int kmp(string &s,string &t){
     int cnt=0;
     int prev=0;
     int l;
-    vector<int> pie=pieArr(t);
+    vector<int> pi=piArr(t);
 
     for(int i=0;i<n;i++){
         l=prev;
 
-        while(l>0 && s[i]!=t[l]) l=pie[l-1];
+        while(l>0 && s[i]!=t[l]) l=pi[l-1];
         if(s[i]==t[l]) l++;
         if(l==m){
             cnt++;
-            l=pie[l-1];
+            l=pi[l-1];
         }
         prev=l;
     }
     return cnt;
 }
+//Time Complexity will be O(n+m)
+//Space Complexity will be O(m)
+
+//We can eliminate the prev variable
+//This is the best possible optimal way
+int KMP(const string &s,const string &t){
+    int n=s.size();
+    int m=t.size();
+    
+    //We will ignore the t="" case this time
+    //Incase t is larger than s, is can't exist inside s
+    if(m>n) return 0;
+
+    int cnt=0;
+    int l=0;
+    vector<int> pi=piArr(t);
+
+    for(int i=0;i<n;i++){
+        while(l>0 && s[i]!=t[l]) l=pi[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pi[l-1];
+        }
+    }
+    return cnt;
+}
+//Time Complexity will be O(n+m)
+//Space Complexity will be O(m)
 
 
 

@@ -229,3 +229,48 @@ int kmp(string &s,string &t){
         prev=l;
     }
 }
+
+int kmp(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+
+    if(m>n) return 0;
+    int cnt=0;
+    int prev=0;
+    int l;
+
+    vector<int> pi=piArr(t);
+
+    for(int i=0;i<n;i++){
+        l=prev;
+        while(l>0 && s[i]!=t[l]) l=pi[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pi[l-1];
+        }
+        prev=l;
+    }
+}
+
+int kmp(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+    if(m>n) return 0;
+
+    int cnt=0;
+    int l;
+    int prev=0;
+    vector<int> pi=piArr(t);
+    for(int i=0;i<n;i++){
+        l=prev;
+        while(l>0 && s[i]!=t[l]) l=pi[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pi[l-1];
+        }
+        prev=l;
+    }
+    return cn;t
+}
