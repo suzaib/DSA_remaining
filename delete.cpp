@@ -183,3 +183,49 @@ int main(){
     
 }
 
+
+
+int kmp(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+
+    if(m>n) return 0;
+    int cnt=0;
+    int prev=0;
+    int l;
+    vector<int> pie=pieArr(t);
+    
+    for(int i=0;i<n;i++){
+        l=prev;
+        while(l>0 && s[i]!=t[l]) l=pie[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pie[l-1];
+        }
+        prev=l;
+    }
+    return cnt;
+
+}
+
+int kmp(string &s,string &t){
+    int n=s.size();
+    int m=t.size();
+    if(m>n) return 0;
+
+    int cnt=0;
+    int prev=0;
+    int l;
+    vector<int> pie=pieArr(t);
+    for(int i=0;i<n;i++){
+        l=prev;
+        while(l>0 && s[i]!=t[l]) l=pie[l-1];
+        if(s[i]==t[l]) l++;
+        if(l==m){
+            cnt++;
+            l=pie[l-1];
+        }
+        prev=l;
+    }
+}

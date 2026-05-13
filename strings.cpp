@@ -455,24 +455,6 @@ int kmp(string &s,string &t){
     return cnt;
 }
 
-int fx(string &s,string &t){
-    int n=s.size();
-    int m=t.size();
-
-    vector<int> pie=pieArr(t);
-    int l=0;
-    int cnt=0;
-    for(int i=0;i<n;i++){
-        while(l>0 && s[i]==t[l]) l=pie[l-1];
-        if(s[i]==t[l]) l++;
-        if(l==m){
-            cnt++;
-            l=pie[l-1];
-        }
-    }
-    return cnt;
-}
-
 
 
 int main(){
