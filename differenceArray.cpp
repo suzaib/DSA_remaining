@@ -124,6 +124,8 @@ int minMoves_brute(vector<int> &arr,int limit){
 
 //Optimisation : We try to use the difference array technique since this question is similar to range updates
 //We will fill the array with 2 and subtract one each time we can get it in lesser sums
+//Since we may need last+1 index as the subtraction happens after the last index, we will create an array with one extra size for buffer
+//This will save us the case to check if the index was last of not
 //Optimal Method
 int minMoves(vector<int> &nums,int limit){
     int n=nums.size();
@@ -166,6 +168,70 @@ int minMoves(vector<int> &nums,int limit){
 //Time Complexity will be O(n+l)
 //Space Complexity will be O(l)
 
+
+//Variation 2
+//This time instead of adding or incrementing for a given pair of indices, we will take xor
+//Consider the query : (1,[2,4]) , this means, replace a[i] by a[i]^1 for all i=2 to i=4
+//First we do it by brute force as well
+
+//Brute Force
+int minXOR_brute(vector<int> &nums,vector<pair<int,pair<int,int>>> &queries){
+    int n=nums.size();
+
+    for(auto q:queries){
+        int x=q.first;
+        int i=q.second.first;
+        int j=q.second.second;
+
+        for(int k=i;k<=j;k++) nums[k]^=x;
+
+    }
+
+    int ans=INT_MAX;
+    for(int i=0;i<n;i++) ans=min(ans,nums[i]);
+    return ans;
+}
+//The code runs for a total of q*n times in worst case when the range of indices is n length each time
+//No extra space is used to solve the problem
+//Time Complexity will be O(qn)
+//Space Complexity will be O(1)
+
+//Optimisation : We use the same method as difference array technique. Earlier we added the increment value at starting index and subtracted the value at end+1 index
+//We use the same logic, also remember, the oppposite of addition was subtraction and the opposite of xor is xor itself
+//Then at last we take the prefix xor and output the minimum among all
+//However for this, we first need to create the difference array for the xor operations
+//Difference array only needs to be created when the array is non-null
+//If the array is like [0,0,0..,0] then there is no need to create any separate difference array, as was shown by previous question
+//But for this time, we will need to create a separate difference array
+//Optimal Method
+int minXOR(vector<int> &nums,vector<pair<int,pair<int,int>>> &queries){
+    int n=nums.size();
+    vector<int> diff(n,0);
+    diff[0]=nums[0];
+    for(int i=1;i<n;i++) diff[i]=nums[i]^nums[i-1];
+
+    for(auto q:queries){
+        int x=q.first;
+        int i=q.second.first;
+        int j=q.second.second;
+
+        diff[i]^=x;
+        if(j+1<n) diff[j+1]^=x;
+    }
+
+    int curr=0;
+    int ans=INT_MAX;
+    for(int i=0;i<n;i++){
+        curr^=diff[i];
+        ans=min(ans,curr);
+    }
+
+    return ans;
+}
+//The code runs for 3 loops of n+q+n times
+//Space is used by the difference array we create to solve the problem
+//Time Complexity will be O(n+q)
+//Space Complexity will be O(n)
 
 int main(){
     //Your code here
