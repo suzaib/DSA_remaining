@@ -73,8 +73,100 @@ Therefore for an array say : [2,3,1,2,3]
 The corresponding difference array would be : [2,1,-2,1,1]
 Now we need to apply the difference array technique on this array only and the result will be the same
 */
+
 #include<bits/stdc++.h>
 using namespace std;
+
+
+/*
+Minimum Moves to make array complementary
+For explanation refer to Leetcode Problem 1674
+Intuition : consider the array [1,2,4,3], with limit 4
+Consider pair (1,3) the sum is 4, so if the required sum is 4, that can be achieved in only 0 changes
+However if the required sum is different than 4 we may need some changes
+What is the range which we can alter the sum in , if we change only one element. Try to observe the minimum this sum can be taken to will be min(a,b)+1
+That will be when we preserve the minimal element and change the maximum of the two to 1
+The maximum can be max(a,b)+limit, when we preserve the max element of the two and change the other one to limit
+What if we change both, in that case the minimum can be 2 when both are changed to 1 and maximum can be 2*limit when both are changed to limit
+
+Method : We will create an array from 0 to all the way 2*limit and put how many moves can we reach that sum, and in the end we will just take the minimum */
+
+//Brute Force 
+int minMoves_brute(vector<int> &arr,int limit){
+    int n=arr.size();
+    vector<int> sum(2*limit+1,0);
+
+    for(int i=2;i<=2*limit;i++){
+        for(int j=0;j<n/2;j++){
+            int a=arr[j];
+            int b=arr[n-j-1];
+            int agg=a+b;
+
+            int low=min(a,b)+1;
+            int high=max(a,b)+limit;
+
+            if(i==agg) continue;
+            if(i>=low && i<=high) sum[i]++;
+            else sum[i]+=2;
+        }
+    }
+
+    int ans=INT_MAX;
+    for(int i=2;i<=2*limit;i++) ans=min(ans,sum[i]);
+
+    return ans;
+}
+//The code runs for two loops of 2*limit and n/2
+//The total time taken by both the loops is n*limit
+//Space is used by the sum array which is of size 2*limit
+//Time Complexity will be O(nl)
+//Space Complexity will be O(limit)
+
+//Optimisation : We try to use the difference array technique since this question is similar to range updates
+//We will fill the array with 2 and subtract one each time we can get it in lesser sums
+//Optimal Method
+int minMoves(vector<int> &nums,int limit){
+    int n=nums.size();
+    vector<int> diff(2*limit+2,0);
+    
+    for(int i=0;i<n/2;i++){
+        int a=nums[i];
+        int b=nums[n-i-1];
+        int sum=a+b;
+        
+        int low=min(a,b)+1;
+        int high=max(a,b)+limit;
+
+        //Fill the array with 2 using DAT
+        diff[2]+=2;
+        diff[2*limit+1]-=2;
+
+        //Now we start subtracting one if the sum can be reached in one change
+        diff[low]+=(-1);
+        diff[high+1]-=(-1);
+
+        //We decrease it further by 1 if the sum can be reached by 0 changes
+        diff[sum]+=(-1);
+        diff[sum+1]-=(-1);
+    }
+
+    int ans=INT_MAX;
+    int curr=0;
+
+    //Now we iterate through the diff array and pick the minimum prefix sum
+    for(int i=2;i<=2*limit;i++){
+        curr+=diff[i];
+        ans=min(ans,curr);
+    }
+
+    return ans;
+}
+//The code runs for two loops one is n/2 and the other is 2*limit
+//Space is used by the diff array
+//Time Complexity will be O(n+l)
+//Space Complexity will be O(l)
+
+
 int main(){
     //Your code here
     return 0;
