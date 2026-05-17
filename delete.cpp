@@ -151,3 +151,56 @@ int main(){
 
 
 
+class DisjointSet{
+    public:
+        vector<int> rank;
+        vector<int> parent; 
+        vector<int> count;
+        DisjointSet(int n){
+            rank.resize(n+1,0);//We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
+            count.resize(n+1,1);
+            parent.resize(n+1);
+            iota(parent.begin(),parent.end(),0);
+        }
+
+        int findUltimatePar(int node){
+            if(node==parent[node]) return node;
+            return parent[node]=findUltimatePar(parent[node]);//The path compression technique
+        }
+
+        void unionByRank(int u,int v){
+            int pu=findUltimatePar(u);
+            int pv=findUltimatePar(v);
+
+            //If they belong to the same component, that is their ultimate parents are the same, no need to do anything, simply return
+            if(pu==pv) return;
+
+            //Now we reattach them on the basis of their rank
+            if(rank[pu]<rank[pv]) parent[pu]=pv;
+            else if(rank[pu]>rank[pv]) parent[pv]=pu;
+            else{
+                parent[pv]=pu;
+                rank[pu]++;
+            }
+        }
+        //Time Complexity will be O(4*a)
+
+        void unionBySize(int u,int v){
+            int pu=findUltimatePar(u);
+            int pv=findUltimatePar(v);
+
+            //If they have same ultimate parent, no need to do anything, simply return
+            if(pu==pv) return;
+
+            //Now we attach the component having a smaller size(count) to the one having larger size(count)
+            if(count[pu]<count[pv]){
+                parent[pu]=pv;
+                count[pv]+=count[pu];
+            }
+            else{
+                parent[pv]=pu;
+                count[pu]+=count[pv];
+            }
+        }
+        //Time Complexity will be O(4*a)
+};
