@@ -19,16 +19,13 @@ int main(){
     return 0;
 }
 
+
 class Node{
     public:
         Node* links[26]={nullptr};
-        bool flag=false;
-
-        bool containsChar(char ch){
-            return links[ch-'a']!=nullptr;
-        }
-
-        void put(char ch,Node* node){
+        int endsWith=0;
+        int prefixCnt=0;
+        void put(char ch, Node* node){
             links[ch-'a']=node;
         }
 
@@ -36,7 +33,82 @@ class Node{
             return links[ch-'a'];
         }
 
-        void setEnd(){
-            flag=true;
+        bool containsChar(char ch){
+            return links[ch-'a']!=nullptr;
         }
-}
+
+};
+
+class Trie{
+    private:
+        Node* root;
+    public:
+        Trie(){
+            root=new Node();
+        }
+
+        void insert(const string& word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) node->put(word[i],new Node());
+                node=node->get(word[i]);
+                node->prefixCnt++;
+            }
+            node->endsWith++;
+        }
+        //Time Complexity will be O(n)
+
+        //Count the number of words ending with the given prefix
+        int countPrefix(const string& prefix){
+            int n=prefix.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(prefix[i])) return 0;
+                node=node->get(prefix[i]);
+            }
+            return node->prefixCnt;
+        }
+        //Time Complexity will be O(n)
+
+        //Count the number of Words
+        int countWords(const string& word){
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                if(!node->containsChar(word[i])) return 0;
+                node=node->get(word[i]);
+            }
+            return node->endsWith;
+        }
+        //Time Complexity will be O(n)
+
+        //Erase a particular word from the trie
+        //One thing to be noted here, we first need to confirm if the word exists or not
+        void erase(const string& word){
+            if(search(word)==false) return;
+            int n=word.size();
+            Node* node=root;
+            for(int i=0;i<n;i++){
+                node=node->get(word[i]);
+                node->prefixCnt--;
+            }
+            node->endsWith--;
+        }
+        //Time Complexity will be O(n)
+
+        //Search if a word exists or not
+        bool search(const string& word){
+            return countWords(word)>0;
+        }
+        //Time Complexity will be O(n)
+
+        //See if a words start a given prefix
+        bool startsWith(const string& prefix){
+            return countPrefix(prefix)>0;
+        }
+        //Time Complexity will be O(n)
+
+};
+
+
