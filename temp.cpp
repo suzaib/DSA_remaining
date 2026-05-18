@@ -18,3 +18,25 @@ int maxChair(vector<int> &chairs){
 int main(){
     return 0;
 }
+
+class Node{
+    public:
+        Node* links[26]={nullptr};
+        bool flag=false;
+
+        bool containsChar(char ch){
+            return links[ch-'a']!=nullptr;
+        }
+
+        void put(char ch,Node* node){
+            links[ch-'a']=node;
+        }
+
+        Node* get(char ch){
+            return links[ch-'a'];
+        }
+
+        void setEnd(){
+            flag=true;
+        }
+}
