@@ -164,6 +164,7 @@ int jumpGameII_tabulation(vector<int> &arr){
 //Space Complexity will be O(n)
 
 //Optimal Method
+//The most optimal method is using the greedy approach
 int jumpGameII(vector<int> &arr){
     int n=arr.size();
     int r=0;
@@ -182,6 +183,7 @@ int jumpGameII(vector<int> &arr){
 //Each element is only visited once
 //No extra space is used
 //Time Complexity will be O(n)
+//Space Complexity will be O(1)
 
 
 
