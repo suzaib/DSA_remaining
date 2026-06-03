@@ -189,3 +189,63 @@ class Trie{
         }
 }
 
+
+
+#include<bits/stdc++.h>
+using namespace std;
+
+//Xenia and bit operations
+class SGTree{
+    public:
+        vector<int> seg;
+
+        SGTree(int n){
+            seg.resize(4*n+1);
+        }
+
+        void build(int idx,int low,int high,bool level,vector<int> &arr){
+            if(low==high){
+                seg[idx]=arr[low];
+                return;
+            }
+
+            int mid=low+(high-low)/2;
+            build(2*idx+1,low,mid,!level,arr);
+            build(2*idx+2,mid+1,high,!level,arr);
+            if(level) seg[idx]=seg[2*idx+1]|seg[2*idx+2];
+            else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
+        }
+
+        void update(int idx,int low,int high,bool level,int _idx,int val){
+            if(low==high){
+                seg[idx]=val;
+                return;
+            }
+
+            int mid=low+(high-low)/2;
+            if(_idx<=mid) update(2*idx+1,low,mid,!level,_idx,val);
+            else update(2*idx+2,mid+1,high,!level,_idx,val);
+            if(level) seg[idx]=seg[2*idx+1]|seg[2*idx+2];
+            else seg[idx]=seg[2*idx+1]^seg[2*idx+2];
+        }
+};
+
+int main(){
+    int n,m;
+    cin>>n>>m;
+    int el=1<<n;
+    vector<int> arr(el);
+    for(int i=0;i<el;i++) cin>>arr[i];
+    SGTree sgt(el);
+    sgt.build(0,0,el-1,n%2!=0,arr);
+    for(int i=0;i<m;i++){
+        int p,b;
+        cin>>p>>b;
+        p--;//Since the problem involves 1 based indexing
+        sgt.update(0,0,el-1,n%2!=0,p,b);
+        cout<<sgt.seg[0]<<"\n";
+
+    }
+    return 0;
+}
+
