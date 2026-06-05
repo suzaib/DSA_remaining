@@ -190,4 +190,27 @@ class Trie{
 }
 
 
+void frostingCake(int n,vector<int> &arr,vector<int> &ans){
+    ans[0]=arr[0];
+    int i=1;
+    int prefixSum=arr[0];
+    while(arr[i]>=arr[i-1]){
+        prefixSum+=arr[i];
+        i++;
+    }
 
+}
+#include<bits/stdc++.h> 
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        vector<int> arr(n);
+        for(int i=0;i<n;i++) cin>>arr[i];
+        vector<int> ans(n);
+        frostingCake(n,arr,ans);
+        
+    }
+    return 0;
+}
