@@ -1,4 +1,3 @@
-#include<bits/stdc++.h>
 using namespace std;
 int helper(int i,int n,vector<int> &chairs,vector<bool> &vis){
     if(i==n) return 0;
@@ -200,6 +199,8 @@ void frostingCake(int n,vector<int> &arr,vector<int> &ans){
     }
 
 }
+
+
 #include<bits/stdc++.h> 
 int main(){
     int t;
