@@ -69,27 +69,46 @@ int kthAncestor_brute(Node* root,Node* child,int k){
 //We store the root to node path in a vector and then easily find the kth ancestor
 //For eg if the root node path is [1,2,3,4] then 4th 2nd ancestor is 2
 //First we create a function that finds the root to node path
-void helper(Node* root,Node* node,vector<int> &ans){
-    if(!node) return;
-    if(root==node){
-        ans.push_back(node->val);
-        return ans;
-    }
+bool helper(Node* root,Node* node,vector<Node*> &ans){
+    if(!root) return false;
 
-    ans.push_back(root->val);
+    ans.push_back(root);
 
-    helper(root->left,node,ans);
-    helper(root->right,node,ans);
+    if(root==node) return true;
+
+    if(helper(root->left,node,ans)) return true;
+    if(helper(root->right,node,ans)) return true;
 
     ans.pop_back();
 
+    return false;
+
 
 }
-vector<int> rootToNodePath(Node* root,Node* node){
-    vector<int> ans;
+vector<Node*> rootToNodePath(Node* root,Node* node){
+    vector<Node*> ans;
     if(!root || !node) return ans;
     helper(root,node,ans);
+    return ans;
 }
+//In the worst case when the target node may not be present, the dfs explores every node once
+//Space is used by recursion stack which can be O(h) where h is the height of the tree
+//A vector is used to store the answer which can be O(h) which can be O(n) in skewed tree
+//Time Complexity will be O(n)
+//Space Complexity will be O(n)
+
+//Now we can write our kthAncestor function
+int kthAncestor(Node* root,Node* node,int k){
+    vector<Node*> path=rootToNodePath(root,node);
+    int n=path.size();
+    if(n-k-1<0) return -1;
+    return path[n-k-1]->val;
+}
+//Time Complexity will be O(n)
+//Space Complexity will be O(n)
+
+
+
 int main(){
     //Your function here
     return 0;
