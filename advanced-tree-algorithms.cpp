@@ -65,7 +65,7 @@ int kthAncestor_brute(Node* root,Node* child,int k){
 //Space Complexity will be O(n)
 
 
-//Optimal Method
+//Better Method
 //We store the root to node path in a vector and then easily find the kth ancestor
 //For eg if the root node path is [1,2,3,4] then 4th 2nd ancestor is 2
 //First we create a function that finds the root to node path
@@ -83,7 +83,7 @@ bool helper(Node* root,Node* node,vector<Node*> &ans){
 
     return false;
 }
-vector<Node*> rootToNodePath(Node* root,Node* node){
+vector<Node*> rootToNodePath_better(Node* root,Node* node){
     vector<Node*> ans;
     if(!root || !node) return ans;
     helper(root,node,ans);
@@ -93,19 +93,44 @@ vector<Node*> rootToNodePath(Node* root,Node* node){
 //Space is used by recursion stack which can be O(h) where h is the height of the tree
 //A vector is used to store the answer which can be O(h) which can be O(n) in skewed tree
 //Time Complexity will be O(n)
-//Space Complexity will be O(n)
+//Space Complexity will be O(2n)
 
 //Now we can write our kthAncestor function
-int kthAncestor(Node* root,Node* node,int k){
-    vector<Node*> path=rootToNodePath(root,node);
+int kthAncestor_better(Node* root,Node* node,int k){
+    vector<Node*> path=rootToNodePath_better(root,node);
     int n=path.size();
     if(n-k-1<0) return -1;
     return path[n-k-1]->val;
 }
 //Time Complexity will be O(n)
+//Space Complexity will be O(2n)
+
+//Optimal Method
+//We can do slightly better by returning the kth ancestor in only the backtracking
+Node* helper(Node* root,Node* node,int &k,int &ans){
+    if(!root) return nullptr;
+
+    if(root==node) return root;
+
+    Node* left=helper(root->left,node,k,ans);
+    Node* right=helper(root->right,node,k,ans);
+
+    if(!left && !right) return nullptr;
+    k--;
+
+    if(k==0) ans=root->val;
+
+    return root;
+
+}
+int kthAncestor(Node* root, Node* node,int k){
+    if(k==0) return node->val;
+    int ans=-1;
+    helper(root,node,k,ans);
+    return ans;
+}
+//Time Complexity will be O(n)
 //Space Complexity will be O(n)
-
-
 
 /*
 This is the most optimal approach when we are asked to find the kth ancestor only once
