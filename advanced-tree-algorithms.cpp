@@ -82,8 +82,6 @@ bool helper(Node* root,Node* node,vector<Node*> &ans){
     ans.pop_back();
 
     return false;
-
-
 }
 vector<Node*> rootToNodePath(Node* root,Node* node){
     vector<Node*> ans;
@@ -108,6 +106,12 @@ int kthAncestor(Node* root,Node* node,int k){
 //Space Complexity will be O(n)
 
 
+
+/*
+This is the most optimal approach when we are asked to find the kth ancestor only once
+But what if we are asked to find it several times in form of different queries
+In that case this operation can cost much time
+Under such circumstances we use the concept of binary lifting
 
 int main(){
     //Your function here
