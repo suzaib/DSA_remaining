@@ -121,8 +121,8 @@ Node* helper(Node* root,Node* node,int &k,int &ans){
     if(k==0) ans=root->val;
 
     return root;
-
 }
+
 int kthAncestor(Node* root, Node* node,int k){
     if(k==0) return node->val;
     int ans=-1;
@@ -138,6 +138,40 @@ But what if we are asked to find it several times in form of different queries
 In that case this operation can cost much time
 Under such circumstances we use the concept of binary lifting
 
+
+Building Theory
+Watch the video for better understanding : https://www.youtube.com/watch?v=ndXfOiTDJb4
+To jump say 7 positions we don't need to go as 1->1->1-> and so on till 7 
+If you observe 7 is in bits as 111 therefore first we jump 1 then we jump 2^1(2) then we jump 2^2(4) and in just three jumps we have jumped 7 places
+Similarly if you have to jump 9 places simply jump 1 then 8(2^3)
+
+Therefore if we know the 2^kth ancestor of every single node, the jumping becomes extremely easy
+Therefore we need to spend some time preprocessing
+In short we need to know 1st 2nd 4th 8th .... ancestor of every node in the tree
+
+We will use a 2D matrix for this job
+The matrix, named up will be like up[node][k] and it will give the 2^kth ancestor of node
+
+The Trick
+We only need to fill the first column of up[node][0]
+For eg consider the node 8 whose parent is 7 and whose parent is 6 ... whose parent is 1
+Now what will up[8][0] store ? it will be 7 since 8th 1st ancestor is 7 (k means 2^k so k=0 means 1)
+What about 8th second ancestor, wouldn't it be the 1st ancestor of 7
+Therefore up[8][1] will be nothing but up[8-1][1-1]
+Similarly 8th 4th ancestor would be up[8][2]=up[7][1]
+
+This is based on the thing 2^k=2^(k-1) + 2^(k-1)
+Generalised form : up[node][k]=up[up[node][k-1]][k-1]
+Suppose we need to find up[8][2] which means to find 8th 4th ancestor which will be 4
+instead of doing all the work, we can split it as 2+2
+Therefore up[8][2]=up[[8][1]][1] = up[6][1] = 4
+We first jump 2^(k-1)th ancestor which is up[8][2-1] and now from this new node we jump the remaining 2^(k-1])
+Therefore the new node is up[8][1] which becomes the node for the next jump
+Therefore up[node][k]=up[newNode][k-1]
+
+We fill the first 0th column by either using the input from the question or by simply traversing the whole tree
+Then we use the 0th column to fill the 1st column, use the 1st column to fill the 2nd column and so on
+We use -1 as default value
 int main(){
     //Your function here
     return 0;
