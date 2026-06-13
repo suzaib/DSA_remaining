@@ -172,6 +172,20 @@ Therefore up[node][k]=up[newNode][k-1]
 We fill the first 0th column by either using the input from the question or by simply traversing the whole tree
 Then we use the 0th column to fill the 1st column, use the 1st column to fill the 2nd column and so on
 We use -1 as default value
+*/
+
+//We are creating the solution for the problem mentioned at the top
+//Here is the problem link : https://cses.fi/problemset/task/1687
+#include<bits/stdc++.h>
+using namespace std;
+int up[200000+5][30];
+
+int helper(int node)
+int main(){
+    int n,q;
+    cin>>n>>q;
+    vector<vector<
+}
 int main(){
     //Your function here
     return 0;
