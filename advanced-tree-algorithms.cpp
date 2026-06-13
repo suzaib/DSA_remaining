@@ -178,13 +178,32 @@ We use -1 as default value
 //Here is the problem link : https://cses.fi/problemset/task/1687
 #include<bits/stdc++.h>
 using namespace std;
-int up[200000+5][30];
 
 int helper(int node)
 int main(){
     int n,q;
     cin>>n>>q;
-    vector<vector<
+    vector<vector<int>> dp(n+1,vector<int> (30,-1));
+    for(int i=2;i<=n;i++) cin>>dp[i][0];
+
+    //Now we build the remaining dp table
+    for(int i=1;i<30;i++){
+        for(int j=2;j<=n;j++){
+            if(dp[j][i-1]==-1) continue;
+            dp[j][i]=dp[dp[j][i-1]][i-1];
+        }
+    }
+
+    for(int i=0;i<q;i++){
+        int x,k;
+        cin>>x>>k;
+        for(int bit=0;bit<=29;bit++){
+            if((1<<bit) & k){
+                if(x!=-1) x=dp[x][bit];
+            }
+        }
+        cout<<x<<"\n";
+    }
 }
 int main(){
     //Your function here
