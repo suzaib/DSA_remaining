@@ -65,6 +65,67 @@ Space used is O(k) since a new string is created
 
 
 //Phase 0 : Basics
+//Palindromes
+
+/*
+Given a string s, you need to tell what is the biggest palindromic string you can form using the chars in the given string
+For eg  : "aacdbdde", the biggest palindromic string that can be formed will be of 5 length. One of them can be "adcda"
+Method : Create a frequency array and count the number of times each character occurs
+         Then add the even occurences since we need pairs then if even one exists odd times, add 1
+*/
+
+//Here is the code
+int longestPalindrome(string &s){
+    int n=s.size();
+    vector<int> freq(26,0);
+    for(int i=0;i<n;i++) freq[s[i]-'a']++;
+    int cnt=0;
+    bool oneOdd=false;
+    for(int i=0;i<26;i++){
+        if(freq[i]&1){
+            oneOdd=true;
+            cnt+=freq[i]-1;
+        }
+        else cnt+=freq[i];
+    }
+    return oneOdd? cnt+1:cnt;
+}
+//Time Complexity will be O(n)
+//Space Complexity will be O(26)
+
+
+//Type 2 : When the string involves capital letters too
+//We can create two freq arrays
+int longestPalindrome(string &s){
+    int n=s.size();
+    vector<int> lower(26,0);
+    vector<int> upper(26,0);
+    for(int i=0;i<n;i++){
+        if(s[i]>=65 && s[i]<=90) upper[s[i]-'A']++;
+        else lower[s[i]-'a']++;
+    }
+
+    bool oneOdd=false;
+    int cnt=0;
+    for(int i=0;i<26;i++){
+        if(lower[i]&1){
+            oneOdd=true;
+            cnt+=lower[i]-1;
+        }
+        else cnt+=lower[i];
+
+        if(upper[i]&1){
+            oneOdd=true;
+            cnt+=upper[i]-1;
+        }
+        else cnt+=upper[i];
+    }
+    return oneOdd? cnt+1:cnt;
+}
+//Time Complexity will be O(n)
+//Space Complexity will be O(52)
+
+
 //Algorithms : 
 //Manual string comparison
 
