@@ -427,6 +427,16 @@ vector<int> piArr(string &s){
     }
     return pi;
 }
+vector<int> piArr(string &s){
+    int n=s.size();
+    vector<int> pi(n,0);
+    for(int i=1;i<n;i++){
+        int l=pie[i-1];
+        while(l>0 && s[l]!=s[i]) l=pi[l-1];
+        if(s[l]==s[i]) l++;
+        pi[i]=l;
+    }
+}
 //The code will run for maybe 2n or 3n times
 //No extra space will be used
 //Time Complexity will be O(n)
