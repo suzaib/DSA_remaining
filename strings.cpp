@@ -514,6 +514,12 @@ int kmp(const string &s,const string &t){
 //Time Complexity will be O(n+m)
 //Space Complexity will be O(m)
 
+
+
+/*
+Z Algorithm 
+
+*/
 int main(){
     //Your code here
     return 0;
