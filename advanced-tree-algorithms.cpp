@@ -179,7 +179,6 @@ We use -1 as default value
 #include<bits/stdc++.h>
 using namespace std;
 
-int helper(int node)
 int main(){
     int n,q;
     cin>>n>>q;
