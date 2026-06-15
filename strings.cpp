@@ -518,6 +518,15 @@ int kmp(const string &s,const string &t){
 
 /*
 Z Algorithm 
+Consider the strinig "onionions"
+We need to have i=0 and then take each string by moving i forward
+The strings formed will be : onionions, nionions, ionions, onions, nions, ions, ons, ns, s
+For each of them you have to tell what is the longest common prefix between them and the orginal string
+That vaue compiled for each index will give you the z array
+For this string the zArr will be  : [9,0,0,5,0,0,2,0,0]
+Some conventions take z[0]=0 but here we have taken length of string
+
+The algorithm needed to compute the z array is called the z algorithm
 
 */
 int main(){
