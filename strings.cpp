@@ -427,16 +427,6 @@ vector<int> piArr(string &s){
     }
     return pi;
 }
-vector<int> piArr(string &s){
-    int n=s.size();
-    vector<int> pi(n,0);
-    for(int i=1;i<n;i++){
-        int l=pie[i-1];
-        while(l>0 && s[l]!=s[i]) l=pi[l-1];
-        if(s[l]==s[i]) l++;
-        pi[i]=l;
-    }
-}
 //The code will run for maybe 2n or 3n times
 //No extra space will be used
 //Time Complexity will be O(n)
@@ -493,45 +483,13 @@ bool stringMatching_better(string &s,string &t){
 //The find function runs for n times
 //Space is used since we create a pi array and an extra string both of size n+m
 //Time Complexity will be O(3n+2m)
-//Time Complexity will be O(2(n+m))
+//Space Complexity will be O(2(n+m))
 
 //Optimal Method
 //The concept remains same, but this time we will shrink down the space from m+n to just m
 //We have designed this function to return the number of times the subsequence t appears in s
 //If you want this function to just check whether t exists in s or not, check if cnt value returned by the function is greater than 0 or not
-
 int kmp(const string &s,const string &t){
-    int n=s.size();
-    int m=t.size();
-    
-    //We will ignore the t="" case this time
-    //Incase t is larger than s, is can't exist inside s
-    if(m>n) return 0;
-
-    int cnt=0;
-    int prev=0;
-    int l;
-    vector<int> pi=piArr(t);
-
-    for(int i=0;i<n;i++){
-        l=prev;
-
-        while(l>0 && s[i]!=t[l]) l=pi[l-1];
-        if(s[i]==t[l]) l++;
-        if(l==m){
-            cnt++;
-            l=pi[l-1];
-        }
-        prev=l;
-    }
-    return cnt;
-}
-//Time Complexity will be O(n+m)
-//Space Complexity will be O(m)
-
-//We can eliminate the prev variable
-//This is the best possible optimal way
-int KMP(const string &s,const string &t){
     int n=s.size();
     int m=t.size();
     
@@ -555,8 +513,6 @@ int KMP(const string &s,const string &t){
 }
 //Time Complexity will be O(n+m)
 //Space Complexity will be O(m)
-
-
 
 int main(){
     //Your code here
