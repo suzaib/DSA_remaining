@@ -548,7 +548,29 @@ vector<int> zArr_brute(const string &s){
 //Time Complexity will be O(n2)
 //Space Complexity will be O(1)
 
-//Better Method
+//Optimal Method
+vector<int> zArr(const string &s){
+    int n=s.size();
+    vector<int> z(n,0);
+    int l=0;
+    int r=0;
+    for(int i=1;i<n;i++){
+        if(i<r){
+            z[i]=z[i-l];
+
+            //Now handling case of z[i] reaching for characters beyond what we have seen at r
+            if(i+z[i]>r) z[i]=r-i;
+        }
+
+        //Looking for more batch beyond the current calculation
+        while(i+z[i]<s.size() && s[z[i]]==s[i+z[i]]) z[i]++;
+
+        //Update l and r
+        if(i+z[i]>r){
+            
+        }
+    }
+}
 
 int main(){
     //Your code here
