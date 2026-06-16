@@ -486,6 +486,8 @@ bool stringMatching_better(string &s,string &t){
 //Space Complexity will be O(2(n+m))
 
 //Optimal Method
+//Watch the video to understand better : https://www.youtube.com/watch?v=6gQR8TaFXMw
+//https://hello.com
 //The concept remains same, but this time we will shrink down the space from m+n to just m
 //We have designed this function to return the number of times the subsequence t appears in s
 //If you want this function to just check whether t exists in s or not, check if cnt value returned by the function is greater than 0 or not
@@ -518,17 +520,36 @@ int kmp(const string &s,const string &t){
 
 /*
 Z Algorithm 
+Watch this video to understand : https://www.youtube.com/watch?v=pcL05iQHRsk
 Consider the strinig "onionions"
 We need to have i=0 and then take each string by moving i forward
 The strings formed will be : onionions, nionions, ionions, onions, nions, ions, ons, ns, s
 For each of them you have to tell what is the longest common prefix between them and the orginal string
 That vaue compiled for each index will give you the z array
-For this string the zArr will be  : [9,0,0,5,0,0,2,0,0]
-Some conventions take z[0]=0 but here we have taken length of string
-
+For this string the zArr will be  : [0,0,0,5,0,0,2,0,0]
+We can take z[0] as the length of the string but by convention we take it as 0
 The algorithm needed to compute the z array is called the z algorithm
 
+We first write code for this problem in brute force
 */
+
+//Brute Force Idea
+vector<int> zArr_brute(const string &s){
+    int n=s.size();
+    vector<int> z(n,0);
+    z[0]=n;
+    for(int i=1;i<n;i++){
+        while(s[z[i]]==s[i+z[i]]) z[i]++;
+    }
+    return z[i];
+}
+//The code can run upto n2 times
+//Space is only used to return the answer vector
+//Time Complexity will be O(n2)
+//Space Complexity will be O(1)
+
+//Better Method
+
 int main(){
     //Your code here
     return 0;
