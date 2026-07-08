@@ -13,7 +13,7 @@ int maxInArr(vector<int> arr){
 
 
 
-//Q.1) Assign Cookies
+//Assign Cookies
 int assignCookies(vector<int> cookies,vector<int> children){
     int n=cookies.size();
     int m=children.size();
@@ -36,7 +36,7 @@ int assignCookies(vector<int> cookies,vector<int> children){
 
 
 
-//Q.2) Lemonade Change 
+//Lemonade Change 
 bool lemonadeChange(vector<int> customers){
     int n=customers.size();
     int count5=0;
@@ -65,7 +65,7 @@ bool lemonadeChange(vector<int> customers){
 
 
 
-//Q.3) Shortest Job First
+//Shortest Job First
 int ShortestJobFirst(vector<int> arr){
     int n=arr.size();
     int waitTime=0;
@@ -82,7 +82,7 @@ int ShortestJobFirst(vector<int> arr){
 
 
 
-//Q.4) Jump Game
+//Jump Game
 bool jumpGame(vector<int> arr){
     int n=arr.size();
     int maxReach=0;
@@ -97,7 +97,7 @@ bool jumpGame(vector<int> arr){
 
 
 
-// Q.5) Jump Game II
+//Jump Game II
 //Minimum Jumps needed to reach the last Idx or cross it
 //Return -1, in case the last index is unreachable
 //This is a question involving dynamic programming as we have to try all ways
@@ -187,7 +187,7 @@ int jumpGameII(vector<int> &arr){
 
 
 
-// Q.6) Job Sequencing Problem
+//Job Sequencing Problem
 class Job{
     public:
         int deadline;
@@ -252,7 +252,7 @@ int jobSequencing(vector<int> &deadline,vector<int> &profit){
 
 
 
-//Q.7 N Meetings in one room
+//N Meetings in one room
 class Meeting{
     public:
         int startTime;
@@ -280,7 +280,6 @@ int nMeetings(vector<int> start,vector<int> end){
 }
 
 
-//Question 8
 //Non Overlapping Intervals
 //Consider [(1,2),(2,3),(3,4),(1,3)]
 //We need to remove intervals so that there is no overlap, for eg in this we can remove (1,2) and (2,3), then the remaining intervals would be (1,3) and (3,4)
@@ -317,7 +316,7 @@ int minIntervals(vector<pair<int,int>> &intervals){
 //Space taken will be due to changing the intervals array, but let us just ignore that
 //Time Complexity will be O(2nlog2n + 2n)
 
-//Q.10) Minimum Platforms Required
+//Minimum Platforms Required
 int minPlatforms(vector<int> &arr,vector<int> &dep){
     int n=arr.size();
     sort(arr.begin(),arr.end());
@@ -346,7 +345,7 @@ int minPlatforms(vector<int> &arr,vector<int> &dep){
 
 
 
-//Q.11) Valid Parenthesis
+//Valid Parenthesis
 //To do this question, first let us solve a simpler question
 //Given an expression, containing only ( and ) , tell if it is a valid parenthesis
 //Intuition : Use a counter variable, increase it by one when you encounter ( and decrease it by one when you encounter )
@@ -428,7 +427,6 @@ bool validParenthesisII_tabulation(string &str){
 }
 
 
-//Question 12
 //Min Candy Problem
 //The question is extremely simple, just do two iterations, one by only focussing on left neighbours, and one only focussing on right neighbours
 int minCandy_naive(vector<int> &arr){
@@ -522,7 +520,6 @@ int minCandy(vector<int> &arr){
 
 
 
-//Question 13
 //Fractional Knapsack Problem
 //Try to take the bag which has the most value per one unit weight
 //For this we need to sort the array, using a custom comparator
