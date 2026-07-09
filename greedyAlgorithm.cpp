@@ -570,8 +570,6 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 
 
 
-//Q.9) Lecture 9
-//Check first jump game II(revise)
 //Check parenthesis helper (revise)
 //Q.11 Valid parenthesis, complete the tabulation etc
 
