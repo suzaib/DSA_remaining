@@ -422,22 +422,52 @@ bool validParenthesisII_memoization(string &str){
 //Tabulation
 bool validParenthesisII_tabulation(string &str){
     int n=str.size();
-    vector<vector<int>> dp(n,vector<int> (n,false));
+    vector<vector<int>> dp(n+1,vector<int> (n+1,false));
+    dp[n][0]=true;
     for(int idx=n-1;idx>=0;idx--){
-        for(int cnt=1;cnt<=n;cnt++){
-            if(str[idx]=='(') dp[idx][cnt]=dp[idx+1][cnt+1];
-            else if(str[idx]==')') dp[idx][cnt]=dp[idx+1][cnt-1];
+        for(int cnt=0;cnt<=n;cnt++){
+            if(str[idx]=='(') dp[idx][cnt]=(cnt<n? dp[idx+1][cnt+1]:false);
+            else if(str[idx]==')') dp[idx][cnt]=(cnt>0? dp[idx+1][cnt-1]:false);
             else{
-                bool open=dp[idx+1][cnt+1];
-                bool closed=dp[idx+1][cnt-1];
+                bool open=false;
+                bool closed=false;
+                if(cnt<n) open=dp[idx+1][cnt+1];
+                if(cnt>0) closed=dp[idx+1][cnt-1];
                 bool blank=dp[idx+1][cnt];
                 dp[idx][cnt]=(open || closed || blank);
             }
         }
     }
-    return dp[0][1];
+    return dp[0][0];
 }
+//Time Complexity will be O(n2)
+//Space Complexity will be O(n2)
 
+//Space Optimisation
+bool validParenthesisII_spaceOptimised(string &str){
+    int n=str.size();
+    vector<bool> next(n+1,false);
+    vector<bool> curr(n+1,false);
+    next[0]=true;
+    for(int idx=n-1;idx>=0;idx--){
+        for(int cnt=0;cnt<=n;cnt++){
+            if(str[idx]=='(') curr[cnt]=(cnt<n? next[cnt+1]:false);
+            else if(str[idx]==')') curr[cnt]=(cnt>0? next[cnt-1]:false);
+            else{
+                bool open=false;
+                bool closed=false;
+                if(cnt<n) open=next[cnt+1];
+                if(cnt>0) closed=next[cnt-1];
+                bool blank=next[cnt];
+                curr[cnt]=(open || closed || blank);
+            }
+        }
+        next=curr;
+    }
+    return curr[0];
+}
+//Time Complexity will be O(n2)
+//Space Complexity will be O(2n)
 
 //Min Candy Problem
 //The question is extremely simple, just do two iterations, one by only focussing on left neighbours, and one only focussing on right neighbours
