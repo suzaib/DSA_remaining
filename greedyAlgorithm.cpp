@@ -377,7 +377,7 @@ bool parenthesisHelper(int idx,int cnt,string &str){
     if(cnt<0) return false;
     if(idx==str.size()) return cnt==0;
     if(str[idx]=='(') return parenthesisHelper(idx+1,cnt+1,str);
-    else if(str[idx]==')') return parenthesisHelper(idx+1,cnt-1,str);
+    if(str[idx]==')') return parenthesisHelper(idx+1,cnt-1,str);
     else{
         bool open=parenthesisHelper(idx+1,cnt+1,str);
         bool closed=parenthesisHelper(idx+1,cnt-1,str);
@@ -402,7 +402,7 @@ bool parenthesisHelper_memoization(int idx,int cnt,vector<vector<int>> &dp,strin
     if(idx==str.size()) return cnt==0;
     if(dp[idx][cnt]!=-1) return dp[idx][cnt];
     if(str[idx]=='(') return dp[idx][cnt]=parenthesisHelper_memoization(idx+1,cnt+1,dp,str);
-    else if(str[idx]==')') return dp[idx][cnt]=parenthesisHelper_memoization(idx+1,cnt-1,dp,str);
+    if(str[idx]==')') return dp[idx][cnt]=parenthesisHelper_memoization(idx+1,cnt-1,dp,str);
     else{
         bool open=parenthesisHelper_memoization(idx+1,cnt+1,dp,str);
         bool closed=parenthesisHelper_memoization(idx+1,cnt-1,dp,str);
@@ -422,8 +422,20 @@ bool validParenthesisII_memoization(string &str){
 //Tabulation
 bool validParenthesisII_tabulation(string &str){
     int n=str.size();
-    vector<vector<int>> dp(n,vector<int> (n+1,-1));
-    
+    vector<vector<int>> dp(n,vector<int> (n,false));
+    for(int idx=n-1;idx>=0;idx--){
+        for(int cnt=1;cnt<=n;cnt++){
+            if(str[idx]=='(') dp[idx][cnt]=dp[idx+1][cnt+1];
+            else if(str[idx]==')') dp[idx][cnt]=dp[idx+1][cnt-1];
+            else{
+                bool open=dp[idx+1][cnt+1];
+                bool closed=dp[idx+1][cnt-1];
+                bool blank=dp[idx+1][cnt];
+                dp[idx][cnt]=(open || closed || blank);
+            }
+        }
+    }
+    return dp[0][1];
 }
 
 
