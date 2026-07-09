@@ -469,6 +469,9 @@ bool validParenthesisII_spaceOptimised(string &str){
 //Time Complexity will be O(n2)
 //Space Complexity will be O(2n)
 
+//Optimal Solution
+//The most optimal way to solve this question is by using greedy approach
+
 //Min Candy Problem
 //The question is extremely simple, just do two iterations, one by only focussing on left neighbours, and one only focussing on right neighbours
 int minCandy_naive(vector<int> &arr){
