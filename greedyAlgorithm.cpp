@@ -471,6 +471,29 @@ bool validParenthesisII_spaceOptimised(string &str){
 
 //Optimal Solution
 //The most optimal way to solve this question is by using greedy approach
+bool validParenthesisII(string &s){
+    int mini=0;
+    int maxi=0;
+    for(char c:s){
+        if(c=='('){
+            maxi++;
+            mini++;
+        }
+        else if(c==')'){
+            maxi--;
+            mini=max(0,mini-1);
+        }
+        else{
+            mini=max(0,mini-1);
+            maxi++;
+        }
+        if(maxi<0) return false;
+    }
+    return mini==0;
+}
+//Time Complexity will be O(n)
+//Space Complexity will be O(1)
+
 
 //Min Candy Problem
 //The question is extremely simple, just do two iterations, one by only focussing on left neighbours, and one only focussing on right neighbours
@@ -615,8 +638,7 @@ double fractionalKnapsack(vector<pair<int,int>> &arr,int maxWt){
 
 
 
-//Check parenthesis helper (revise)
-//Q.11 Valid parenthesis, complete the tabulation etc
+
 
 //For n jobs, the optimal solution is by using the disjoint sets to optimise the second loop which finds max deadline
 int main(){

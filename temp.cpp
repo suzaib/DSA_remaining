@@ -216,3 +216,36 @@ int main(){
     return 0;
 }
 
+bool compare(pair<int,int> &a,pair<int,int> &b){
+    return a.second>b.second;
+}
+vector<int> job(vector<int> &deadline,vector<int> &profit){
+    int n=deadline.size();
+    vector<pair<int,int>> Jobs;
+    for(int i=0;i<n;i++) Jobs.push_back({deadline[i],profit[i]});
+    sort(Jobs.begin(),Jobs.end(),compare);
+    int maxDeadline=*(max_element(deadline.begin(),deadline.end()));
+    vector<bool> slot(maxDeadline+1,false);
+
+    int jobCnt=0;
+    int totalProfit=0;
+    for(int i=0;i<n;i++){
+        for(int j=Jobs[i].first;j>0;j--){
+            if(slot[j]) continue;
+            slot[j]=true;
+            jobCnt++;
+            totalProfit+=Jobs[i].second;
+            break;
+        }
+    }
+    return {totalProfit,jobCnt};
+}
+
+class DSU{
+    public:
+        vector<int> wt;
+
+        DSU(int n){
+            wt.resize
+        }
+}
