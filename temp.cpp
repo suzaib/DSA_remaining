@@ -241,11 +241,39 @@ vector<int> job(vector<int> &deadline,vector<int> &profit){
     return {totalProfit,jobCnt};
 }
 
-class DSU{
+class DisjointSet{
     public:
+        vector<int> parent; 
         vector<int> wt;
-
-        DSU(int n){
-            wt.resize
+        DisjointSet(int n){
+            
+            //We are using n+1 size so that the data structure works for both one based and zero based indexing graphs
+            wt.resize(n+1,1);
+            parent.resize(n+1);
+            iota(parent.begin(),parent.end(),0);
         }
-}
+
+        int findUltimatePar(int node){
+            if(node==parent[node]) return node;
+            return parent[node]=findUltimatePar(parent[node]);//The path compression technique
+        }
+
+        void unionBySize(int u,int v){
+            int pu=findUltimatePar(u);
+            int pv=findUltimatePar(v);
+
+            //If they have same ultimate parent, no need to do anything, simply return
+            if(pu==pv) return;
+
+            //Now we attach the component having a smaller size(wt) to the one having larger size(wt)
+            if(wt[pu]<wt[pv]){
+                parent[pu]=pv;
+                wt[pv]+=wt[pu];
+            }
+            else{
+                parent[pv]=pu;
+                wt[pu]+=wt[pv];
+            }
+        }
+        //Time Complexity will be O(a(n))
+};
