@@ -201,12 +201,14 @@ vector<int> jobSequencing_brute(vector<int> &deadline,vector<int> &profit){
 
     int jobCnt=0;
     int totalProfit=0;
-    DisjointSet ds(maxDeadline+1);
     for(int i=0;i<n;i++){
-        int j=ds.findPar(Jobs[i].first);
-        if(j==0) break;
-        slot[j]=true;
-        ds.unionBySize(j,j-1);
+        for(int j=Jobs[i].first;j>0;j--){
+            if(slot[j]) continue;
+            slot[j]=true;
+            jobCnt++;
+            totalProfit+=Jobs[i].second;
+            break;
+        }
     }
     return {totalProfit,jobCnt};
 }
@@ -221,20 +223,50 @@ vector<int> jobSequencing_brute(vector<int> &deadline,vector<int> &profit){
 //We do that by using disjoint set data structure
 //When we mark slot[i] as taken, we make i-1 its parent
 
-//To create the vector<Job> array, n time
-//To sort the jobs array, n time
-//To find the maxDeadline, n time
-//The nested loop runs for n*maxDeadline(in worst case)
-//Let the max deadline be m
-//Space is occupoied by jobs array(2n), and slot array(n)
-//Time Complexity will be O(3n+mn)
-//Space Complexity will be O(3n)
+//We first import the dsu class from our graphs file with a few changes to it
+class DisjointSet{
+    public:
+        vector<int> parent;
+        DisjointSet(int n){
+            parent.resize(n+1);
+            iota(parent.begin(),parent.end(),0);
+        }
 
-//Optimal Approach
-//This employs the disjoint set from graphs, so better watch that
-int jobSequencing(vector<int> &deadline,vector<int> &profit){
+        int findPar(int node){
+            if(node==parent[node]) return node;
+            return parent[node]=findPar(parent[node]);
+        }
+
+        void unionBySize(int u,int v){
+            int pu=findPar(u);
+            int pv=findPar(v);
+            parent[pu]=pv;
+        }
+};
+
+vector<int> jobSequencing(vector<int> &deadline,vector<int> &profit){
     int n=deadline.size();
+    vector<pair<int,int>> Jobs;
+    for(int i=0;i<n;i++) Jobs.push_back({deadline[i],profit[i]});
+    sort(Jobs.begin(),Jobs.end(),compare);
+    int maxDeadline=*(max_element(deadline.begin(),deadline.end()));
+
+    int jobCnt=0;
+    int totalProfit=0;
+    DisjointSet ds(maxDeadline+1);
+    for(int i=0;i<n;i++){
+        int j=ds.findPar(Jobs[i].first);
+        if(j==0) continue;
+        jobCnt++;
+        totalProfit+=Jobs[i].second;
+        ds.unionBySize(j,j-1);
+    }
+    return {totalProfit,jobCnt};
 }
+//Time taken will be reduced to nlogn
+//Space will be the same as the slot space is now occupied by the dsu
+//Time Complexity will be O(nlogn)
+//Space Complexity will be O(n+D)
 
 
 
