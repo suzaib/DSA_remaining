@@ -145,14 +145,13 @@ bool hasRepeatedChars(string st){
 //Since this is game of choice, dp is something we can try
 //The basic recursion will be like this where we have the choice to choose either back or front card 
 int helper(int i,int j,int k,vector<int> &arr){
-    if(i>j) return 0;
     if(k==0) return 0;
     int back=arr[j]+helper(i,j-1,k-1,arr);
     int front=arr[i]+helper(i+1,j,k-1,arr);
     return max(back,front);
 
 }
-int maxScore(vector<int>& cardPoints, int k) {
+int maxScore_recursive(vector<int>& cardPoints, int k) {
     int n=cardPoints.size();
     if(k>n) return 0;
     if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
@@ -164,6 +163,35 @@ int maxScore(vector<int>& cardPoints, int k) {
 //Time Complexity will be O(2^k)
 //Space Complexity will be O(k)
 
+//Memoization
+//One may think we would need a 3D dp because three states are changing (i,j,k)
+//However one of them is dependent on the other two
+//Think it this, suppose t cards are chosen at some point, then i cards have been chosen from the front and n-j-1 cards from the back
+//Let the orginal_k be denoted by K
+//Let's denote the remaning cards by k
+//Then we have rem_k=org_k-t
+//Put values and regroup to get : j=(n-1)+(k-K)+i
+//Therefore j is dependent on the other two, so we only need 2D dp for the two independent variables
+int helper(int i,int j,int k,vector<vector<int>> &dp,vector<int> &arr){
+    if(k==0) return 0;
+    if(dp[i][k]!=-1) return dp[i][k];
+    int back=arr[j]+helper(i,j-1,k-1,dp,arr);
+    int front=arr[i]+helper(i+1,j,k-1,dp,arr);
+    return dp[i][k]=max(back,front);
+}
+int maxScore_memoization(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k>n) return 0;
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
+    vector<vector<int>> dp(n,vector<int>(k+1,-1));
+    return helper(0,n-1,k,dp,cardPoints);
+}
+//The code runs to complete all the dp states which are n*k
+//Space is occupied by the dp table of n*k size as well as recursion stack space n
+//Time Complexity will be O(nk)
+//Space Complextiy will be O(n+nk)
+
+//Tabulation
 
 
 //Brute Force
