@@ -2,108 +2,123 @@
 
 #include<bits/stdc++.h>
 using namespace std;
-/*
-There are four kinds of problems in this section:
-    1) Constant Window (Distance between the two pointers remains constant or length of window remains constant)
-    */
-    // A Sample problem in constant window 
-    //Q.1) Given an array, find out the maximum sum that can be obtained by using a subarray of k elements
-    int maxSumUsingKElOfSubArr(vector<int> arr,int k){
-        if(k==0) return 0;
-        int n=arr.size();
-        int sum=0;
-        int maxSum=0;
-        int l=0;
-        int r=l+k-1;
-        for(int i=l;i<r;i++){
-            sum=sum+arr[i];
+
+// There are four kinds of problems in this section:
+// 1) Constant Window (Distance between the two pointers remains constant or length of window remains constant)
+
+// A Sample problem in constant window 
+//Q.1) Given an array, find out the maximum sum that can be obtained by using a subarray of k elements
+int maxSumUsingKElOfSubArr(vector<int> arr,int k){
+    if(k==0) return 0;
+    int n=arr.size();
+    int sum=0;
+    int maxSum=0;
+    int l=0;
+    int r=l+k-1;
+    for(int i=l;i<r;i++){
+        sum=sum+arr[i];
+    }
+    while(r<n){
+        sum=sum+arr[r];
+        maxSum=max(sum,maxSum);
+        sum=sum-arr[l];
+        l++;
+        r++;
+    }
+    return maxSum;
+}
+//Time Complexity will be O(2n)
+//Space Complexity will be O(1)
+
+
+
+//2) Longest Subarray or longest substring problems(Most common problem type in this section)
+//Find the longest subarray with sum<=k 
+//Brute Force
+int longSubarrWithSumLesserOrEqToK_brute(vector<int> arr,int k){
+    int n=arr.size();
+    int sum;
+    int maxLen=0;
+    for(int i=0;i<n;i++){
+        sum=0;
+        for(int j=i;j<n;j++){
+            sum=sum+arr[j];
+            if(sum<=k) maxLen=max(maxLen,j-i+1);
+            else break;
         }
-        while(r<n){
-            sum=sum+arr[r];
-            maxSum=max(sum,maxSum);
+    }
+    return maxLen;
+}
+//Time Complexity will be O(n2)
+//Space Complexity will be O(1)
+
+//Better Method
+int longSubarrWithSumLesserOrEqToK_better(vector<int> arr,int k){
+    int n=arr.size();
+    int l=0;
+    int r=0;
+    int sum=0;
+    int maxLen=0;
+    sum=sum+arr[r];
+    while(r<n){
+        if(sum>k){
             sum=sum-arr[l];
             l++;
+        }
+        else{
+            maxLen=max(maxLen,r-l+1);
             r++;
-        }
-        return maxSum;
-    }
-/*
-    2) Longest Subarray or longest substring problems(Most common problem type in this section)
-    //Q.2) Find the longest subarray with sum<=k */
-    int longSubarrWithSumLesserOrEqToK_brute(vector<int> arr,int k){
-        int n=arr.size();
-        int sum;
-        int maxLen=0;
-        for(int i=0;i<n;i++){
-            sum=0;
-            for(int j=i;j<n;j++){
-                sum=sum+arr[j];
-                if(sum<=k) maxLen=max(maxLen,j-i+1);
-                else break;
-            }
-        }
-        return maxLen;
-    }
-
-    int longSubarrWithSumLesserOrEqToK_better(vector<int> arr,int k){
-        int n=arr.size();
-        int l=0;
-        int r=0;
-        int sum=0;
-        int maxLen=0;
-        sum=sum+arr[r];
-        while(r<n){
-            if(sum>k){
-                sum=sum-arr[l];
-                l++;
-            }
-            else{
-                maxLen=max(maxLen,r-l+1);
-                r++;
-                sum=sum+arr[r];
-            }
-        }
-        return maxLen;
-    }
-    //Time Complexity will be O(2N)
-    
-    //The optimal approach is goes like this: suppose you have k=14 and you get the length of array at a point where the sum is <=k is 3, Now imagine the next element is 10, and the element at l position is 2, obviously 
-    //if we add 10 , the sum >k then we have to shrink it, making the length 2 , but shrinking once isn't enough, since the sum>k therefore in the previous code we shrink it again, and here's the catch. We know we have 
-    //already gotten a length 3 , hence the answer will be either 3 or greater than that, therefore we should only shrink once and then move again(without shrinking twice) , the subarr will again have length 3 and if
-    //sum>k then we shrink it again by one (only one) and go , this way there's no way that the size can be more than 3 by violating the conditions(see video again to understand if not understood yet)
-
-    int longSubarrWithSumLesserOrEqToK_optimal(vector<int> arr,int k){
-        int n=arr.size();
-        int l=0;
-        int r=0;
-        int sum=0;
-        int maxLen=0;
-        while(r<n){
             sum=sum+arr[r];
-            if(sum>k){
-                sum=sum-arr[l];
-                l++;
-            }
-            else maxLen=max(maxLen,r-l+1);
-            r++;
         }
-        return maxLen;
     }
-    //Time Complexity will be O(N)
-    //This optimal can't be used if we are asked to print or get the subarr, in that case the better solution is the most optimal one
+    return maxLen;
+}
+//Time Complexity will be O(2N)
+//Space Complexity will be O(1)
+
+//Optimal Method
+//The optimal approach is goes like this: suppose you have k=14 and you get the length of array at a point where the sum is <=k is 3, Now imagine the next element is 10, and the element at l position is 2, obviously 
+//if we add 10 , the sum >k then we have to shrink it, making the length 2 , but shrinking once isn't enough, since the sum>k therefore in the previous code we shrink it again, and here's the catch. We know we have 
+//already gotten a length 3 , hence the answer will be either 3 or greater than that, therefore we should only shrink once and then move again(without shrinking twice) , the subarr will again have length 3 and if
+//sum>k then we shrink it again by one (only one) and go , this way there's no way that the size can be more than 3 by violating the conditions(see video again to understand if not understood yet)
+
+//This optimal can't be used if we are asked to print or get the subarr, in that case the better solution is the most optimal one
+
+int longSubarrWithSumLesserOrEqToK(vector<int> arr,int k){
+    int n=arr.size();
+    int l=0;
+    int r=0;
+    int sum=0;
+    int maxLen=0;
+    while(r<n){
+        sum=sum+arr[r];
+        if(sum>k){
+            sum=sum-arr[l];
+            l++;
+        }
+        else maxLen=max(maxLen,r-l+1);
+        r++;
+    }
+    return maxLen;
+}
+//Time Complexity will be O(N)
+//Space Complexity will be O(1)
 
 
-    /*
-    3) Pattern 3 : Number of subarrays with given condition
-        This will mostly be solved using the pattern 2
-        For eg: Find the number of subarrays with sum==k 
-        This problem will be solved using : No. of subarrays where sum<=k - No. of subarray where sum<=(k-1)
+/*
+3) Pattern 3 : Number of subarrays with given condition
+    This will mostly be solved using the pattern 2
+    For eg: Find the number of subarrays with sum==k 
+    This problem will be solved using : No. of subarrays where sum<=k - No. of subarray where sum<=(k-1)
 
-    4) Pattern 4 : Shortest Window with the given condition
+4) Pattern 4 : Shortest Window with the given condition
 
-    */
+*/
 
-//Now we begin the questions
+
+
+//Now we begin solving all those 4 types of problems
+
 
 //Some Predefined functions:
 //For checking if the string has repeating characters 
@@ -119,10 +134,40 @@ bool hasRepeatedChars(string st){
     }
     return false;
 }
-//Q.3) Maximum points from cards : 
+//Time Complexity will be O(n)
+//Space Complexity will be O(1)
+
+
+//Maximum points from cards
 //Consider array=[6,2,3,4,7,2,1,7,1], you need to choose k cards consecutively such that their sum is the greatest
 //Ans is two cards from front and two from back make the sum the greatest : 16 (Although this is not a subarr)
-//We first use the brute force , first by selecting all k cards from the back , then k-1 from back and 1 from front and at last k from front, and get the maximum sum obtained
+
+//Since this is game of choice, dp is something we can try
+//The basic recursion will be like this where we have the choice to choose either back or front card 
+int helper(int i,int j,int k,vector<int> &arr){
+    if(i>j) return 0;
+    if(k==0) return 0;
+    int back=arr[j]+helper(i,j-1,k-1,arr);
+    int front=arr[i]+helper(i+1,j,k-1,arr);
+    return max(back,front);
+
+}
+int maxScore(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k>n) return 0;
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
+    return helper(0,n-1,k,cardPoints);
+}
+//Total of n states with each state having 2 choices
+//Time taken will be something around 2^n
+//Space will be used by the recursion stack of n size
+//Time Complexity will be O(2^k)
+//Space Complexity will be O(k)
+
+
+
+//Brute Force
+//By selecting all k cards from the back , then k-1 from back and 1 from front and at last k from front, and get the maximum sum obtained
 int maxPointsFromCards_brute(vector<int> cards,int k){
     int n=cards.size();
     int maxPoints=0;
@@ -152,7 +197,10 @@ int maxPointsFromCards_brute(vector<int> cards,int k){
     }
     return maxPoints;
 }
+//Time Complexity will be O(nk)
+//Space Complexity will be O(1)
 
+//Optimal Solution
 //We keep a track of left sum and right sum and that gives us the optimal solution
 int maxPointsFromCards(vector<int> cards,int k){
     int n=cards.size();
@@ -171,10 +219,12 @@ int maxPointsFromCards(vector<int> cards,int k){
     }
     return maxSum;
 }
-//Time Complexity will be O(2K)
+//Time Complexity will be O(2k)
+//Space Complexity will be O(1)
 
 
-//Q.4) Longest Substring without repeating characters
+//Longest Substring without repeating characters
+//Brute Force
 int longSubstrWithoutRepeatingChar_brute(string st){
     int n=st.size();
     string tmpSt;
