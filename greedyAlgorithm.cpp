@@ -263,9 +263,9 @@ vector<int> jobSequencing(vector<int> &deadline,vector<int> &profit){
     }
     return {totalProfit,jobCnt};
 }
-//Time taken will be reduced to nlogn
+//Time taken will be reduced to nlogn + n(time taken by dsu can be assumed constant)
 //Space will be the same as the slot space is now occupied by the dsu
-//Time Complexity will be O(nlogn)
+//Time Complexity will be O(nlogn+n)
 //Space Complexity will be O(n+D)
 
 
