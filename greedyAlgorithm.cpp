@@ -188,53 +188,39 @@ int jumpGameII(vector<int> &arr){
 
 
 //Job Sequencing Problem
-class Job{
-    public:
-        int deadline;
-        int profit;
-};
-bool comparator(Job a,Job b){
-    return a.profit>b.profit;
+bool compare(pair<int,int> &a,pair<int,int> &b){
+    return a.second>b.second;
 }
 vector<int> jobSequencing_brute(vector<int> &deadline,vector<int> &profit){
     int n=deadline.size();
-    vector<Job> jobs(n);
-    //Pairing each deadline with its corresponding profit
-    for(int i=0;i<n;i++){
-        jobs[i]={deadline[i],profit[i]};
-    }
-
-    //Sorting jobs in decreasing order
-    sort(jobs.begin(),jobs.end(),comparator);
-
-    //Find max deadline to create time slots
+    vector<pair<int,int>> Jobs;
+    for(int i=0;i<n;i++) Jobs.push_back({deadline[i],profit[i]});
+    sort(Jobs.begin(),Jobs.end(),compare);
     int maxDeadline=*(max_element(deadline.begin(),deadline.end()));
-
-    //Creating time slots array
     vector<bool> slot(maxDeadline+1,false);
 
-    //Filling up the time slots
-    int jobCount=0;
+    int jobCnt=0;
     int totalProfit=0;
+    DisjointSet ds(maxDeadline+1);
     for(int i=0;i<n;i++){
-
-        //In case day 0 is not to be considered, run the loop only till 1
-        for(int j=jobs[i].deadline;j>0;j--){
-            if(!slot[j]){
-                slot[j]=true;
-                jobCount++;
-                totalProfit+=jobs[i].profit;
-                break;
-            }
-        }
+        int j=ds.findPar(Jobs[i].first);
+        if(j==0) break;
+        slot[j]=true;
+        ds.unionBySize(j,j-1);
     }
-    
-    //Creating an ans array to store the values
-    vector<int> ans;
-    ans.push_back(jobCount);
-    ans.push_back(totalProfit);  
-    return ans;  
+    return {totalProfit,jobCnt};
 }
+//Sorting takes nlogn and then the two loops take n*D where D is the max Deadline
+//Space is occupied by the slot array and storing jobs
+//Space used is approximately n+D
+//Time Complexity will be O(nlogn+nD)
+//Space Compelexity will be O(n+D)
+
+//Optimal Method
+//We only try to eliminate the nD portion in time complexity 
+//We do that by using disjoint set data structure
+//When we mark slot[i] as taken, we make i-1 its parent
+
 //To create the vector<Job> array, n time
 //To sort the jobs array, n time
 //To find the maxDeadline, n time
