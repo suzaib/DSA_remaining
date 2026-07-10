@@ -277,3 +277,33 @@ class DisjointSet{
         }
         //Time Complexity will be O(a(n))
 };
+
+class DisjointSet{
+    public:
+        vector<int> wt;
+        vector<int> parent;
+        DisjointSet(int n){
+            wt.resize(n+1,1);
+            parent.resize(n+1);
+            iota(parent.begin(),parent.end());
+        }
+
+        int findPar(int node){
+            if(node==parent[node]) return node;
+            return parent[node]=findPar(parent[node]);
+        }
+
+        void unionBySize(int u,int v){
+            int pu=findPar(u);
+            int pv=findPar(v);
+            if(pu==pv) return;
+            if(wt[pu]>wt[pv]){
+                parent[pv]=pu;
+                wt[pu]+=wt[pv];
+            }
+            else{
+                parent[pu]=pv;
+                wt[pv]+=wt[pu];
+            }
+        }
+};
