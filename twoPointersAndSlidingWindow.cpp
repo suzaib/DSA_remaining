@@ -192,7 +192,71 @@ int maxScore_memoization(vector<int>& cardPoints, int k) {
 //Space Complextiy will be O(n+nk)
 
 //Tabulation
+int maxScore_tabulation(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k>n) return 0;
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
+    vector<vector<int>> dp(n,vector<int>(k+1,0));
+    for(int cnt=1;cnt<=k;cnt++){
+        for(int i=k-cnt;i>=0;i--){
+            int j=(n-1)-(k-cnt)+i;
 
+            int back=cardPoints[j]+dp[i][cnt-1];
+            int front=cardPoints[i]+dp[i+1][cnt-1]; 
+            dp[i][cnt]=max(back,front);
+        }
+    }
+    return dp[0][k];
+}
+//Time Complexity will be O(nk)
+//Space Complexity will be O(nk)
+
+//Space Optimisation
+int maxScore_spaceOptimisation(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k>n) return 0;
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
+    vector<int> curr(k+1,0);
+    vector<int> prev(k+1,0);
+    vector<vector<int>> dp(n,vector<int>(k+1,0));
+    for(int cnt=1;cnt<=k;cnt++){
+        for(int i=k-cnt;i>=0;i--){
+            int j=(n-1)-(k-cnt)+i;
+
+            int back=cardPoints[j]+prev[i];
+            int front=cardPoints[i]+prev[i+1]; 
+            curr[i]=max(back,front);
+        }
+        prev=curr;
+    }
+    return curr[0];
+}
+//Time Complexity will be O(nk)
+//Space Complexity will be O(2k)
+
+//Further Optimisation
+int maxScore_furtherOptimisation(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k>n) return 0;
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
+    vector<int> dp(k+1,0);
+    for(int cnt=1;cnt<=k;cnt++){
+        for(int i=0;i<=k-cnt;i++){
+            int j=(n-1)-(k-cnt)+i;
+
+            int back=cardPoints[j]+dp[i];
+            int front=cardPoints[i]+dp[i+1]; 
+            dp[i]=max(back,front);
+        }
+    }
+    return dp[0];
+}
+//Time Complexity will be O(nk)
+//Space Complexity will be O(k)
+
+//That is all the optimisation we can get from the dp techniques
+//However DP is not the way to solve it
+//Sliding window and two pointers is the way to go for this problem
 
 //Brute Force
 //By selecting all k cards from the back , then k-1 from back and 1 from front and at last k from front, and get the maximum sum obtained
