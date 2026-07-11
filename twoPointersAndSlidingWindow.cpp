@@ -134,7 +134,7 @@ bool hasRepeatedChars(string st){
     }
     return false;
 }
-//Time Complexity will be O(n)
+//Time Complexity will be O(nlogn+n)
 //Space Complexity will be O(1)
 
 
@@ -260,7 +260,7 @@ int maxScore_furtherOptimisation(vector<int>& cardPoints, int k) {
 
 //Brute Force
 //Select i cards from front, and k-i from the back for all values of i
-int maxScore(vector<int>& cardPoints, int k) {
+int maxScore_brute(vector<int>& cardPoints, int k) {
     int n=cardPoints.size();
     if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
     int maxPoints=0;
@@ -323,7 +323,12 @@ int longSubstrWithoutRepeatingChar_brute(string st){
     }
     return maxLen;
 }
+//Two loops running and the repeated chars function uses nlogn+n time
+//The template string also could contribute n time along with adding a space of n
+//Time Complexity will be O(n3*logn)
+//Space Complexity will be O(n)
 
+//Better Method
 int longSubstrWithoutRepeatingChar_better(string st){
     int n=st.size();
     int maxLen=0;
@@ -342,7 +347,7 @@ int longSubstrWithoutRepeatingChar_better(string st){
 //Time Complexity will be O(N*N)
 //And Space Complexity will be O(256)
 
-int longSubstrWithoutRepeatingChar_optimal(string st){
+int longSubstrWithoutRepeatingChar(string st){
     int n=st.size();
     if(n==0) return 0;
     if(n==1) return 1;
