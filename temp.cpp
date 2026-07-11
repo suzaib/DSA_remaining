@@ -1,3 +1,4 @@
+#include<bits/stdc++.h>
 using namespace std;
 int helper(int i,int n,vector<int> &chairs,vector<bool> &vis){
     if(i==n) return 0;
@@ -9,6 +10,7 @@ int helper(int i,int n,vector<int> &chairs,vector<bool> &vis){
     vis[chairs[i]-1]=false;
     return max(skip,sit);
 }
+
 int maxChair(vector<int> &chairs){
     int n=chairs.size();
     vector<bool> vis(n,false);
