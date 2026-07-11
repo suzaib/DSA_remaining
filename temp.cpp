@@ -142,6 +142,7 @@ class Trie{
         void insert(const string &word){
             Node* node=root;
             for(int i=0;i<word.size();i++){
+                char ch=word[i];
                 if(!node->containsChar(ch-'a')) node->put(word[i], new Node());
                 node=node->get(word[i]);
                 node->prefixCnt++;
@@ -149,7 +150,7 @@ class Trie{
             node->endsWith++;
         }
 
-        void countPrefix(const string &prefix){
+        int countPrefix(const string &prefix){
             Node* node=root;
             for(int i=0;i<prefix.size();i++){
                 if(!node->containsChar(prefix[i])) return 0;
@@ -186,7 +187,7 @@ class Trie{
         bool startsWith(const string &word){
             return countPrefix(word)>0;
         }
-}
+};
 
 
 void frostingCake(int n,vector<int> &arr,vector<int> &ans){
