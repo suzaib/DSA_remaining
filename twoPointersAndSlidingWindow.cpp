@@ -348,25 +348,19 @@ int longSubstrWithoutRepeatingChar_better(string st){
 //And Space Complexity will be O(256)
 
 //Optimal Solution
-int longSubstrWithoutRepeatingChar(string st){
-    int n=st.size();
+int longSubstrWithoutRepeatingChar(string &s){
+    int n=s.size();
+    int i=0;
+    int j=0;
     if(n==0) return 0;
-    if(n==1) return 1;
     int maxLen=0;
-    int len=0;
-    int r=0;
-    int l=0;
-    int hash[256]={-1};
-    while(r<n){
-        if(hash[st[r]]!=-1){
-            if(hash[st[r]]>=l){
-                l=hash[st[r]]+1;
-            }
-        }
-        len=r-l+1;
-        maxLen=max(maxLen,len);
-        hash[st[r]]=r;
-        r++;
+    vector<int> hash(256,-1);
+    while(j<n){
+        int c=s[j];
+        if(hash[c]!=-1) i=max(i,hash[c]+1);
+        hash[c]=j;
+        maxLen=max(maxLen,j-i+1);
+        j++;
     }
     return maxLen;
 }
@@ -418,7 +412,7 @@ int maxConsecutiveOnesIII_better(vector<int> arr,int k){
 }
 //Time Complexity will be O(2n)
 
-//The most optimal code will try to get rid of extra nff
+//The most optimal code will try to get rid of extra n
 int maxConsecutiveOnesIII(vector<int> arr,int k){
     int n=arr.size();
     int maxLen=0;
@@ -529,7 +523,6 @@ int fruitsToBaskets_better(vector<int> arr){
 //Space Complexity will O(3) which is as good as constant space
 
 
-//Further optimising the better solution
 //Optimal solution
 int fruitsToBaskets(vector<int> arr){
     int n=arr.size();
