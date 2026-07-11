@@ -347,6 +347,7 @@ int longSubstrWithoutRepeatingChar_better(string st){
 //Time Complexity will be O(N*N)
 //And Space Complexity will be O(256)
 
+//Optimal Solution
 int longSubstrWithoutRepeatingChar(string st){
     int n=st.size();
     if(n==0) return 0;
