@@ -259,32 +259,20 @@ int maxScore_furtherOptimisation(vector<int>& cardPoints, int k) {
 //Sliding window and two pointers is the way to go for this problem
 
 //Brute Force
-//By selecting all k cards from the back , then k-1 from back and 1 from front and at last k from front, and get the maximum sum obtained
-int maxPointsFromCards_brute(vector<int> cards,int k){
-    int n=cards.size();
+//Select i cards from front, and k-i from the back for all values of i
+int maxScore(vector<int>& cardPoints, int k) {
+    int n=cardPoints.size();
+    if(k==n) return accumulate(cardPoints.begin(),cardPoints.end(),0);
     int maxPoints=0;
     for(int i=0;i<=k;i++){
-        int start=(n-k+i)%n;
-        int end=(n-1+i)%n;
         int points=0;
-        if(start==n-k){
-            for(int j=start;j<n;j++){
-                points+=cards[j];
-            }
-        }
-        else if(start==0){
-            for(int j=0;j<k;j++){
-                points+=cards[j];
-            }
-        }
-        else{
-            for(int j=start;j<n;j++){
-                points+=cards[j];
-            }
-            for(int j=0;j<=end;j++){
-                points+=cards[j];
-            }
-        }
+        
+        //Choose i cards from front
+        for(int f=0;f<i;f++) points+=cardPoints[f];
+
+        //Choose k-i cards from back
+        for(int b=n-1;b>=n-k+i;b--) points+=cardPoints[b];
+
         maxPoints=max(maxPoints,points);
     }
     return maxPoints;
@@ -298,9 +286,7 @@ int maxPointsFromCards(vector<int> cards,int k){
     int n=cards.size();
     int leftSum=0;
     int rightSum=0;
-    for(int i=0;i<k;i++){
-        leftSum+=cards[i];
-    }
+    for(int i=0;i<k;i++) leftSum+=cards[i];
     int maxSum=leftSum;
     int rightIdx=n-1;
     for(int i=k-1;i>=0;i--){
@@ -313,6 +299,7 @@ int maxPointsFromCards(vector<int> cards,int k){
 }
 //Time Complexity will be O(2k)
 //Space Complexity will be O(1)
+
 
 
 //Longest Substring without repeating characters
