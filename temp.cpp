@@ -217,39 +217,3 @@ int main(){
 }
 
 
-
-class Solution {
-public:
-    int lengthOfLongestSubstring(string s) {
-        int n=s.size();
-        int i=0;
-        int j=0;
-        if(n==0) return 0;
-        int maxLen=0;
-        vector<int> hash(256,-1);
-        while(j<n){
-            int c=s[j];
-            if(hash[c]!=-1) i=max(i,hash[c]+1);
-            hash[c]=j;
-            maxLen=max(maxLen,j-i+1);
-            j++;
-        }
-        return maxLen;
-    }
-};
-
-int len(string &s){
-    int n=s.size();
-    int i=0;
-    int j=0;
-    if(n==0) return 0;
-    int maxLen=0;
-    vector<int> hash(256,-1);
-    while(j<n){
-        int c=s[j];
-        if(hash[c]!=-1) i=max(i,hash[c]+1);
-        hash[c]=j;
-        maxLen=max(maxLen,j-i+1);
-        j++;
-    }
-}
