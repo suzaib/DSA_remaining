@@ -220,3 +220,29 @@ int main(){
 }
 
 
+#include<bits/stdc++.h>
+using namespace std;
+void print(int n){
+    if(n==1) cout<<1;
+    else if(n==2) cout<<-1;
+    else{
+        cout<<"1 2 3 ";
+        long long preSum=6;
+        for(int i=4;i<=n;i++){
+            cout<<preSum<<" ";
+            preSum*=2;
+        }
+    }
+    cout<<"\n";
+}
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        print(n);
+    }
+}
