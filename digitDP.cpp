@@ -54,6 +54,9 @@ Therefore if two adjacent zeroes are encountered when leadingZeroes value is fal
 
 We will also keep the number in string so to fetch the idx directly
 */
-//Also a thing to note is that
+
+void solve(int x){
+    
+}
 int main(){
 }
