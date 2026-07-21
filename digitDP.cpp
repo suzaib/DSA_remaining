@@ -55,6 +55,32 @@ Therefore if two adjacent zeroes are encountered when leadingZeroes value is fal
 We will also keep the number in string so to fetch the idx directly
 */
 
+
+//The basic recursion code
+int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz){
+    if(idx==n) return 1;
+
+    //Lower bound will be 0
+    int lb=0;
+
+    //Upper bound will depend on the value of tight
+    int ub=(tight? s[idx]-'0':9);
+
+    int res=0;
+    for(int dig=lb;dig<=ub;dig++){
+        if(dig==prevDig && !lz) continue;
+        res+=helper(s,n,idx+1,(tight && dig==ub),dig,(lz && dig==0));
+    }
+    return res;
+}
+int solve(int x){
+    string s=to_string(x); //We needs idx info therefore string is better
+    int n=s.size();
+    return helper(s,n,0,true,-1,true);
+}
+//Exponential in nature
+
+//Memoized version
 int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp){
     if(idx==n) return 1;
 
