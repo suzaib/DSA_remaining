@@ -55,7 +55,7 @@ Therefore if two adjacent zeroes are encountered when leadingZeroes value is fal
 We will also keep the number in string so to fetch the idx directly
 */
 
-int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz){
+int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp){
     if(idx==n) return 1;
 
     //Lower bound will be 0
@@ -67,14 +67,15 @@ int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz){
     int res=0;
     for(int dig=lb;dig<=ub;dig++){
         if(dig==prevDig && !lz) continue;
-        res+=helper(s,n,idx+1,(tight && dig==ub),dig,(lz && dig==0))
+        res+=helper(s,n,idx+1,(tight && dig==ub),dig,(lz && dig==0));
     }
     return res;
 }
-void solve(int x){
+int solve(int x){
     string s=to_string(x); //We needs idx info therefore string is better
     int n=s.size();
-    return helper(s,n,0,true,-1,true);
+    int dp[20][2][11][2];
+    return helper(s,n,0,true,-1,true,dp);
 }
 int main(){
 }
