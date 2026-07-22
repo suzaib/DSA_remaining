@@ -178,6 +178,48 @@ int solve(int x){
 
 
 //Number of digit one : LEETCODE 233
+int helper(string &str,int n,int idx,bool tight,int cntOnes){
+    if(idx==n) return cntOnes;
 
+    int lb=0;
+    int ub=(tight? str[idx]-'0':9);
+
+    int res=0;
+    for(int dig=lb;dig<=ub;dig++){
+        if(dig==1) res+=helper(str,n,idx+1,(tight && dig==ub),cntOnes+1);
+        else res+=helper(str,n,idx+1,(tight && dig==ub),cntOnes);
+    }
+    return res;
+}
+int cntDigitOne(int n) {
+    string str=to_string(n);
+    int sz=str.size();
+    return helper(str,sz,0,1,0);
+}
+
+//Memoization
+int helper(string &str,int n,int idx,bool tight,int cntOnes,vector<vector<vector<int>>> &dp){
+    if(dp[idx][tight][cntOnes]!=-1) return dp[idx][tight][cntOnes];
+    if(idx==n) return dp[idx][tight][cntOnes]=cntOnes;
+
+    int lb=0;
+    int ub=(tight? str[idx]-'0':9);
+
+    int res=0;
+    for(int dig=lb;dig<=ub;dig++){
+        if(dig==1) res+=helper(str,n,idx+1,(tight && dig==ub),cntOnes+1,dp);
+        else res+=helper(str,n,idx+1,(tight && dig==ub),cntOnes,dp);
+    }
+    return dp[idx][tight][cntOnes]=res;
+}
+int countDigitOne(int n) {
+    string str=to_string(n);
+    int sz=str.size();
+    vector<vector<vector<int>>> dp(sz+1,vector<vector<int>> (2,vector<int> (sz+1,-1)));
+    return helper(str,sz,0,1,0,dp);
+}
+
+//Tabulation
+    
 int main(){
 }
