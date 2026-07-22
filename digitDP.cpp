@@ -81,6 +81,7 @@ int solve(int x){
 //Exponential in nature
 
 //Memoized version
+//Since -1 can't be put in index therefore we can use 10 in place of -1
 int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp[20][2][11][2]){
     if(idx==n) return 1;
     if(dp[idx][tight][prevDig][lz]!=-1) return dp[idx][tight][prevDig][lz];
@@ -99,11 +100,80 @@ int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp[20][2
     return dp[idx][tight][prevDig][lz]=res;
 }
 int solve(int x){
-    string s=to_string(x); //We needs idx info therefore string is better
+    string s=to_string(x); 
     int n=s.size();
     int dp[20][2][11][2];
     memset(dp,-1,sizeof(dp));
     return helper(s,n,0,true,10,true,dp);
 }
+
+//Tabulation
+int solve(int x){
+    string s=to_string(x);
+    int n=s.size();
+    int dp[20][2][11][2];
+    memset(dp,-1,sizeof(dp));
+    for(int tight=0;tight<=1;tight++){
+        for(int prevDig=0;prevDig<=10;prevDig++){
+            for(int lz=0;lz<=1;lz++) dp[n][tight][prevDig][lz]=1;
+        }
+    }
+
+    for(int idx=n-1;idx>=0;idx--){
+        for(int tight=0;tight<=1;tight++){
+            int lb=0;
+            int ub=(tight? s[idx]-'0':9);
+            for(int prevDig=0;prevDig<=10;prevDig++){
+                for(int lz=0;lz<=1;lz++){
+                    int res=0;
+                    for(int dig=lb;dig<=ub;dig++){
+                        if(dig==prevDig && !lz) continue;
+                        res+=dp[idx+1][(tight && dig==ub)][dig][(lz && dig==0)];
+                    }
+                    dp[idx][tight][prevDig][lz]=res;
+                }
+            }
+        }
+    }
+
+    return dp[0][1][10][1];
+}
+
+//We can optimise it further but there is no need for that as it hardly matters since the array is fixed size
+//We are still writing it just as a coding exercise
+int solve(int x){
+    string s=to_string(x);
+    int n=s.size();
+    int curr[2][11][2];
+    int ahead[2][11][2];
+
+    for(int tight=0;tight<=1;tight++){
+        for(int prevDig=0;prevDig<=10;prevDig++){
+            for(int lz=0;lz<=1;lz++) ahead[tight][prevDig][lz]=1;
+        }
+    }
+
+    for(int idx=n-1;idx>=0;idx--){
+        for(int tight=0;tight<=1;tight++){
+            int lb=0;
+            int ub=(tight? s[idx]-'0':9);
+            for(int prevDig=0;prevDig<=10;prevDig++){
+                for(int lz=0;lz<=1;lz++){
+                    int res=0;
+                    for(int dig=lb;dig<=ub;dig++){
+                        if(dig==prevDig && !lz) continue;
+                        res+=ahead[(tight && dig==ub)][dig][(lz && dig==0)];
+                    }
+                    curr[tight][prevDig][lz]=res;
+                }
+            }
+        }
+        memcpy(ahead,curr,sizeof(curr));
+    }
+    return curr[1][10][1];
+}
+//This can be further optimised to single dp style array
+//But that would only save 44 size of array
+//Not needed here
 int main(){
 }
