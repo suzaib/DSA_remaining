@@ -220,6 +220,61 @@ int countDigitOne(int n) {
 }
 
 //Tabulation
-    
+int countDigitOne(int n) {
+    string str=to_string(n);
+    int sz=str.size();
+    vector<vector<vector<long long>>> dp(sz+1,vector<vector<long long>> (2,vector<long long> (sz+1,0)));
+    for(int tight=0;tight<=1;tight++){
+        for(int cnt=0;cnt<=sz;cnt++) dp[sz][tight][cnt]=cnt;
+    }
+
+    for(int idx=sz-1;idx>=0;idx--){
+        for(int tight=0;tight<=1;tight++){
+            int lb=0;
+            int ub=(tight? str[idx]-'0':9);
+            for(int cntOnes=0;cntOnes<sz;cntOnes++){
+                long long res=0;
+                for(int dig=lb;dig<=ub;dig++){
+                    if(dig==1) res+=dp[idx+1][(tight && dig==ub)][cntOnes+1];
+                    else res+=dp[idx+1][(tight && dig==ub)][cntOnes];
+                }
+                dp[idx][tight][cntOnes]=res;
+            }
+        }
+    }
+    return (int)dp[0][1][0];
+}
+
+//Space Optimisation
+int countDigitOne(int n) {
+    string str=to_string(n);
+    int sz=str.size();
+    vector<vector<long long>> ahead(2,vector<long long> (sz+1,0));
+    vector<vector<long long>> curr(2, vector<long long > (sz+1,0));
+    for(int tight=0;tight<=1;tight++){
+        for(int cnt=0;cnt<=sz;cnt++) ahead[tight][cnt]=cnt;
+    }
+
+    for(int idx=sz-1;idx>=0;idx--){
+        for(int tight=0;tight<=1;tight++){
+            int lb=0;
+            int ub=(tight? str[idx]-'0':9);
+            for(int cntOnes=0;cntOnes<sz;cntOnes++){
+                long long res=0;
+                for(int dig=lb;dig<=ub;dig++){
+                    if(dig==1) res+=ahead[(tight && dig==ub)][cntOnes+1];
+                    else res+=ahead[(tight && dig==ub)][cntOnes];
+                }
+                curr[tight][cntOnes]=res;
+            }
+        }
+        ahead=curr;
+    }
+    return (int)curr[1][0];
+}
+//Further optimisation is quite tricky and not needed in this case
+
+
+
 int main(){
 }
