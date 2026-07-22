@@ -81,8 +81,9 @@ int solve(int x){
 //Exponential in nature
 
 //Memoized version
-int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp){
+int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp[20][2][11][2]){
     if(idx==n) return 1;
+    if(dp[idx][tight][prevDig][lz]!=-1) return dp[idx][tight][prevDig][lz];
 
     //Lower bound will be 0
     int lb=0;
@@ -93,15 +94,16 @@ int helper(string &s,int n,int idx,bool tight, int prevDig,bool lz, int dp){
     int res=0;
     for(int dig=lb;dig<=ub;dig++){
         if(dig==prevDig && !lz) continue;
-        res+=helper(s,n,idx+1,(tight && dig==ub),dig,(lz && dig==0));
+        res+=helper(s,n,idx+1,(tight && dig==ub),dig,(lz && dig==0),dp);
     }
-    return res;
+    return dp[idx][tight][prevDig][lz]=res;
 }
 int solve(int x){
     string s=to_string(x); //We needs idx info therefore string is better
     int n=s.size();
     int dp[20][2][11][2];
-    return helper(s,n,0,true,-1,true,dp);
+    memset(dp,-1,sizeof(dp));
+    return helper(s,n,0,true,10,true,dp);
 }
 int main(){
 }
