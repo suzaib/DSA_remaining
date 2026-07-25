@@ -205,6 +205,20 @@ class DisjointSet{
         //Time Complexity will be O(4*a)
 };
 
+Node* helper(Node* root, Node* node, int &k, int &ans){
+    if(!root) return nullptr;
+    if(root==node) return root;
+    Node* left=helper(root->left,node,k,ans);
+    Node* right=helper(root->right,node,k,ans);
 
+    if(!left && !right) return nullptr;
+    k--;
+}
+Node* kth(Node* root, Node* node, int k){
+    if(k==0) return node->val;
+    int ans=-1;
+    helper(root,node,k,ans);
+    return ans;
+}
 
 
