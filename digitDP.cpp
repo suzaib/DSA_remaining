@@ -277,6 +277,31 @@ int countDigitOne(int n) {
 
 //Leetcode 1012
 //Numbers with repeated Digits
+int helper(int idx,bool tight,int bitmask,bool isRepeated,bool lz,string &s,int n){
+    if(idx==n) return isRepeated;
+
+    int lb=0;
+    int ub=(tight? s[idx]-'0':9);
+    int cnt=0;
+    for(int dig=lb;dig<=ub;dig++){
+        bool nextLz=lz && (dig==0);
+        //Checking if the bit is already set
+        if(!lz && (bitmask &(1<<dig))) cnt+=helper(idx+1,(tight && dig==ub),bitmask,true,(lz && dig==0),s,n);
+        else{
+            bool nextLz=lz && (dig==0);
+            if(!nextLz) bitmask|=(1<<dig);
+            cnt+=helper(idx+1,(tight && dig==ub),bitmask,isRepeated,(lz && dig==0),s,n);
+            if(!nextLz) bitmask&=~(1<<dig);
+        }
+    }
+    return cnt;
+}
+int numDupDigitsAtMostN(int n) {
+    string str=to_string(n);
+    int s=str.size();
+    return helper(0,true,0,false,true,str,s);
+}
+
 
 int main(){
 }
