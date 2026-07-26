@@ -286,11 +286,10 @@ int helper(int idx,bool tight,int bitmask,bool isRepeated,bool lz,string &s,int 
     for(int dig=lb;dig<=ub;dig++){
         bool nextLz=lz && (dig==0);
         //Checking if the bit is already set
-        if(!lz && (bitmask &(1<<dig))) cnt+=helper(idx+1,(tight && dig==ub),bitmask,true,(lz && dig==0),s,n);
+        if(!lz && (bitmask &(1<<dig))) cnt+=helper(idx+1,(tight && dig==ub),bitmask,true,nextLz,s,n);
         else{
-            bool nextLz=lz && (dig==0);
             if(!nextLz) bitmask|=(1<<dig);
-            cnt+=helper(idx+1,(tight && dig==ub),bitmask,isRepeated,(lz && dig==0),s,n);
+            cnt+=helper(idx+1,(tight && dig==ub),bitmask,isRepeated,nextLz,s,n);
             if(!nextLz) bitmask&=~(1<<dig);
         }
     }
@@ -302,6 +301,37 @@ int numDupDigitsAtMostN(int n) {
     return helper(0,true,0,false,true,str,s);
 }
 
+//Memoization
+int helper(int idx,bool tight,int bitmask,bool isRepeated,bool lz,string &s,int n,int dp[20][2][1024][2][2]){
+    if(idx==n) return isRepeated;
+
+    if(dp[idx][tight][bitmask][isRepeated][lz]!=-1) return dp[idx][tight][bitmask][isRepeated][lz];
+    int lb=0;
+    int ub=(tight? s[idx]-'0':9);
+    int cnt=0;
+    for(int dig=lb;dig<=ub;dig++){
+        bool nextLz=lz && dig==0;
+        //Checking if the bit is already set
+        if(!lz && (bitmask &(1<<dig))) cnt+=helper(idx+1,(tight && dig==ub),bitmask,true,nextLz,s,n,dp);
+        else{
+            if(!nextLz) bitmask|=(1<<dig);
+            cnt+=helper(idx+1,(tight && dig==ub),bitmask,isRepeated,nextLz,s,n,dp);
+            if(!nextLz) bitmask&=~(1<<dig);
+        }
+    }
+    return dp[idx][tight][bitmask][isRepeated][lz]=cnt;
+}
+int numDupDigitsAtMostN(int n) {
+    string str=to_string(n);
+    int s=str.size();
+    int dp[20][2][1024][2][2];
+    memset(dp,-1,sizeof(dp));
+    return helper(0,true,0,false,true,str,s,dp);
+}
+//This is good enough
+//There is no need for tabulation in this one
+
+//There is another method to solve this, but that isn't of digit dp but uses combinatorics
 
 int main(){
 }
