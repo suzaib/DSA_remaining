@@ -275,7 +275,8 @@ int countDigitOne(int n) {
 //Further optimisation is quite tricky and not needed in this case
 
 
-//Leetcode 
+//Leetcode 1012
+//Numbers with repeated Digits
 
 int main(){
 }
