@@ -332,6 +332,38 @@ int numDupDigitsAtMostN(int n) {
 //There is no need for tabulation in this one
 
 //There is another method to solve this, but that isn't of digit dp but uses combinatorics
+//We are still writing it here as it solves this problem most optimally
+//The method is simple, let nd be the cnt of all numbers whose every digit is different
+//Then the answer would simply be n-nd
+//This would give us all the numbers where atleast one digit is repeated
 
+//Calculating nd
+//For 1 digit, the total numbers can be 9
+//For 2 digit, the total numbers can be 9*9(for second place we choose from 0-9, 10 choices, but we can't choose the number we choose before, therefore 9 choices)
+//For 3 digit, the total numbers can be 9*9*8
+//Similary, we arrive at the formula :  for x digits, nd=9*P(9,x-1)
+//Here P is permuation function. Also x-1>=0 so x>=1 and x-1<=9 so x<=10
+//Which is obvious, if we need to form a number with more than 10 digits, atleast one will be repeated
+
+//Consider the number 5432
+//First we find out all the numbers of three digits having unique digits
+//Then we build numbers of 4 digits having unique digits
+int p(int x){
+    if(x<=1) return 1;
+    int cnt=1;
+    for(int i=2;i<=x;i++) cnt*=i;
+    return cnt;
+}
+int numDupDigitsAtMostN(int n) {
+    string s=to_string(n);
+    int l=s.size();
+
+    const int fact9=362880;
+
+    //The sum smaller gives the cnt of all numbers whose all digits are unique and which are one digit less than n
+    int sumSmaller=(9*fact9)/p(11-l);
+
+    //Write the rest of the code to calculate the numbers with unique digits that are of n digits
+}
 int main(){
 }

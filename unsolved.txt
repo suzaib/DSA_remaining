@@ -65,6 +65,7 @@ See if you can print the subsequence for the problem of longest string chain(it 
 
 
 
+//Digit DP(repo) , solve the optimal method of leetcode 1012
 
 
 
