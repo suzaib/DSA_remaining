@@ -534,14 +534,19 @@ We first write code for this problem in brute force
 */
 
 //Brute Force Idea
-vector<int> zArr_brute(const string &s){
+vector<int> zArr(const string &s){
     int n=s.size();
     vector<int> z(n,0);
-    z[0]=n;
     for(int i=1;i<n;i++){
-        while(s[z[i]]==s[i+z[i]]) z[i]++;
+        int j=0;
+        int k=i;
+        while(k<n && s[j]==s[k]){
+            k++;
+            j++;
+        }
+        z[i]=j;
     }
-    return z[i];
+    return z;
 }
 //The code can run upto n2 times
 //Space is only used to return the answer vector
@@ -549,27 +554,47 @@ vector<int> zArr_brute(const string &s){
 //Space Complexity will be O(1)
 
 //Optimal Method
+//Z Algorithm
 vector<int> zArr(const string &s){
     int n=s.size();
     vector<int> z(n,0);
     int l=0;
     int r=0;
+    //The window l-r represents the reptitive window
+
     for(int i=1;i<n;i++){
 
-        //Handling the case of z[i] reaching for characters beyond what we have seen at r
-        if(i<r) z[i]=min(r-i,z[i-l]);
+        //If index is within the reptitive window then we reuse the value
+        if(i<r){
+            z[i]=z[i-l];
+            //However resusing the value might lead us beyond the value
+            if(i+z[i]>r) z[i]=r-i;
+        }
 
-        //Looking for more batch beyond the current calculation
+        //Look for more beyond the current calculation
         while(i+z[i]<n && s[z[i]]==s[i+z[i]]) z[i]++;
 
-        //Update l and r
+        //Now updating l and r
         if(i+z[i]>r){
-            l=i;
             r=i+z[i];
+            l=i;
         }
     }
     return z;
 }
+
+
+//Rabin Karp Algorithm
+//The crude idea is very simple
+//Consider the string s="aaaaaab" and t="aab". Now let's say we calculate a hash for t by assigning each char a value
+//Say a=1 and b=2. Now keep comparing the hash value of t(3) to each 3 sized window of s. If the value matches, confirm by actually checking the window
+//Slide the window in s by subtracting the hash of left char and adding the hash of next right char
+
+//As you may have observed, the hash value may be same but the pattern may not. This is likely if you take a very simple hashing function like we took as a=1, b=2 etc
+//Such thing is called spurious hits, where the hash value matches but the pattern doesn't
+//Therefore this could take the worst case time to mn
+
+//To avoid the spurious hits, Rabin Karp gave a formula to calculate hash
 
 int main(){
     //Your code here
