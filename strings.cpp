@@ -595,6 +595,13 @@ vector<int> zArr(const string &s){
 //Therefore this could take the worst case time to mn
 
 //To avoid the spurious hits, Rabin Karp gave a formula to calculate hash
+//The hash function is as follows : suppose you have "bca" then the hash will be 2*(10^2)+3*(10^1)+1*(10^0)
+int hash(const string &s){
+    int n=s.size();
+    long long hash=0;
+    for(char c:s) hash+=(c-'a'+1)+hash*10;
+    return hash;
+}
 
 int main(){
     //Your code here
