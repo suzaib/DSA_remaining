@@ -365,5 +365,74 @@ int numDupDigitsAtMostN(int n) {
 
     //Write the rest of the code to calculate the numbers with unique digits that are of n digits
 }
+
+
+//Non negative integers without consecutive ones in binary formm
+//Idea is simple, since we only need the count, we form the binary number in string and then count
+//Brute Force Recursion
+int helper(int idx,bool tight,int prev,int n,string &s){
+    if(idx==n) return 1;
+    
+    int cnt=0;
+
+    int lb=0;
+    int ub=(tight? s[idx]-'0':1);
+
+    for(int dig=lb;dig<=ub;dig++){
+        if(dig==1 && prev==dig) continue;
+        cnt+=helper(idx+1,(tight && dig==ub),dig,n,s);
+    }
+
+    return cnt;
+}
+int noConsecOnesBinary(int n){
+    if(n==0) return 1;
+    string s;
+    while(n>0){
+        s+=(n&1)+'0';
+        n>>=1;
+    }
+    reverse(s.begin(),s.end());
+    int sz=s.size();
+
+    return helper(0,1,-1,sz,s);
+}
+
+//Memoization
+//No need of tabulation in this problem as the time complexity is already good and stack overflow isn't a issue
+int helper(int idx,bool tight,int prev,int n,string &s,vector<vector<vector<int>>> &dp){
+    if(idx==n) return 1;
+    if(dp[idx][tight][prev]!=-1) return dp[idx][tight][prev];
+    int cnt=0;
+
+    int lb=0;
+    int ub=(tight? s[idx]-'0':1);
+
+    for(int dig=lb;dig<=ub;dig++){
+        if(dig==1 && prev==dig) continue;
+        cnt+=helper(idx+1,(tight && dig==ub),dig,n,s,dp);
+    }
+
+    return dp[idx][tight][prev]=cnt;
+}
+int noConsecOnesBinary(int n){
+    if(n==0) return 1;
+    string s;
+    while(n>0){
+        s+=(n&1)+'0';
+        n>>=1;
+    }
+    reverse(s.begin(),s.end());
+
+    int sz=s.size();
+    vector<vector<vector<int>>> dp(sz,vector<vector<int>> (2,vector<int> (3,-1)));
+    return helper(0,1,2,sz,s,dp);
+}
+
+//The best solution is not Digit DP. It's a Fibonacci-based DP on bits with
+//Time: O(logn) (about 31 iterations for a 32-bit integer)
+//Space: O(1)
+
+
 int main(){
 }
