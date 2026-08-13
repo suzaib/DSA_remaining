@@ -434,5 +434,68 @@ int noConsecOnesBinary(int n){
 //Space: O(1)
 
 
+//Numbers at most N Given Digit Set
+//Leetcode 902
+//Brute Force Recursive Approach
+int helper(int idx,bool tight,bool lz,int n,string &s,vector<int> &digits){
+    if(idx==n) return lz? 0:1;
+    int lb=0;
+    int ub=(tight? s[idx]-'0':digits.back());
+
+    int ans=0;
+    if(lz) ans+=helper(idx+1,(tight && ub==0),lz,n,s,digits);
+    for(int dig:digits){
+        if(dig>ub) continue;
+        ans+=helper(idx+1,(tight && dig==ub),0,n,s,digits);
+    }
+
+    return ans;
+}
+int atMostNGivenDigitSet(vector<string>& digits, int n) {
+    string s=to_string(n);
+    vector<int> newDig;
+    for(string st:digits) newDig.push_back(stoi(st));
+    n=s.size();
+    return helper(0,1,1,n,s,newDig);
+}
+//Helper will be called a total of n times. At each step, we have k choices
+//Therefore time will be around k^n times
+//Time Complexity will be O(k^n)
+//Space Complexity will be O(k)
+
+
+//Memoization
+int helper(int idx,bool tight,bool lz,int n,string &s,vector<int> &digits,vector<vector<vector<int>>> &dp){
+    if(idx==n) return lz? 0:1;
+    if(dp[idx][tight][lz]!=-1) return dp[idx][tight][lz];
+    int lb=0;
+    int ub=(tight? s[idx]-'0':digits.back());
+
+    int ans=0;
+    if(lz) ans+=helper(idx+1,(tight && ub==0),lz,n,s,digits,dp);
+    for(int dig:digits){
+        if(dig>ub) continue;
+        ans+=helper(idx+1,(tight && dig==ub),0,n,s,digits,dp);
+    }
+
+    return dp[idx][tight][lz]=ans;
+}
+int atMostNGivenDigitSet(vector<string>& digits, int n) {
+    string s=to_string(n);
+    vector<int> newDig;
+    for(string st:digits){
+        newDig.push_back(stoi(st));
+    }
+    n=s.size();
+    vector<vector<vector<int>>> dp(n,vector<vector<int>> (2,vector<int> (2,-1)));
+
+    return helper(0,1,1,n,s,newDig,dp);
+}
+//The time taken is to fill all the dp states which are n*2*2 in number along with the inner loop of k size
+//Space will be used by the dp array and recursion stack space
+//Time Complexity will be O(4nk)
+//Space Complexity will be O(4n+k)
+
+
 int main(){
 }
