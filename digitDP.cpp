@@ -496,6 +496,10 @@ int atMostNGivenDigitSet(vector<string>& digits, int n) {
 //Time Complexity will be O(4nk)
 //Space Complexity will be O(4n+k)
 
+//No need of tabulation etc since it would only save little space while making the code hard to understand
+//The most optimal approach is using the combinations trick
+//Here is the solution
+
 
 int main(){
 }
