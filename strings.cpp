@@ -603,6 +603,10 @@ int hash(const string &s){
     return hash;
 }
 
+
+
+
+//Manacher Algorithm
 int main(){
     //Your code here
     return 0;
