@@ -599,7 +599,6 @@ vector<int> zArr(const string &s){
 int hash(const string &s){
     int n=s.size();
     long long hash=0;
-    sdfs
     for(char c:s) hash+=(c-'a'+1)+hash*10;
     return hash;
 }
